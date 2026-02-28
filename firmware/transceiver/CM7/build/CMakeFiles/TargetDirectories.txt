@@ -1,0 +1,5 @@
+V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/transceiver_CM7.dir
+V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/STM32_Drivers.dir
+V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/USB_Device_Library.dir
+V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/edit_cache.dir
+V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/rebuild_cache.dir
