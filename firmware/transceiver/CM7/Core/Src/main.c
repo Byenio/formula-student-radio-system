@@ -119,7 +119,52 @@ void StartRadioTxTask(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void MPU_Config(void)
+{
+  MPU_Region_InitTypeDef MPU_InitStruct = {0};
 
+  /* Disable the MPU */
+  HAL_MPU_Disable();
+
+  /* --------------------------------------------------------
+     Region 0: AXI SRAM (0x24000000) - 512KB
+     Usage: General RAM (Stack, Heap, USB Descriptors)
+     Setting: Cacheable, Shareable (Standard RAM)
+     -------------------------------------------------------- */
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+  MPU_InitStruct.Number = MPU_REGION_NUMBER0;
+  MPU_InitStruct.BaseAddress = 0x24000000;
+  MPU_InitStruct.Size = MPU_REGION_SIZE_512KB;
+  MPU_InitStruct.SubRegionDisable = 0x0;
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+  MPU_InitStruct.IsShareable = MPU_ACCESS_SHAREABLE;
+  MPU_InitStruct.IsCacheable = MPU_ACCESS_CACHEABLE;
+  MPU_InitStruct.IsBufferable = MPU_ACCESS_BUFFERABLE;
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+  /* --------------------------------------------------------
+     Region 1: SRAM1 D2 (0x30000000) - 256KB
+     Usage: DMA Buffers (UART)
+     Setting: NON-Cacheable (Prevents DMA coherence issues)
+     -------------------------------------------------------- */
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+  MPU_InitStruct.Number = MPU_REGION_NUMBER1;
+  MPU_InitStruct.BaseAddress = 0x30000000;
+  MPU_InitStruct.Size = MPU_REGION_SIZE_256KB;
+  MPU_InitStruct.SubRegionDisable = 0x0;
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL1; // Warning: TEX Level 1 for Strong Order/Device
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
+  MPU_InitStruct.IsShareable = MPU_ACCESS_SHAREABLE;
+  MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
+  MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+  /* Enable the MPU */
+  HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+}
 /* USER CODE END 0 */
 
 /**
@@ -130,7 +175,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  MPU_Config();
   /* USER CODE END 1 */
 /* USER CODE BEGIN Boot_Mode_Sequence_0 */
 #if defined(DUAL_CORE_BOOT_SYNC_SEQUENCE)
@@ -220,7 +265,7 @@ int main(void)
   /* USER CODE BEGIN RTOS_QUEUES */
   xAudioInputStreamBuffer = xStreamBufferCreateStatic(
     AUDIO_STREAM_SIZE,
-    1,
+    FRAME_BYTES,
     audio_stream_storage,
     &xAudioStreamStruct
   );
@@ -272,11 +317,8 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint8_t test_data = 0x55;
   while (1)
   {
-    HAL_UART_Transmit(&huart6, &test_data, 1, 10);
-    HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -333,6 +375,19 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
+  RCC_CRSInitTypeDef RCC_CRSInitStruct = {0};
+
+  __HAL_RCC_CRS_CLK_ENABLE();
+
+  RCC_CRSInitStruct.Prescaler = RCC_CRS_SYNC_DIV1;
+  RCC_CRSInitStruct.Source = RCC_CRS_SYNC_SOURCE_USB2; // Sync with USB2 (OTG FS)
+  RCC_CRSInitStruct.Polarity = RCC_CRS_SYNC_POLARITY_RISING;
+  RCC_CRSInitStruct.ReloadValue = __HAL_RCC_CRS_RELOADVALUE_CALCULATE(48000000, 1000);
+  RCC_CRSInitStruct.ErrorLimitValue = 34;
+  RCC_CRSInitStruct.HSI48CalibrationValue = 32;
+
+  HAL_RCCEx_CRSConfig(&RCC_CRSInitStruct);
 }
 
 /**
@@ -426,7 +481,7 @@ static void MX_USART6_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART6_Init 2 */
-  HAL_NVIC_SetPriority(USART6_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(USART6_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(USART6_IRQn);
   /* USER CODE END USART6_Init 2 */
 

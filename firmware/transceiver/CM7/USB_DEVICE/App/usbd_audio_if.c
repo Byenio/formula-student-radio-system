@@ -253,20 +253,12 @@ static int8_t AUDIO_PeriodicTC_FS(uint8_t *pbuf, uint32_t size, uint8_t cmd)
 
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
-  size_t bytes_sent = xStreamBufferSendFromISR(
+  xStreamBufferSendFromISR(
     xAudioInputStreamBuffer,
     (void*) mono_buffer,
     mono_samples * sizeof(int16_t),
     &xHigherPriorityTaskWoken
   );
-
-  if (bytes_sent != mono_samples * sizeof(int16_t))
-  {
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);
-  } else
-  {
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET);
-  }
 
   portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 

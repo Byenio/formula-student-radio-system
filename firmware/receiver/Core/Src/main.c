@@ -18,7 +18,12 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "cmsis_os2.h"
+#include "FreeRTOS.h"
+#include "radio_protocol.h"
+#include "semphr.h"
+#include "queue.h"
+#include "stream_buffer.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <string.h>
@@ -48,11 +53,27 @@ DMA_HandleTypeDef hdma_lpuart1_tx;
 DMA_HandleTypeDef hdma_usart1_rx;
 DMA_HandleTypeDef hdma_usart1_tx;
 
+/* Definitions for ParserTask */
+osThreadId_t ParserTaskHandle;
+const osThreadAttr_t ParserTask_attributes = {
+  .name = "ParserTask",
+  .priority = (osPriority_t) osPriorityNormal,
+  .stack_size = 1024 * 4
+};
+/* Definitions for PcTxTask */
+osThreadId_t PcTxTaskHandle;
+const osThreadAttr_t PcTxTask_attributes = {
+  .name = "PcTxTask",
+  .priority = (osPriority_t) osPriorityHigh,
+  .stack_size = 256 * 4
+};
 /* USER CODE BEGIN PV */
-#define RX_BUFFER_SIZE 512
-uint8_t rx_buffer[RX_BUFFER_SIZE];
-uint8_t tx_buffer[RX_BUFFER_SIZE / 2];
-volatile uint8_t data_ready_flag = 0;
+StreamBufferHandle_t xRadioRxStreamBuffer;
+QueueHandle_t xPcTxQueue;
+SemaphoreHandle_t xPcUartSemaphore;
+
+#define RX_DMA_BUFFER_SIZE 512
+uint8_t rx_dma_buffer[RX_DMA_BUFFER_SIZE];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -61,6 +82,9 @@ static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_LPUART1_UART_Init(void);
+void StartParserTask(void *argument);
+void StartPcTxTask(void *argument);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -103,41 +127,59 @@ int main(void)
   MX_USART1_UART_Init();
   MX_LPUART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(USART1_IRQn);
+  xRadioRxStreamBuffer = xStreamBufferCreate(1024, 1);
 
-  if(HAL_UART_Receive_DMA(&huart1, rx_buffer, RX_BUFFER_SIZE) != HAL_OK)
-  {
-    Error_Handler();
-  }
+  xPcTxQueue = xQueueCreate(10, sizeof(RadioPacket_t));
+
+  xPcUartSemaphore = xSemaphoreCreateBinary();
+  xSemaphoreGive(xPcUartSemaphore);
+
+  HAL_UART_Receive_DMA(&huart1, rx_dma_buffer, RX_DMA_BUFFER_SIZE);
   /* USER CODE END 2 */
+
+  /* Init scheduler */
+  osKernelInitialize();
+
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* creation of ParserTask */
+  ParserTaskHandle = osThreadNew(StartParserTask, NULL, &ParserTask_attributes);
+
+  /* creation of PcTxTask */
+  PcTxTaskHandle = osThreadNew(StartPcTxTask, NULL, &PcTxTask_attributes);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  /* USER CODE END RTOS_THREADS */
+
+  /* USER CODE BEGIN RTOS_EVENTS */
+  /* add events, ... */
+  /* USER CODE END RTOS_EVENTS */
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    if (data_ready_flag != 0)
-    {
-      // Copy the data to a safe TX buffer so DMA doesn't overwrite it while we send
-      // This is crucial for audio stability
-      if (data_ready_flag == 1) // First Half Ready (0 to Size/2)
-      {
-        memcpy(tx_buffer, rx_buffer, RX_BUFFER_SIZE / 2);
-      }
-      else if (data_ready_flag == 2) // Second Half Ready (Size/2 to End)
-      {
-        memcpy(tx_buffer, &rx_buffer[RX_BUFFER_SIZE / 2], RX_BUFFER_SIZE / 2);
-      }
-
-      // Clear flag BEFORE sending to allow new interrupts
-      uint8_t current_flag = data_ready_flag;
-      data_ready_flag = 0;
-
-      // Send to PC via DMA (non-blocking)
-      // Wait if previous TX is still busy (rare at high baud, but safe)
-      while(HAL_UART_GetState(&hlpuart1) == HAL_UART_STATE_BUSY_TX);
-      HAL_UART_Transmit_DMA(&hlpuart1, tx_buffer, RX_BUFFER_SIZE / 2);
-    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -295,16 +337,16 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Channel1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
   /* DMA1_Channel2_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel2_IRQn);
   /* DMA1_Channel3_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel3_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel3_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel3_IRQn);
   /* DMA1_Channel4_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel4_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel4_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel4_IRQn);
 
 }
@@ -325,16 +367,6 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15|GPIO_PIN_9|GPIO_PIN_11, GPIO_PIN_RESET);
-
-  /*Configure GPIO pins : PB15 PB9 PB11 */
-  GPIO_InitStruct.Pin = GPIO_PIN_15|GPIO_PIN_9|GPIO_PIN_11;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP; // Push-Pull
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, FE_CTRL3_Pin|GPIO_PIN_5|FE_CTRL1_Pin, GPIO_PIN_RESET);
@@ -359,25 +391,73 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart)
+void Process_DMA_Buffer(UART_HandleTypeDef* huart)
 {
-  if (huart->Instance == USART1)
+  static uint16_t old_pos = 0;
+  uint16_t new_pos = RX_DMA_BUFFER_SIZE - __HAL_DMA_GET_COUNTER(huart->hdmarx);
+
+  if (new_pos != old_pos)
   {
-    data_ready_flag = 1;
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);
+    if (new_pos > old_pos)
+    {
+      xStreamBufferSendFromISR(xRadioRxStreamBuffer, &rx_dma_buffer[old_pos], new_pos - old_pos, NULL);
+    } else
+    {
+      xStreamBufferSendFromISR(xRadioRxStreamBuffer, &rx_dma_buffer[old_pos], RX_DMA_BUFFER_SIZE - old_pos, NULL);
+      if (new_pos > 0)
+      {
+        xStreamBufferSendFromISR(xRadioRxStreamBuffer, &rx_dma_buffer[0], new_pos, NULL);
+      }
+    }
+    old_pos = new_pos;
   }
 }
 
-// Called when buffer is completely full (wraps around to start)
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef* huart) {
+  if (huart->Instance == USART1) Process_DMA_Buffer(huart);
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart) {
+  if (huart->Instance == USART1) Process_DMA_Buffer(huart);
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart)
 {
-  if (huart->Instance == USART1)
+  if (huart->Instance == LPUART1)
   {
-    data_ready_flag = 2;
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);
+    BaseType_t xTaskWoken = pdFALSE;
+    xSemaphoreGiveFromISR(xPcUartSemaphore, &xTaskWoken);
+    portYIELD_FROM_ISR(xTaskWoken);
   }
 }
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* huart, uint16_t Size)
+{
+  if (huart->Instance == USART1) Process_DMA_Buffer(huart);
+}
 /* USER CODE END 4 */
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM16 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM16)
+  {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

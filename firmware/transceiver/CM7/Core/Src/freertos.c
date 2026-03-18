@@ -30,6 +30,7 @@
 #include "stream_buffer.h"
 #include "queue.h"
 #include <string.h>
+#include <usb_device.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -75,6 +76,8 @@ adpcm_state_t encoder_state = {0, 0};
 /* ============================================================ */
 void StartAudioTask(void* argument)
 {
+  MX_USB_DEVICE_Init();
+
   int16_t pcm_input_buffer[FRAME_SAMPLES];
   size_t bytes_received;
   RadioPacket_t audio_packet;
@@ -152,7 +155,7 @@ void StartRadioTxTask(void* argument)
 {
   RadioPacket_t tx_packet;
 
-  static __attribute__((aligned(32))) uint8_t dma_buffer[sizeof(RadioPacket_t)];
+  static __attribute__((section(".dma_buffer"))) __attribute__((aligned(32))) uint8_t dma_buffer[sizeof(RadioPacket_t)];
 
   for (;;)
   {
@@ -162,18 +165,15 @@ void StartRadioTxTask(void* argument)
       {
         dma_buffer[0] = tx_packet.start_byte;
         dma_buffer[1] = tx_packet.type;
-        dma_buffer[3] = tx_packet.length;
+        dma_buffer[2] = tx_packet.length;
 
         memcpy(&dma_buffer[3], tx_packet.payload, tx_packet.length);
 
         uint16_t total_len = 3 + tx_packet.length;
 
-        SCB_CleanDCache_by_Addr((uint32_t*)dma_buffer, total_len + 32);
-
         if (HAL_UART_Transmit_DMA(&huart6, dma_buffer, total_len) != HAL_OK)
         {
           xSemaphoreGive(xUartTxSemaphore);
-          HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);
         }
       }
     }
