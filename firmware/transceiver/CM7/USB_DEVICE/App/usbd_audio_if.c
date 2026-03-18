@@ -34,8 +34,6 @@
 /* Private variables ---------------------------------------------------------*/
 extern UART_HandleTypeDef huart6;
 
-adpcm_state_t encoder_state = {0, 0};
-
 #define PACKET_SIZE 64
 #if defined(__GNUC__) // For STM32CubeIDE / GCC
 __attribute__((section(".dma_buffer"))) ALIGN_32BYTES(uint8_t tx_buffer[2][PACKET_SIZE]);
@@ -199,8 +197,6 @@ static int8_t AUDIO_AudioCmd_FS(uint8_t* pbuf, uint32_t size, uint8_t cmd)
     break;
 
     case AUDIO_CMD_PLAY:
-      encoder_state.predicted_sample = 0;
-      encoder_state.step_index = 0;
     break;
   }
   UNUSED(pbuf);
@@ -244,65 +240,38 @@ static int8_t AUDIO_MuteCtl_FS(uint8_t cmd)
 static int8_t AUDIO_PeriodicTC_FS(uint8_t *pbuf, uint32_t size, uint8_t cmd)
 {
   /* USER CODE BEGIN 5 */
-  uint16_t sample_count = size / 2;
-  int16_t *pcm_samples = (int16_t*)pbuf;
-  uint16_t encoded_len = sample_count / 4;
+  uint16_t total_stereo_samples = size / 2;
+  uint16_t mono_samples = total_stereo_samples / 2;
 
-  if (encoded_len > PACKET_SIZE) encoded_len = PACKET_SIZE;
+  int16_t mono_buffer[mono_samples];
+  int16_t* pcm_in = (int16_t*)pbuf;
 
-  uint8_t current_buf = buffer_index;
-  uint8_t *target_buffer = tx_buffer[current_buf];
-
-  int out_idx = 0;
-
-  for (int i = 0; i < sample_count; i += 4)
+  for (int i = 0; i < mono_samples; i++)
   {
-    if (out_idx >= encoded_len) break;
-
-    uint8_t high_nibble = adpcm_encode_sample(pcm_samples[i], &encoder_state);
-    uint8_t low_nibble = 0;
-    if (i + 2 < sample_count) {
-      low_nibble = adpcm_encode_sample(pcm_samples[i + 2], &encoder_state);
-    }
-    target_buffer[out_idx++] = (high_nibble << 4) | (low_nibble & 0x0F);
+    mono_buffer[i] = pcm_in[i * 2];
   }
 
-  /* --- CLEAN D‑CACHE for the exact region DMA will read --- */
+  BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+  size_t bytes_sent = xStreamBufferSendFromISR(
+    xAudioInputStreamBuffer,
+    (void*) mono_buffer,
+    mono_samples * sizeof(int16_t),
+    &xHigherPriorityTaskWoken
+  );
+
+  if (bytes_sent != mono_samples * sizeof(int16_t))
   {
-    uintptr_t addr = (uintptr_t)target_buffer;
-    uintptr_t aligned_addr = addr & ~((uintptr_t)31);              // align down to 32 bytes
-    uintptr_t end = addr + encoded_len;
-    uintptr_t aligned_end = (end + 31) & ~((uintptr_t)31);        // align up to 32 bytes
-    uint32_t clean_len = (uint32_t)(aligned_end - aligned_addr);
-    SCB_CleanDCache_by_Addr((uint32_t*)aligned_addr, (int32_t)clean_len);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);
+  } else
+  {
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET);
   }
 
-  /* Start DMA transmit and check result */
-  if (huart6.gState == HAL_UART_STATE_READY)
-  {
-    HAL_StatusTypeDef st = HAL_UART_Transmit_DMA(&huart6, target_buffer, encoded_len);
-    if (st == HAL_OK)
-    {
-      buffer_index = (buffer_index + 1) % 2;   // swap buffer
-      HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET); // red LED off
-    }
-    else
-    {
-      /* indicate error briefly */
-      HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);
-      /* optionally abort previous DMA to recover:
-      HAL_UART_AbortTransmit(&huart6);
-      or try HAL_Delay(1); then retry */
-    }
-  }
-  else
-  {
-    /* UART busy: indicate overrun */
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);
-  }
+  portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
   UNUSED(cmd);
-  return (USBD_OK);
+  return USBD_OK;
   /* USER CODE END 5 */
 }
 
@@ -340,23 +309,7 @@ void HalfTransfer_CallBack_FS(void)
 }
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
-  if (huart->Instance == USART6)
-  {
-    /* Toggle a visible LED on successful transmit completion */
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0); // green LED (or adjust to your pin)
-  }
-}
 
-void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
-{
-  if (huart->Instance == USART6)
-  {
-    /* persistent error indicator */
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET); // red LED on
-  }
-}
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
 
 /**

@@ -34,7 +34,10 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include "stream_buffer.h"
+#include "queue.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -62,7 +65,9 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 
 /* USER CODE BEGIN Private defines */
-
+extern StreamBufferHandle_t xAudioInputStreamBuffer;
+extern QueueHandle_t xRadioTxQueue;
+extern SemaphoreHandle_t xUartTxSemaphore;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

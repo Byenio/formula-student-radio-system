@@ -23,7 +23,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "cmsis_os.h"
+#include "adpcm.h"
+#include "radio_protocol.h"
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -86,7 +89,18 @@ const osThreadAttr_t RadioTxTask_attributes = {
   .priority = (osPriority_t) osPriorityHigh,
 };
 /* USER CODE BEGIN PV */
+StreamBufferHandle_t xAudioInputStreamBuffer;
+QueueHandle_t xRadioTxQueue;
+SemaphoreHandle_t xUartTxSemaphore;
 
+// stream buffer
+#define AUDIO_STREAM_SIZE 2048
+uint8_t audio_stream_storage[AUDIO_STREAM_SIZE];
+StaticStreamBuffer_t xAudioStreamStruct;
+
+// adpcm configuration
+#define FRAME_SAMPLES 320 // 20ms@16kHz
+#define FRAME_BYTES   (FRAME_SAMPLES * sizeof(int16_t)) // 640 bytes raw
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -195,7 +209,8 @@ int main(void)
   /* USER CODE END RTOS_MUTEX */
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
-  /* add semaphores, ... */
+  xUartTxSemaphore = xSemaphoreCreateBinary();
+  xSemaphoreGive(xUartTxSemaphore);
   /* USER CODE END RTOS_SEMAPHORES */
 
   /* USER CODE BEGIN RTOS_TIMERS */
@@ -203,7 +218,14 @@ int main(void)
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
-  /* add queues, ... */
+  xAudioInputStreamBuffer = xStreamBufferCreateStatic(
+    AUDIO_STREAM_SIZE,
+    1,
+    audio_stream_storage,
+    &xAudioStreamStruct
+  );
+
+  xRadioTxQueue = xQueueCreate(10, sizeof(RadioPacket_t));
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
@@ -482,64 +504,20 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart)
+{
+  if (huart->Instance == USART6)
+  {
+    BaseType_t xHigherPiorityTaskWoken = pdFALSE;
 
+    xSemaphoreGiveFromISR(xUartTxSemaphore, &xHigherPiorityTaskWoken);
+
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+
+    portYIELD_FROM_ISR(xHigherPiorityTaskWoken);
+  }
+}
 /* USER CODE END 4 */
-
-/* USER CODE BEGIN Header_StartAudioTask */
-/**
-  * @brief  Function implementing the AudioTask thread.
-  * @param  argument: Not used
-  * @retval None
-  */
-/* USER CODE END Header_StartAudioTask */
-void StartAudioTask(void *argument)
-{
-  /* init code for USB_DEVICE */
-  MX_USB_DEVICE_Init();
-  /* USER CODE BEGIN 5 */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END 5 */
-}
-
-/* USER CODE BEGIN Header_StartTelemetryTask */
-/**
-* @brief Function implementing the TelemetryTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartTelemetryTask */
-void StartTelemetryTask(void *argument)
-{
-  /* USER CODE BEGIN StartTelemetryTask */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartTelemetryTask */
-}
-
-/* USER CODE BEGIN Header_StartRadioTxTask */
-/**
-* @brief Function implementing the RadioTxTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartRadioTxTask */
-void StartRadioTxTask(void *argument)
-{
-  /* USER CODE BEGIN StartRadioTxTask */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartRadioTxTask */
-}
 
 /**
   * @brief  Period elapsed callback in non blocking mode
