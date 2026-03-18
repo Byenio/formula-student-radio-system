@@ -246,21 +246,25 @@ static int8_t AUDIO_PeriodicTC_FS(uint8_t *pbuf, uint32_t size, uint8_t cmd)
   /* USER CODE BEGIN 5 */
   uint16_t sample_count = size / 2;
   int16_t *pcm_samples = (int16_t*)pbuf;
-  uint16_t encoded_len = sample_count / 2;
+  uint16_t encoded_len = sample_count / 4;
 
   if (encoded_len > PACKET_SIZE) encoded_len = PACKET_SIZE;
 
   uint8_t current_buf = buffer_index;
   uint8_t *target_buffer = tx_buffer[current_buf];
 
-  for (int i = 0; i < sample_count; i += 2)
+  int out_idx = 0;
+
+  for (int i = 0; i < sample_count; i += 4)
   {
+    if (out_idx >= encoded_len) break;
+
     uint8_t high_nibble = adpcm_encode_sample(pcm_samples[i], &encoder_state);
     uint8_t low_nibble = 0;
-    if (i + 1 < sample_count) {
-      low_nibble = adpcm_encode_sample(pcm_samples[i + 1], &encoder_state);
+    if (i + 2 < sample_count) {
+      low_nibble = adpcm_encode_sample(pcm_samples[i + 2], &encoder_state);
     }
-    target_buffer[i / 2] = (high_nibble << 4) | (low_nibble & 0x0F);
+    target_buffer[out_idx++] = (high_nibble << 4) | (low_nibble & 0x0F);
   }
 
   /* --- CLEAN D‑CACHE for the exact region DMA will read --- */
@@ -287,8 +291,8 @@ static int8_t AUDIO_PeriodicTC_FS(uint8_t *pbuf, uint32_t size, uint8_t cmd)
       /* indicate error briefly */
       HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);
       /* optionally abort previous DMA to recover:
-         HAL_UART_AbortTransmit(&huart6);
-         or try HAL_Delay(1); then retry */
+      HAL_UART_AbortTransmit(&huart6);
+      or try HAL_Delay(1); then retry */
     }
   }
   else

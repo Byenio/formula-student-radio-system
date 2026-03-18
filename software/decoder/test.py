@@ -6,8 +6,8 @@ import time
 # --- CONFIGURATION ---
 SERIAL_PORT = 'COM7'  # CHANGE THIS to your Nucleo Port!
 BAUD_RATE = 921600
-SAMPLE_RATE = 32000
-DURATION = 240  # Record for 5 seconds
+SAMPLE_RATE = 16000
+DURATION = 240
 
 # --- ADPCM DECODER TABLES ---
 step_table = [
