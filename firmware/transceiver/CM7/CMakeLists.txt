@@ -39,9 +39,28 @@ add_executable(${CMAKE_PROJECT_NAME})
 # Include mx-generated
 include("mx-generated.cmake")
 
-
 # In order to use CMake for cross-compiling
 set(CMAKE_CXX_COMPILER_FORCED "true")
+
+# OPUS configuration
+set(OPUS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(OPUS_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
+set(OPUS_BUILD_SHARED_LIBRARY OFF CACHE BOOL "" FORCE)
+set(OPUS_FIXED_POINT ON CACHE BOOL "" FORCE)
+set(OPUS_ENABLE_FLOAT_API OFF CACHE BOOL "" FORCE)
+set(OPUS_DISABLE_INTRINSICS ON CACHE BOOL "" FORCE)
+
+# Bare-metal specific Opus flags
+set(OPUS_STACK_PROTECTOR OFF CACHE BOOL "" FORCE)
+set(OPUS_FORTIFY_SOURCE OFF CACHE BOOL "" FORCE)
+set(OPUS_HARDENING OFF CACHE BOOL "" FORCE)
+set(OPUS_USE_NEON OFF CACHE BOOL "" FORCE)
+
+# Prevent CMake from trying to install Opus when building the main project
+set(OPUS_INSTALL_PKG_CONFIG_MODULE OFF CACHE BOOL "" FORCE)
+set(OPUS_INSTALL_CMAKE_CONFIG_MODULE OFF CACHE BOOL "" FORCE)
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/../Middlewares/Third_Party/opus ${CMAKE_BINARY_DIR}/opus EXCLUDE_FROM_ALL)
 
 # Add project symbols (macros)
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
@@ -53,7 +72,7 @@ enable_language(C ASM)
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined include paths
+        ${CMAKE_SOURCE_DIR}/../Middlewares/Third_Party/opus/include
 )
 
 # Add sources to executable
@@ -71,8 +90,8 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 )
 
 # Add linked libraries
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined libraries
+target_link_libraries(${CMAKE_PROJECT_NAME}
+    opus
 )
 
 # Remove wrong libob.a library dependency when using cpp files
@@ -82,12 +101,3 @@ list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
 if((CMAKE_C_STANDARD EQUAL 90) OR (CMAKE_C_STANDARD EQUAL 99))
     message(ERROR "Generated code requires C11 or higher")
 endif()
-
-
-
-
-
-
-
-
-

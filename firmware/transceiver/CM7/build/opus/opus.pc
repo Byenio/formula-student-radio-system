@@ -1,0 +1,16 @@
+# Opus codec reference implementation pkg-config file
+
+prefix=C:/Program Files (x86)/transceiver_CM7
+exec_prefix=C:/Program Files (x86)/transceiver_CM7
+libdir=C:/Program Files (x86)/transceiver_CM7/lib
+includedir=C:/Program Files (x86)/transceiver_CM7/include
+
+Name: Opus
+Description: Opus IETF audio codec ( build)
+URL: https://opus-codec.org/
+Version: 1.5.2
+Requires:
+Conflicts:
+Libs: -LC:/Program Files (x86)/transceiver_CM7/lib -lopus
+Libs.private: -lm
+Cflags: -IC:/Program Files (x86)/transceiver_CM7/include/opus

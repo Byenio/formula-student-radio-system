@@ -8915,6 +8915,8 @@ LOAD CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
 LOAD CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
 LOAD CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
 LOAD C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a
+LOAD opus/libopus.a
+LOAD C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libm.a
 START GROUP
 LOAD C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard\libgcc.a
 LOAD C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a
@@ -8937,7 +8939,7 @@ LOAD C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/
                 0x08000000                g_pfnVectors
                 0x08000298                        . = ALIGN (0x4)
 
-.text           0x080002a0    0x12f44
+.text           0x080002a0    0x12fd4
                 0x080002a0                        . = ALIGN (0x4)
  *(.text)
  .text          0x080002a0       0x40 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
@@ -9815,453 +9817,453 @@ LOAD C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/
                 0x08011f24       0x64 CMakeFiles/transceiver_CM7.dir/Core/Src/freertos.c.obj
                 0x08011f24                StartTelemetryTask
  .text.StartRadioTxTask
-                0x08011f88       0x98 CMakeFiles/transceiver_CM7.dir/Core/Src/freertos.c.obj
+                0x08011f88      0x128 CMakeFiles/transceiver_CM7.dir/Core/Src/freertos.c.obj
                 0x08011f88                StartRadioTxTask
  .text.NMI_Handler
-                0x08012020        0x8 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x08012020                NMI_Handler
+                0x080120b0        0x8 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x080120b0                NMI_Handler
  .text.HardFault_Handler
-                0x08012028        0x8 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x08012028                HardFault_Handler
+                0x080120b8        0x8 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x080120b8                HardFault_Handler
  .text.MemManage_Handler
-                0x08012030        0x8 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x08012030                MemManage_Handler
+                0x080120c0        0x8 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x080120c0                MemManage_Handler
  .text.BusFault_Handler
-                0x08012038        0x8 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x08012038                BusFault_Handler
+                0x080120c8        0x8 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x080120c8                BusFault_Handler
  .text.UsageFault_Handler
-                0x08012040        0x8 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x08012040                UsageFault_Handler
+                0x080120d0        0x8 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x080120d0                UsageFault_Handler
  .text.DebugMon_Handler
-                0x08012048        0xe CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x08012048                DebugMon_Handler
- *fill*         0x08012056        0x2 
+                0x080120d8        0xe CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x080120d8                DebugMon_Handler
+ *fill*         0x080120e6        0x2 
  .text.DMA1_Stream0_IRQHandler
-                0x08012058       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x08012058                DMA1_Stream0_IRQHandler
+                0x080120e8       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x080120e8                DMA1_Stream0_IRQHandler
  .text.DMA1_Stream1_IRQHandler
-                0x0801206c       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x0801206c                DMA1_Stream1_IRQHandler
+                0x080120fc       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x080120fc                DMA1_Stream1_IRQHandler
  .text.DMA1_Stream2_IRQHandler
-                0x08012080       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x08012080                DMA1_Stream2_IRQHandler
+                0x08012110       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x08012110                DMA1_Stream2_IRQHandler
  .text.DMA1_Stream3_IRQHandler
-                0x08012094       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x08012094                DMA1_Stream3_IRQHandler
+                0x08012124       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x08012124                DMA1_Stream3_IRQHandler
  .text.USART1_IRQHandler
-                0x080120a8       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x080120a8                USART1_IRQHandler
+                0x08012138       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x08012138                USART1_IRQHandler
  .text.EXTI15_10_IRQHandler
-                0x080120bc        0xe CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x080120bc                EXTI15_10_IRQHandler
- *fill*         0x080120ca        0x2 
+                0x0801214c        0xe CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x0801214c                EXTI15_10_IRQHandler
+ *fill*         0x0801215a        0x2 
  .text.TIM6_DAC_IRQHandler
-                0x080120cc       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x080120cc                TIM6_DAC_IRQHandler
+                0x0801215c       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x0801215c                TIM6_DAC_IRQHandler
  .text.USART6_IRQHandler
-                0x080120e0       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x080120e0                USART6_IRQHandler
+                0x08012170       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x08012170                USART6_IRQHandler
  .text.OTG_FS_IRQHandler
-                0x080120f4       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
-                0x080120f4                OTG_FS_IRQHandler
+                0x08012184       0x14 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+                0x08012184                OTG_FS_IRQHandler
  .text.HAL_MspInit
-                0x08012108       0x3c CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_msp.c.obj
-                0x08012108                HAL_MspInit
+                0x08012198       0x3c CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_msp.c.obj
+                0x08012198                HAL_MspInit
  .text.HAL_UART_MspInit
-                0x08012144      0x330 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_msp.c.obj
-                0x08012144                HAL_UART_MspInit
+                0x080121d4      0x330 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_msp.c.obj
+                0x080121d4                HAL_UART_MspInit
  .text.HAL_InitTick
-                0x08012474       0xd8 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_timebase_tim.c.obj
-                0x08012474                HAL_InitTick
+                0x08012504       0xd8 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_timebase_tim.c.obj
+                0x08012504                HAL_InitTick
  .text.MX_USB_DEVICE_Init
-                0x0801254c       0x64 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usb_device.c.obj
-                0x0801254c                MX_USB_DEVICE_Init
+                0x080125dc       0x64 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usb_device.c.obj
+                0x080125dc                MX_USB_DEVICE_Init
  .text.USBD_FS_DeviceDescriptor
-                0x080125b0       0x24 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
-                0x080125b0                USBD_FS_DeviceDescriptor
+                0x08012640       0x24 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+                0x08012640                USBD_FS_DeviceDescriptor
  .text.USBD_FS_LangIDStrDescriptor
-                0x080125d4       0x24 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
-                0x080125d4                USBD_FS_LangIDStrDescriptor
+                0x08012664       0x24 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+                0x08012664                USBD_FS_LangIDStrDescriptor
  .text.USBD_FS_ProductStrDescriptor
-                0x080125f8       0x3c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
-                0x080125f8                USBD_FS_ProductStrDescriptor
+                0x08012688       0x3c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+                0x08012688                USBD_FS_ProductStrDescriptor
  .text.USBD_FS_ManufacturerStrDescriptor
-                0x08012634       0x28 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
-                0x08012634                USBD_FS_ManufacturerStrDescriptor
+                0x080126c4       0x28 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+                0x080126c4                USBD_FS_ManufacturerStrDescriptor
  .text.USBD_FS_SerialStrDescriptor
-                0x0801265c       0x24 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
-                0x0801265c                USBD_FS_SerialStrDescriptor
+                0x080126ec       0x24 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+                0x080126ec                USBD_FS_SerialStrDescriptor
  .text.USBD_FS_ConfigStrDescriptor
-                0x08012680       0x3c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
-                0x08012680                USBD_FS_ConfigStrDescriptor
+                0x08012710       0x3c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+                0x08012710                USBD_FS_ConfigStrDescriptor
  .text.USBD_FS_InterfaceStrDescriptor
-                0x080126bc       0x3c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
-                0x080126bc                USBD_FS_InterfaceStrDescriptor
+                0x0801274c       0x3c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+                0x0801274c                USBD_FS_InterfaceStrDescriptor
  .text.Get_SerialNum
-                0x080126f8       0x58 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+                0x08012788       0x58 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
  .text.IntToUnicode
-                0x08012750       0x7e CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+                0x080127e0       0x7e CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
  .text.AUDIO_Init_FS
-                0x080127ce       0x1a CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
+                0x0801285e       0x1a CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
  .text.AUDIO_DeInit_FS
-                0x080127e8       0x16 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
+                0x08012878       0x16 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
  .text.AUDIO_AudioCmd_FS
-                0x080127fe       0x28 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
+                0x0801288e       0x28 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
  .text.AUDIO_VolumeCtl_FS
-                0x08012826       0x18 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
+                0x080128b6       0x18 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
  .text.AUDIO_MuteCtl_FS
-                0x0801283e       0x18 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
- *fill*         0x08012856        0x2 
+                0x080128ce       0x18 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
+ *fill*         0x080128e6        0x2 
  .text.AUDIO_PeriodicTC_FS
-                0x08012858       0xe4 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
+                0x080128e8       0xe4 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
  .text.AUDIO_GetState_FS
-                0x0801293c       0x10 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
+                0x080129cc       0x10 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
  .text.HAL_PCD_MspInit
-                0x0801294c       0xe8 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x0801294c                HAL_PCD_MspInit
+                0x080129dc       0xe8 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x080129dc                HAL_PCD_MspInit
  .text.HAL_PCD_SetupStageCallback
-                0x08012a34       0x24 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012a34                HAL_PCD_SetupStageCallback
+                0x08012ac4       0x24 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012ac4                HAL_PCD_SetupStageCallback
  .text.HAL_PCD_DataOutStageCallback
-                0x08012a58       0x36 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012a58                HAL_PCD_DataOutStageCallback
+                0x08012ae8       0x36 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012ae8                HAL_PCD_DataOutStageCallback
  .text.HAL_PCD_DataInStageCallback
-                0x08012a8e       0x34 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012a8e                HAL_PCD_DataInStageCallback
+                0x08012b1e       0x34 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012b1e                HAL_PCD_DataInStageCallback
  .text.HAL_PCD_SOFCallback
-                0x08012ac2       0x1c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012ac2                HAL_PCD_SOFCallback
+                0x08012b52       0x1c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012b52                HAL_PCD_SOFCallback
  .text.HAL_PCD_ResetCallback
-                0x08012ade       0x50 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012ade                HAL_PCD_ResetCallback
- *fill*         0x08012b2e        0x2 
+                0x08012b6e       0x50 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012b6e                HAL_PCD_ResetCallback
+ *fill*         0x08012bbe        0x2 
  .text.HAL_PCD_SuspendCallback
-                0x08012b30       0x4c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012b30                HAL_PCD_SuspendCallback
+                0x08012bc0       0x4c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012bc0                HAL_PCD_SuspendCallback
  .text.HAL_PCD_ResumeCallback
-                0x08012b7c       0x1c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012b7c                HAL_PCD_ResumeCallback
+                0x08012c0c       0x1c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012c0c                HAL_PCD_ResumeCallback
  .text.HAL_PCD_ISOOUTIncompleteCallback
-                0x08012b98       0x24 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012b98                HAL_PCD_ISOOUTIncompleteCallback
+                0x08012c28       0x24 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012c28                HAL_PCD_ISOOUTIncompleteCallback
  .text.HAL_PCD_ISOINIncompleteCallback
-                0x08012bbc       0x24 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012bbc                HAL_PCD_ISOINIncompleteCallback
+                0x08012c4c       0x24 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012c4c                HAL_PCD_ISOINIncompleteCallback
  .text.HAL_PCD_ConnectCallback
-                0x08012be0       0x1c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012be0                HAL_PCD_ConnectCallback
+                0x08012c70       0x1c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012c70                HAL_PCD_ConnectCallback
  .text.HAL_PCD_DisconnectCallback
-                0x08012bfc       0x1c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012bfc                HAL_PCD_DisconnectCallback
+                0x08012c8c       0x1c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012c8c                HAL_PCD_DisconnectCallback
  .text.USBD_LL_Init
-                0x08012c18       0xa0 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012c18                USBD_LL_Init
+                0x08012ca8       0xa0 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012ca8                USBD_LL_Init
  .text.USBD_LL_Start
-                0x08012cb8       0x36 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012cb8                USBD_LL_Start
+                0x08012d48       0x36 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012d48                USBD_LL_Start
  .text.USBD_LL_OpenEP
-                0x08012cee       0x4c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012cee                USBD_LL_OpenEP
+                0x08012d7e       0x4c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012d7e                USBD_LL_OpenEP
  .text.USBD_LL_CloseEP
-                0x08012d3a       0x3e CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012d3a                USBD_LL_CloseEP
+                0x08012dca       0x3e CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012dca                USBD_LL_CloseEP
  .text.USBD_LL_StallEP
-                0x08012d78       0x3e CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012d78                USBD_LL_StallEP
+                0x08012e08       0x3e CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012e08                USBD_LL_StallEP
  .text.USBD_LL_ClearStallEP
-                0x08012db6       0x3e CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012db6                USBD_LL_ClearStallEP
+                0x08012e46       0x3e CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012e46                USBD_LL_ClearStallEP
  .text.USBD_LL_IsStallEP
-                0x08012df4       0x58 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012df4                USBD_LL_IsStallEP
+                0x08012e84       0x58 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012e84                USBD_LL_IsStallEP
  .text.USBD_LL_SetUSBAddress
-                0x08012e4c       0x3e CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012e4c                USBD_LL_SetUSBAddress
+                0x08012edc       0x3e CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012edc                USBD_LL_SetUSBAddress
  .text.USBD_LL_Transmit
-                0x08012e8a       0x42 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012e8a                USBD_LL_Transmit
+                0x08012f1a       0x42 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012f1a                USBD_LL_Transmit
  .text.USBD_LL_PrepareReceive
-                0x08012ecc       0x42 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012ecc                USBD_LL_PrepareReceive
+                0x08012f5c       0x42 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012f5c                USBD_LL_PrepareReceive
  .text.USBD_LL_GetRxDataSize
-                0x08012f0e       0x26 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012f0e                USBD_LL_GetRxDataSize
+                0x08012f9e       0x26 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012f9e                USBD_LL_GetRxDataSize
  .text.USBD_static_malloc
-                0x08012f34       0x1c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012f34                USBD_static_malloc
+                0x08012fc4       0x1c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012fc4                USBD_static_malloc
  .text.USBD_static_free
-                0x08012f50       0x14 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012f50                USBD_static_free
+                0x08012fe0       0x14 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012fe0                USBD_static_free
  .text.USBD_Get_USB_Status
-                0x08012f64       0x58 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
-                0x08012f64                USBD_Get_USB_Status
+                0x08012ff4       0x58 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+                0x08012ff4                USBD_Get_USB_Status
  .text.Reset_Handler
-                0x08012fbc       0x54 CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
-                0x08012fbc                Reset_Handler
+                0x0801304c       0x54 CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
+                0x0801304c                Reset_Handler
  .text.Default_Handler
-                0x08013010        0x2 CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
-                0x08013010                RTC_Alarm_IRQHandler
-                0x08013010                HASH_RNG_IRQHandler
-                0x08013010                EXTI2_IRQHandler
-                0x08013010                TIM8_CC_IRQHandler
-                0x08013010                HRTIM1_Master_IRQHandler
-                0x08013010                UART8_IRQHandler
-                0x08013010                SPI4_IRQHandler
-                0x08013010                TIM1_CC_IRQHandler
-                0x08013010                BDMA_Channel6_IRQHandler
-                0x08013010                DMA2_Stream5_IRQHandler
-                0x08013010                HRTIM1_FLT_IRQHandler
-                0x08013010                JPEG_IRQHandler
-                0x08013010                DMA1_Stream5_IRQHandler
-                0x08013010                BDMA_Channel1_IRQHandler
-                0x08013010                HRTIM1_TIMD_IRQHandler
-                0x08013010                TAMP_STAMP_IRQHandler
-                0x08013010                EXTI3_IRQHandler
-                0x08013010                LPTIM4_IRQHandler
-                0x08013010                TIM8_TRG_COM_TIM14_IRQHandler
-                0x08013010                LPTIM2_IRQHandler
-                0x08013010                DFSDM1_FLT1_IRQHandler
-                0x08013010                DMAMUX2_OVR_IRQHandler
-                0x08013010                TIM8_UP_TIM13_IRQHandler
-                0x08013010                I2C3_ER_IRQHandler
-                0x08013010                DFSDM1_FLT2_IRQHandler
-                0x08013010                MDMA_IRQHandler
-                0x08013010                LPTIM3_IRQHandler
-                0x08013010                HSEM1_IRQHandler
-                0x08013010                EXTI0_IRQHandler
-                0x08013010                I2C2_EV_IRQHandler
-                0x08013010                FPU_IRQHandler
-                0x08013010                OTG_HS_WKUP_IRQHandler
-                0x08013010                FDCAN1_IT1_IRQHandler
-                0x08013010                LTDC_ER_IRQHandler
-                0x08013010                DMA2_Stream2_IRQHandler
-                0x08013010                HRTIM1_TIME_IRQHandler
-                0x08013010                SPI1_IRQHandler
-                0x08013010                DCMI_IRQHandler
-                0x08013010                HRTIM1_TIMC_IRQHandler
-                0x08013010                DMA2_Stream3_IRQHandler
-                0x08013010                SAI2_IRQHandler
-                0x08013010                DFSDM1_FLT3_IRQHandler
-                0x08013010                TIM17_IRQHandler
-                0x08013010                USART3_IRQHandler
-                0x08013010                BDMA_Channel7_IRQHandler
-                0x08013010                CRYP_IRQHandler
-                0x08013010                LPTIM5_IRQHandler
-                0x08013010                UART5_IRQHandler
-                0x08013010                ADC3_IRQHandler
-                0x08013010                DMA2_Stream0_IRQHandler
-                0x08013010                TIM4_IRQHandler
-                0x08013010                BDMA_Channel2_IRQHandler
-                0x08013010                QUADSPI_IRQHandler
-                0x08013010                I2C1_EV_IRQHandler
-                0x08013010                DMA1_Stream6_IRQHandler
-                0x08013010                DMAMUX1_OVR_IRQHandler
-                0x08013010                TIM16_IRQHandler
-                0x08013010                UART4_IRQHandler
-                0x08013010                BDMA_Channel5_IRQHandler
-                0x08013010                TIM3_IRQHandler
-                0x08013010                RCC_IRQHandler
-                0x08013010                TIM8_BRK_TIM12_IRQHandler
-                0x08013010                TIM1_TRG_COM_IRQHandler
-                0x08013010                Default_Handler
-                0x08013010                ECC_IRQHandler
-                0x08013010                CEC_IRQHandler
-                0x08013010                BDMA_Channel0_IRQHandler
-                0x08013010                ADC_IRQHandler
-                0x08013010                DMA1_Stream7_IRQHandler
-                0x08013010                HRTIM1_TIMA_IRQHandler
-                0x08013010                SPI5_IRQHandler
-                0x08013010                TIM7_IRQHandler
-                0x08013010                SDMMC1_IRQHandler
-                0x08013010                TIM5_IRQHandler
-                0x08013010                DMA2_Stream7_IRQHandler
-                0x08013010                TIM15_IRQHandler
-                0x08013010                PVD_AVD_IRQHandler
-                0x08013010                I2C3_EV_IRQHandler
-                0x08013010                EXTI9_5_IRQHandler
-                0x08013010                RTC_WKUP_IRQHandler
-                0x08013010                LTDC_IRQHandler
-                0x08013010                SAI3_IRQHandler
-                0x08013010                ETH_WKUP_IRQHandler
-                0x08013010                SPDIF_RX_IRQHandler
-                0x08013010                SPI2_IRQHandler
-                0x08013010                OTG_HS_EP1_IN_IRQHandler
-                0x08013010                CRS_IRQHandler
-                0x08013010                CM7_SEV_IRQHandler
-                0x08013010                EXTI4_IRQHandler
-                0x08013010                CM4_SEV_IRQHandler
-                0x08013010                HRTIM1_TIMB_IRQHandler
-                0x08013010                FDCAN2_IT1_IRQHandler
-                0x08013010                ETH_IRQHandler
-                0x08013010                TIM1_UP_IRQHandler
-                0x08013010                WWDG_RST_IRQHandler
-                0x08013010                BDMA_Channel4_IRQHandler
-                0x08013010                OTG_HS_EP1_OUT_IRQHandler
-                0x08013010                WWDG_IRQHandler
-                0x08013010                SPI6_IRQHandler
-                0x08013010                MDIOS_IRQHandler
-                0x08013010                I2C4_EV_IRQHandler
-                0x08013010                FDCAN2_IT0_IRQHandler
-                0x08013010                LPUART1_IRQHandler
-                0x08013010                FDCAN1_IT0_IRQHandler
-                0x08013010                TIM2_IRQHandler
-                0x08013010                OTG_FS_WKUP_IRQHandler
-                0x08013010                OTG_HS_IRQHandler
-                0x08013010                HSEM2_IRQHandler
-                0x08013010                DMA2D_IRQHandler
-                0x08013010                TIM1_BRK_IRQHandler
-                0x08013010                EXTI1_IRQHandler
-                0x08013010                SDMMC2_IRQHandler
-                0x08013010                OTG_FS_EP1_OUT_IRQHandler
-                0x08013010                BDMA_Channel3_IRQHandler
-                0x08013010                HOLD_CORE_IRQHandler
-                0x08013010                UART7_IRQHandler
-                0x08013010                MDIOS_WKUP_IRQHandler
-                0x08013010                USART2_IRQHandler
-                0x08013010                DFSDM1_FLT0_IRQHandler
-                0x08013010                SAI4_IRQHandler
-                0x08013010                I2C2_ER_IRQHandler
-                0x08013010                DMA2_Stream1_IRQHandler
-                0x08013010                FLASH_IRQHandler
-                0x08013010                DMA2_Stream4_IRQHandler
-                0x08013010                SPI3_IRQHandler
-                0x08013010                WAKEUP_PIN_IRQHandler
-                0x08013010                DMA1_Stream4_IRQHandler
-                0x08013010                OTG_FS_EP1_IN_IRQHandler
-                0x08013010                I2C1_ER_IRQHandler
-                0x08013010                FMC_IRQHandler
-                0x08013010                FDCAN_CAL_IRQHandler
-                0x08013010                SWPMI1_IRQHandler
-                0x08013010                COMP1_IRQHandler
-                0x08013010                LPTIM1_IRQHandler
-                0x08013010                I2C4_ER_IRQHandler
-                0x08013010                DMA2_Stream6_IRQHandler
-                0x08013010                SAI1_IRQHandler
- *fill*         0x08013012        0x2 
+                0x080130a0        0x2 CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
+                0x080130a0                RTC_Alarm_IRQHandler
+                0x080130a0                HASH_RNG_IRQHandler
+                0x080130a0                EXTI2_IRQHandler
+                0x080130a0                TIM8_CC_IRQHandler
+                0x080130a0                HRTIM1_Master_IRQHandler
+                0x080130a0                UART8_IRQHandler
+                0x080130a0                SPI4_IRQHandler
+                0x080130a0                TIM1_CC_IRQHandler
+                0x080130a0                BDMA_Channel6_IRQHandler
+                0x080130a0                DMA2_Stream5_IRQHandler
+                0x080130a0                HRTIM1_FLT_IRQHandler
+                0x080130a0                JPEG_IRQHandler
+                0x080130a0                DMA1_Stream5_IRQHandler
+                0x080130a0                BDMA_Channel1_IRQHandler
+                0x080130a0                HRTIM1_TIMD_IRQHandler
+                0x080130a0                TAMP_STAMP_IRQHandler
+                0x080130a0                EXTI3_IRQHandler
+                0x080130a0                LPTIM4_IRQHandler
+                0x080130a0                TIM8_TRG_COM_TIM14_IRQHandler
+                0x080130a0                LPTIM2_IRQHandler
+                0x080130a0                DFSDM1_FLT1_IRQHandler
+                0x080130a0                DMAMUX2_OVR_IRQHandler
+                0x080130a0                TIM8_UP_TIM13_IRQHandler
+                0x080130a0                I2C3_ER_IRQHandler
+                0x080130a0                DFSDM1_FLT2_IRQHandler
+                0x080130a0                MDMA_IRQHandler
+                0x080130a0                LPTIM3_IRQHandler
+                0x080130a0                HSEM1_IRQHandler
+                0x080130a0                EXTI0_IRQHandler
+                0x080130a0                I2C2_EV_IRQHandler
+                0x080130a0                FPU_IRQHandler
+                0x080130a0                OTG_HS_WKUP_IRQHandler
+                0x080130a0                FDCAN1_IT1_IRQHandler
+                0x080130a0                LTDC_ER_IRQHandler
+                0x080130a0                DMA2_Stream2_IRQHandler
+                0x080130a0                HRTIM1_TIME_IRQHandler
+                0x080130a0                SPI1_IRQHandler
+                0x080130a0                DCMI_IRQHandler
+                0x080130a0                HRTIM1_TIMC_IRQHandler
+                0x080130a0                DMA2_Stream3_IRQHandler
+                0x080130a0                SAI2_IRQHandler
+                0x080130a0                DFSDM1_FLT3_IRQHandler
+                0x080130a0                TIM17_IRQHandler
+                0x080130a0                USART3_IRQHandler
+                0x080130a0                BDMA_Channel7_IRQHandler
+                0x080130a0                CRYP_IRQHandler
+                0x080130a0                LPTIM5_IRQHandler
+                0x080130a0                UART5_IRQHandler
+                0x080130a0                ADC3_IRQHandler
+                0x080130a0                DMA2_Stream0_IRQHandler
+                0x080130a0                TIM4_IRQHandler
+                0x080130a0                BDMA_Channel2_IRQHandler
+                0x080130a0                QUADSPI_IRQHandler
+                0x080130a0                I2C1_EV_IRQHandler
+                0x080130a0                DMA1_Stream6_IRQHandler
+                0x080130a0                DMAMUX1_OVR_IRQHandler
+                0x080130a0                TIM16_IRQHandler
+                0x080130a0                UART4_IRQHandler
+                0x080130a0                BDMA_Channel5_IRQHandler
+                0x080130a0                TIM3_IRQHandler
+                0x080130a0                RCC_IRQHandler
+                0x080130a0                TIM8_BRK_TIM12_IRQHandler
+                0x080130a0                TIM1_TRG_COM_IRQHandler
+                0x080130a0                Default_Handler
+                0x080130a0                ECC_IRQHandler
+                0x080130a0                CEC_IRQHandler
+                0x080130a0                BDMA_Channel0_IRQHandler
+                0x080130a0                ADC_IRQHandler
+                0x080130a0                DMA1_Stream7_IRQHandler
+                0x080130a0                HRTIM1_TIMA_IRQHandler
+                0x080130a0                SPI5_IRQHandler
+                0x080130a0                TIM7_IRQHandler
+                0x080130a0                SDMMC1_IRQHandler
+                0x080130a0                TIM5_IRQHandler
+                0x080130a0                DMA2_Stream7_IRQHandler
+                0x080130a0                TIM15_IRQHandler
+                0x080130a0                PVD_AVD_IRQHandler
+                0x080130a0                I2C3_EV_IRQHandler
+                0x080130a0                EXTI9_5_IRQHandler
+                0x080130a0                RTC_WKUP_IRQHandler
+                0x080130a0                LTDC_IRQHandler
+                0x080130a0                SAI3_IRQHandler
+                0x080130a0                ETH_WKUP_IRQHandler
+                0x080130a0                SPDIF_RX_IRQHandler
+                0x080130a0                SPI2_IRQHandler
+                0x080130a0                OTG_HS_EP1_IN_IRQHandler
+                0x080130a0                CRS_IRQHandler
+                0x080130a0                CM7_SEV_IRQHandler
+                0x080130a0                EXTI4_IRQHandler
+                0x080130a0                CM4_SEV_IRQHandler
+                0x080130a0                HRTIM1_TIMB_IRQHandler
+                0x080130a0                FDCAN2_IT1_IRQHandler
+                0x080130a0                ETH_IRQHandler
+                0x080130a0                TIM1_UP_IRQHandler
+                0x080130a0                WWDG_RST_IRQHandler
+                0x080130a0                BDMA_Channel4_IRQHandler
+                0x080130a0                OTG_HS_EP1_OUT_IRQHandler
+                0x080130a0                WWDG_IRQHandler
+                0x080130a0                SPI6_IRQHandler
+                0x080130a0                MDIOS_IRQHandler
+                0x080130a0                I2C4_EV_IRQHandler
+                0x080130a0                FDCAN2_IT0_IRQHandler
+                0x080130a0                LPUART1_IRQHandler
+                0x080130a0                FDCAN1_IT0_IRQHandler
+                0x080130a0                TIM2_IRQHandler
+                0x080130a0                OTG_FS_WKUP_IRQHandler
+                0x080130a0                OTG_HS_IRQHandler
+                0x080130a0                HSEM2_IRQHandler
+                0x080130a0                DMA2D_IRQHandler
+                0x080130a0                TIM1_BRK_IRQHandler
+                0x080130a0                EXTI1_IRQHandler
+                0x080130a0                SDMMC2_IRQHandler
+                0x080130a0                OTG_FS_EP1_OUT_IRQHandler
+                0x080130a0                BDMA_Channel3_IRQHandler
+                0x080130a0                HOLD_CORE_IRQHandler
+                0x080130a0                UART7_IRQHandler
+                0x080130a0                MDIOS_WKUP_IRQHandler
+                0x080130a0                USART2_IRQHandler
+                0x080130a0                DFSDM1_FLT0_IRQHandler
+                0x080130a0                SAI4_IRQHandler
+                0x080130a0                I2C2_ER_IRQHandler
+                0x080130a0                DMA2_Stream1_IRQHandler
+                0x080130a0                FLASH_IRQHandler
+                0x080130a0                DMA2_Stream4_IRQHandler
+                0x080130a0                SPI3_IRQHandler
+                0x080130a0                WAKEUP_PIN_IRQHandler
+                0x080130a0                DMA1_Stream4_IRQHandler
+                0x080130a0                OTG_FS_EP1_IN_IRQHandler
+                0x080130a0                I2C1_ER_IRQHandler
+                0x080130a0                FMC_IRQHandler
+                0x080130a0                FDCAN_CAL_IRQHandler
+                0x080130a0                SWPMI1_IRQHandler
+                0x080130a0                COMP1_IRQHandler
+                0x080130a0                LPTIM1_IRQHandler
+                0x080130a0                I2C4_ER_IRQHandler
+                0x080130a0                DMA2_Stream6_IRQHandler
+                0x080130a0                SAI1_IRQHandler
+ *fill*         0x080130a2        0x2 
  .text.adpcm_encode_sample
-                0x08013014      0x144 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
-                0x08013014                adpcm_encode_sample
- .text.memset   0x08013158       0x10 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memset.o)
-                0x08013158                memset
+                0x080130a4      0x144 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
+                0x080130a4                adpcm_encode_sample
+ .text.memset   0x080131e8       0x10 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memset.o)
+                0x080131e8                memset
  .text.__libc_init_array
-                0x08013168       0x48 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-init.o)
-                0x08013168                __libc_init_array
- .text.memcpy   0x080131b0       0x1c C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memcpy-stub.o)
-                0x080131b0                memcpy
+                0x080131f8       0x48 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-init.o)
+                0x080131f8                __libc_init_array
+ .text.memcpy   0x08013240       0x1c C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memcpy-stub.o)
+                0x08013240                memcpy
  *(.glue_7)
- .glue_7        0x080131cc        0x0 linker stubs
+ .glue_7        0x0801325c        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x080131cc        0x0 linker stubs
+ .glue_7t       0x0801325c        0x0 linker stubs
  *(.eh_frame)
- .eh_frame      0x080131cc        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
+ .eh_frame      0x0801325c        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
  *(.init)
- .init          0x080131cc        0x4 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crti.o
-                0x080131cc                _init
- .init          0x080131d0        0x8 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtn.o
+ .init          0x0801325c        0x4 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crti.o
+                0x0801325c                _init
+ .init          0x08013260        0x8 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtn.o
  *(.fini)
- .fini          0x080131d8        0x4 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crti.o
-                0x080131d8                _fini
- .fini          0x080131dc        0x8 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtn.o
-                0x080131e4                        . = ALIGN (0x4)
-                0x080131e4                        _etext = .
+ .fini          0x08013268        0x4 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crti.o
+                0x08013268                _fini
+ .fini          0x0801326c        0x8 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtn.o
+                0x08013274                        . = ALIGN (0x4)
+                0x08013274                        _etext = .
 
-.vfp11_veneer   0x080131e4        0x0
- .vfp11_veneer  0x080131e4        0x0 linker stubs
+.vfp11_veneer   0x08013274        0x0
+ .vfp11_veneer  0x08013274        0x0 linker stubs
 
-.v4_bx          0x080131e4        0x0
- .v4_bx         0x080131e4        0x0 linker stubs
+.v4_bx          0x08013274        0x0
+ .v4_bx         0x08013274        0x0 linker stubs
 
-.iplt           0x080131e4        0x0
- .iplt          0x080131e4        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
+.iplt           0x08013274        0x0
+ .iplt          0x08013274        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
 
-.rodata         0x080131e4      0x204
-                0x080131e4                        . = ALIGN (0x4)
+.rodata         0x08013274      0x204
+                0x08013274                        . = ALIGN (0x4)
  *(.rodata)
- .rodata        0x080131e4        0x5 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/tasks.c.obj
- *fill*         0x080131e9        0x3 
- .rodata        0x080131ec        0xd CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/timers.c.obj
- *fill*         0x080131f9        0x3 
- .rodata        0x080131fc       0x28 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
- .rodata        0x08013224       0x48 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+ .rodata        0x08013274        0x5 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/tasks.c.obj
+ *fill*         0x08013279        0x3 
+ .rodata        0x0801327c        0xd CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/timers.c.obj
+ *fill*         0x08013289        0x3 
+ .rodata        0x0801328c       0x28 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
+ .rodata        0x080132b4       0x48 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
  *(.rodata*)
  .rodata.D1CorePrescTable
-                0x0801326c       0x10 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Common/Src/system_stm32h7xx_dualcore_boot_cm4_cm7.c.obj
-                0x0801326c                D1CorePrescTable
+                0x080132fc       0x10 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Common/Src/system_stm32h7xx_dualcore_boot_cm4_cm7.c.obj
+                0x080132fc                D1CorePrescTable
  .rodata.flagBitshiftOffset.0
-                0x0801327c        0x8 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.obj
+                0x0801330c        0x8 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.obj
  .rodata.UARTPrescTable
-                0x08013284       0x18 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.obj
-                0x08013284                UARTPrescTable
+                0x08013314       0x18 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.obj
+                0x08013314                UARTPrescTable
  .rodata.numerator.1
-                0x0801329c        0x8 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
+                0x0801332c        0x8 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
  .rodata.denominator.0
-                0x080132a4        0x8 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
+                0x08013334        0x8 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
  .rodata.LED_PIN
-                0x080132ac        0x6 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/BSP/STM32H7xx_Nucleo/stm32h7xx_nucleo.c.obj
- *fill*         0x080132b2        0x2 
+                0x0801333c        0x6 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/BSP/STM32H7xx_Nucleo/stm32h7xx_nucleo.c.obj
+ *fill*         0x08013342        0x2 
  .rodata.BUTTON_EXTI_LINE.2
-                0x080132b4        0x4 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/BSP/STM32H7xx_Nucleo/stm32h7xx_nucleo.c.obj
+                0x08013344        0x4 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/BSP/STM32H7xx_Nucleo/stm32h7xx_nucleo.c.obj
  .rodata.AudioTask_attributes
-                0x080132b8       0x24 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
-                0x080132b8                AudioTask_attributes
+                0x08013348       0x24 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
+                0x08013348                AudioTask_attributes
  .rodata.TelemetryTask_attributes
-                0x080132dc       0x24 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
-                0x080132dc                TelemetryTask_attributes
+                0x0801336c       0x24 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
+                0x0801336c                TelemetryTask_attributes
  .rodata.RadioTxTask_attributes
-                0x08013300       0x24 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
-                0x08013300                RadioTxTask_attributes
+                0x08013390       0x24 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
+                0x08013390                RadioTxTask_attributes
  .rodata.step_table
-                0x08013324       0xb2 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
-                0x08013324                step_table
- *fill*         0x080133d6        0x2 
+                0x080133b4       0xb2 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
+                0x080133b4                step_table
+ *fill*         0x08013466        0x2 
  .rodata.index_table
-                0x080133d8       0x10 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
-                0x080133d8                index_table
-                0x080133e8                        . = ALIGN (0x4)
+                0x08013468       0x10 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
+                0x08013468                index_table
+                0x08013478                        . = ALIGN (0x4)
 
-.ARM.extab      0x080133e8        0x0
-                0x080133e8                        . = ALIGN (0x4)
+.ARM.extab      0x08013478        0x0
+                0x08013478                        . = ALIGN (0x4)
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x080133e8                        . = ALIGN (0x4)
+                0x08013478                        . = ALIGN (0x4)
 
-.ARM            0x080133e8        0x8
-                0x080133e8                        . = ALIGN (0x4)
-                0x080133e8                        __exidx_start = .
+.ARM            0x08013478        0x8
+                0x08013478                        . = ALIGN (0x4)
+                0x08013478                        __exidx_start = .
  *(.ARM.exidx*)
- .ARM.exidx     0x080133e8        0x8 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard\libgcc.a(_udivmoddi4.o)
-                0x080133f0                        __exidx_end = .
-                0x080133f0                        . = ALIGN (0x4)
+ .ARM.exidx     0x08013478        0x8 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard\libgcc.a(_udivmoddi4.o)
+                0x08013480                        __exidx_end = .
+                0x08013480                        . = ALIGN (0x4)
 
-.preinit_array  0x080133f0        0x0
-                0x080133f0                        . = ALIGN (0x4)
-                0x080133f0                        PROVIDE (__preinit_array_start = .)
+.preinit_array  0x08013480        0x0
+                0x08013480                        . = ALIGN (0x4)
+                0x08013480                        PROVIDE (__preinit_array_start = .)
  *(.preinit_array*)
-                0x080133f0                        PROVIDE (__preinit_array_end = .)
-                0x080133f0                        . = ALIGN (0x4)
+                0x08013480                        PROVIDE (__preinit_array_end = .)
+                0x08013480                        . = ALIGN (0x4)
 
-.init_array     0x080133f0        0x4
-                0x080133f0                        . = ALIGN (0x4)
-                0x080133f0                        PROVIDE (__init_array_start = .)
+.init_array     0x08013480        0x4
+                0x08013480                        . = ALIGN (0x4)
+                0x08013480                        PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array*)
- .init_array    0x080133f0        0x4 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
-                0x080133f4                        PROVIDE (__init_array_end = .)
-                0x080133f4                        . = ALIGN (0x4)
+ .init_array    0x08013480        0x4 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
+                0x08013484                        PROVIDE (__init_array_end = .)
+                0x08013484                        . = ALIGN (0x4)
 
-.fini_array     0x080133f4        0x4
-                0x080133f4                        . = ALIGN (0x4)
+.fini_array     0x08013484        0x4
+                0x08013484                        . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__fini_array_start = .)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x080133f4        0x4 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
+ .fini_array    0x08013484        0x4 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
                 [!provide]                        PROVIDE (__fini_array_end = .)
-                0x080133f8                        . = ALIGN (0x4)
-                0x080133f8                        _sidata = LOADADDR (.data)
+                0x08013488                        . = ALIGN (0x4)
+                0x08013488                        _sidata = LOADADDR (.data)
 
-.rel.dyn        0x080133f8        0x0
- .rel.iplt      0x080133f8        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
+.rel.dyn        0x08013488        0x0
+ .rel.iplt      0x08013488        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
 
-.data           0x24000000      0x154 load address 0x080133f8
+.data           0x24000000      0x154 load address 0x08013488
                 0x24000000                        . = ALIGN (0x4)
                 0x24000000                        _sdata = .
  *(.data)
@@ -10321,10 +10323,10 @@ LOAD C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/
                 0x24000138                USBD_AUDIO_fops_FS
                 0x24000154                        . = ALIGN (0x4)
 
-.igot.plt       0x24000154        0x0 load address 0x0801354c
+.igot.plt       0x24000154        0x0 load address 0x080135dc
  .igot.plt      0x24000154        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
 
-.tdata          0x24000154        0x0 load address 0x0801354c
+.tdata          0x24000154        0x0 load address 0x080135dc
  *(.tdata .tdata.* .gnu.linkonce.td.*)
                 0x24000154                        . = ALIGN (0x4)
                 0x24000154                        _edata = .
@@ -10341,7 +10343,7 @@ LOAD C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/
                 [!provide]                        PROVIDE (__data_source_end = __tdata_source_end)
                 [!provide]                        PROVIDE (__data_source_size = (__data_source_end - __data_source))
 
-.tbss           0x24000154        0x0 load address 0x0801354c
+.tbss           0x24000154        0x0 load address 0x080135dc
                 0x24000154                        _sbss = .
                 0x24000154                        __bss_start__ = _sbss
  *(.tbss .tbss.*)
@@ -10358,7 +10360,7 @@ LOAD C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/
                 [!provide]                        PROVIDE (__arm32_tls_tcb_offset = MAX (0x8, __tls_align))
                 [!provide]                        PROVIDE (__arm64_tls_tcb_offset = MAX (0x10, __tls_align))
 
-.bss            0x24000154    0x137c8 load address 0x0801354c
+.bss            0x24000154    0x137c8 load address 0x080135dc
  *(.bss)
  .bss           0x24000154       0x1c C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+dp/hard/crtbegin.o
  *(.bss*)
@@ -10659,7 +10661,7 @@ LOAD C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/
 OUTPUT(transceiver_CM7.elf elf32-littlearm)
 LOAD linker stubs
 
-.debug_info     0x00000000    0x30b67
+.debug_info     0x00000000    0x310a0
  .debug_info    0x00000000      0xe73 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Common/Src/system_stm32h7xx_dualcore_boot_cm4_cm7.c.obj
  .debug_info    0x00000e73     0x2bae CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj
  .debug_info    0x00003a21     0x17eb CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj
@@ -10690,21 +10692,21 @@ LOAD linker stubs
  .debug_info    0x000253d2      0x4d5 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c.obj
  .debug_info    0x000258a7      0x4de CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c.obj
  .debug_info    0x00025d85     0x29d5 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
- .debug_info    0x0002875a      0xb79 CMakeFiles/transceiver_CM7.dir/Core/Src/freertos.c.obj
- .debug_info    0x000292d3     0x11d9 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
- .debug_info    0x0002a4ac     0x154b CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_msp.c.obj
- .debug_info    0x0002b9f7     0x10cd CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_timebase_tim.c.obj
- .debug_info    0x0002cac4      0x750 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usb_device.c.obj
- .debug_info    0x0002d214      0x48f CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
- .debug_info    0x0002d6a3      0x9c8 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
- .debug_info    0x0002e06b     0x25ad CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
- .debug_info    0x00030618       0x30 CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
- .debug_info    0x00030648      0x213 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
- .debug_info    0x0003085b       0xe0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memset.o)
- .debug_info    0x0003093b      0x10b C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-init.o)
- .debug_info    0x00030a46      0x121 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memcpy-stub.o)
+ .debug_info    0x0002875a     0x10b2 CMakeFiles/transceiver_CM7.dir/Core/Src/freertos.c.obj
+ .debug_info    0x0002980c     0x11d9 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+ .debug_info    0x0002a9e5     0x154b CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_msp.c.obj
+ .debug_info    0x0002bf30     0x10cd CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_timebase_tim.c.obj
+ .debug_info    0x0002cffd      0x750 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usb_device.c.obj
+ .debug_info    0x0002d74d      0x48f CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+ .debug_info    0x0002dbdc      0x9c8 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
+ .debug_info    0x0002e5a4     0x25ad CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+ .debug_info    0x00030b51       0x30 CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
+ .debug_info    0x00030b81      0x213 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
+ .debug_info    0x00030d94       0xe0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memset.o)
+ .debug_info    0x00030e74      0x10b C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-init.o)
+ .debug_info    0x00030f7f      0x121 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memcpy-stub.o)
 
-.debug_abbrev   0x00000000     0x6750
+.debug_abbrev   0x00000000     0x67fb
  .debug_abbrev  0x00000000      0x165 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Common/Src/system_stm32h7xx_dualcore_boot_cm4_cm7.c.obj
  .debug_abbrev  0x00000165      0x276 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj
  .debug_abbrev  0x000003db      0x281 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj
@@ -10735,19 +10737,19 @@ LOAD linker stubs
  .debug_abbrev  0x00004983      0x21d CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c.obj
  .debug_abbrev  0x00004ba0      0x25c CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c.obj
  .debug_abbrev  0x00004dfc      0x3e8 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
- .debug_abbrev  0x000051e4      0x21c CMakeFiles/transceiver_CM7.dir/Core/Src/freertos.c.obj
- .debug_abbrev  0x00005400      0x1f5 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
- .debug_abbrev  0x000055f5      0x222 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_msp.c.obj
- .debug_abbrev  0x00005817      0x212 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_timebase_tim.c.obj
- .debug_abbrev  0x00005a29      0x1e3 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usb_device.c.obj
- .debug_abbrev  0x00005c0c      0x1f3 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
- .debug_abbrev  0x00005dff      0x2be CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
- .debug_abbrev  0x000060bd      0x358 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
- .debug_abbrev  0x00006415       0x24 CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
- .debug_abbrev  0x00006439       0xef CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
- .debug_abbrev  0x00006528       0x9e C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memset.o)
- .debug_abbrev  0x000065c6       0xc9 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-init.o)
- .debug_abbrev  0x0000668f       0xc1 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memcpy-stub.o)
+ .debug_abbrev  0x000051e4      0x2c7 CMakeFiles/transceiver_CM7.dir/Core/Src/freertos.c.obj
+ .debug_abbrev  0x000054ab      0x1f5 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+ .debug_abbrev  0x000056a0      0x222 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_msp.c.obj
+ .debug_abbrev  0x000058c2      0x212 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_timebase_tim.c.obj
+ .debug_abbrev  0x00005ad4      0x1e3 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usb_device.c.obj
+ .debug_abbrev  0x00005cb7      0x1f3 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+ .debug_abbrev  0x00005eaa      0x2be CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
+ .debug_abbrev  0x00006168      0x358 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+ .debug_abbrev  0x000064c0       0x24 CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
+ .debug_abbrev  0x000064e4       0xef CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
+ .debug_abbrev  0x000065d3       0x9e C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memset.o)
+ .debug_abbrev  0x00006671       0xc9 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-init.o)
+ .debug_abbrev  0x0000673a       0xc1 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memcpy-stub.o)
 
 .debug_aranges  0x00000000     0x2378
  .debug_aranges
@@ -11079,7 +11081,7 @@ LOAD linker stubs
  .debug_macro   0x00040f1b      0x470 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
  .debug_macro   0x0004138b       0x63 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
 
-.debug_line     0x00000000    0x2db66
+.debug_line     0x00000000    0x2dbc2
  .debug_line    0x00000000      0xa22 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Common/Src/system_stm32h7xx_dualcore_boot_cm4_cm7.c.obj
  .debug_line    0x00000a22     0x3f2b CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj
  .debug_line    0x0000494d     0x1c9d CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj
@@ -11110,106 +11112,106 @@ LOAD linker stubs
  .debug_line    0x00024e2a      0x815 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c.obj
  .debug_line    0x0002563f      0x78c CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c.obj
  .debug_line    0x00025dcb     0x1066 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
- .debug_line    0x00026e31      0xcd0 CMakeFiles/transceiver_CM7.dir/Core/Src/freertos.c.obj
- .debug_line    0x00027b01      0xbaa CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
- .debug_line    0x000286ab      0xbc0 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_msp.c.obj
- .debug_line    0x0002926b      0x879 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_timebase_tim.c.obj
- .debug_line    0x00029ae4      0xc9c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usb_device.c.obj
- .debug_line    0x0002a780      0xd06 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
- .debug_line    0x0002b486      0xd57 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
- .debug_line    0x0002c1dd     0x105c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
- .debug_line    0x0002d239       0x7b CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
- .debug_line    0x0002d2b4      0x3c2 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
- .debug_line    0x0002d676      0x17e C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memset.o)
- .debug_line    0x0002d7f4      0x170 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-init.o)
- .debug_line    0x0002d964      0x202 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memcpy-stub.o)
+ .debug_line    0x00026e31      0xd2c CMakeFiles/transceiver_CM7.dir/Core/Src/freertos.c.obj
+ .debug_line    0x00027b5d      0xbaa CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+ .debug_line    0x00028707      0xbc0 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_msp.c.obj
+ .debug_line    0x000292c7      0x879 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_timebase_tim.c.obj
+ .debug_line    0x00029b40      0xc9c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usb_device.c.obj
+ .debug_line    0x0002a7dc      0xd06 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+ .debug_line    0x0002b4e2      0xd57 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
+ .debug_line    0x0002c239     0x105c CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+ .debug_line    0x0002d295       0x7b CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
+ .debug_line    0x0002d310      0x3c2 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
+ .debug_line    0x0002d6d2      0x17e C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memset.o)
+ .debug_line    0x0002d850      0x170 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-init.o)
+ .debug_line    0x0002d9c0      0x202 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memcpy-stub.o)
 
-.debug_str      0x00000000   0x198bea
- .debug_str     0x00000000   0x198bea CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Common/Src/system_stm32h7xx_dualcore_boot_cm4_cm7.c.obj
+.debug_str      0x00000000   0x198c18
+ .debug_str     0x00000000   0x198c18 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Common/Src/system_stm32h7xx_dualcore_boot_cm4_cm7.c.obj
                              0x182141 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c.obj
                              0x1831ad (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c.obj
                              0x182ad5 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pcd.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pcd.c.obj
                              0x1827de (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pcd_ex.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pcd_ex.c.obj
                              0x18217c (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_usb.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_usb.c.obj
                              0x1826d8 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c.obj
                              0x182421 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c.obj
                              0x182956 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c.obj
                              0x1820a0 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c.obj
                              0x1827af (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c.obj
                              0x1825ab (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c.obj
                              0x182a15 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c.obj
                              0x1831ae (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c.obj
                              0x181ef2 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c.obj
                              0x182f4f (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c.obj
                              0x18250f (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/BSP/STM32H7xx_Nucleo/stm32h7xx_nucleo.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/STM32_Drivers.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Drivers/BSP/STM32H7xx_Nucleo/stm32h7xx_nucleo.c.obj
                              0x1839fb (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/USB_Device_Library.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/USB_Device_Library.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c.obj
                              0x188f2e (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/USB_Device_Library.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/USB_Device_Library.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c.obj
                              0x188d59 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/USB_Device_Library.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/USB_Device_Library.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c.obj
                              0x188c2e (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/USB_Device_Library.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Src/usbd_audio.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/USB_Device_Library.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Src/usbd_audio.c.obj
                              0x1895f6 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/list.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/list.c.obj
                                0xa66a (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/queue.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/queue.c.obj
                                0xc1aa (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c.obj
                                0xbbb3 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/tasks.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/tasks.c.obj
                                0xcc67 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/timers.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/timers.c.obj
                                0xc6dc (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c.obj
                              0x189c63 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c.obj
                                0xafac (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/FreeRTOS.dir/V_/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c.obj
                                0x8843 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/transceiver_CM7.dir/Core/Src/main.c.obj
                              0x18b7bf (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/transceiver_CM7.dir/Core/Src/freertos.c.obj
-                             0x188fe5 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/transceiver_CM7.dir/Core/Src/freertos.c.obj
+                             0x1891f3 (size before relaxing)
+ .debug_str     0x00198c18        0x0 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_it.c.obj
                              0x1889c3 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_msp.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_msp.c.obj
                              0x18908a (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_timebase_tim.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/transceiver_CM7.dir/Core/Src/stm32h7xx_hal_timebase_tim.c.obj
                              0x182da3 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usb_device.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usb_device.c.obj
                              0x1891ca (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_desc.c.obj
                              0x188b42 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/App/usbd_audio_if.c.obj
                              0x189302 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/transceiver_CM7.dir/USB_DEVICE/Target/usbd_conf.c.obj
                              0x18a95e (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/transceiver_CM7.dir/Core/Startup/startup_stm32h755xx_CM7.s.obj
                                  0xb5 (size before relaxing)
- .debug_str     0x00198bea        0x0 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
+ .debug_str     0x00198c18        0x0 CMakeFiles/transceiver_CM7.dir/Core/Src/adpcm.c.obj
                                0x3eee (size before relaxing)
- .debug_str     0x00198bea        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memset.o)
+ .debug_str     0x00198c18        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memset.o)
                                 0x214 (size before relaxing)
- .debug_str     0x00198bea        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-init.o)
+ .debug_str     0x00198c18        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-init.o)
                                 0x275 (size before relaxing)
- .debug_str     0x00198bea        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memcpy-stub.o)
+ .debug_str     0x00198c18        0x0 C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard\libg_nano.a(libc_a-memcpy-stub.o)
                                 0x232 (size before relaxing)
 
 .comment        0x00000000       0x43

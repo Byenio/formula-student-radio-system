@@ -5908,3 +5908,821 @@ events:
       CMAKE_SYSTEM_PROGRAM_PATH:
         - "/bin"
 ...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/FindGit.cmake:86 (find_program)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusPackageVersion.cmake:8 (find_package)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:5 (get_package_version)"
+    mode: "program"
+    variable: "GIT_EXECUTABLE"
+    description: "Git command line client"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "git.cmd"
+      - "git"
+    candidate_directories:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/mingw/bin/"
+      - "C:/Program Files (x86)/STMicroelectronics/stlink_server/"
+      - "C:/ST/STM32CubeCLT_1.20.0/"
+      - "C:/ST/STM32CubeCLT_1.20.0/CMake/bin/"
+      - "C:/ST/STM32CubeCLT_1.20.0/st-arm-clang/bin/"
+      - "C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/"
+      - "C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/"
+      - "C:/ST/STM32CubeCLT_1.20.0/STLink-gdb-server/bin/"
+      - "C:/ST/STM32CubeCLT_1.20.0/STM32CubeProgrammer/bin/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA app/NvDLISR/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/Tailscale/"
+      - "C:/Program Files (x86)/Vector CANdb++ 3.1/Exec32/"
+      - "C:/Users/marce/AppData/Local/nvm/"
+      - "C:/nvm4w/nodejs/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files (x86)/Windows Kits/8.1/Windows Performance Toolkit/"
+      - "C:/Program Files/FirefoxPWA/"
+      - "C:/ProgramData/chocolatey/bin/"
+      - "C:/Program Files/PuTTY/"
+      - "C:/Program Files/Docker/Docker/resources/bin/"
+      - "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/bin/"
+      - "C:/Users/marce/scoop/shims/"
+      - "C:/Users/marce/AppData/Local/Programs/oh-my-posh/bin/"
+      - "C:/Users/marce/AppData/Local/pnpm/"
+      - "C:/Users/marce/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/marce/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/marce/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/marce/AppData/Local/spicetify/"
+      - "C:/Users/marce/AppData/Local/JetBrains/Toolbox/scripts/"
+      - "C:/Users/marce/AppData/Local/GitHubDesktop/bin/"
+      - "C:/Users/marce/AppData/Local/Microsoft/WinGet/Packages/Typst.Typst_Microsoft.Winget.Source_8wekyb3d8bbwe/typst-x86_64-pc-windows-msvc/"
+      - "C:/Users/marce/.bun/bin/"
+      - "C:/Users/marce/AppData/Local/nvm/v24.4.0/"
+      - "C:/msys64/ucrt64/bin/"
+      - "C:/tools/neovim/nvim-win64/bin/"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/ninja/win/x64/"
+      - "/bin/"
+      - "C:/Users/marce/AppData/Local/Atlassian/SourceTree/git_local/bin/"
+    searched_directories:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/mingw/bin/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/mingw/bin/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/mingw/bin/git.cmd"
+      - "C:/Program Files (x86)/STMicroelectronics/stlink_server/git.cmd.com"
+      - "C:/Program Files (x86)/STMicroelectronics/stlink_server/git.cmd.exe"
+      - "C:/Program Files (x86)/STMicroelectronics/stlink_server/git.cmd"
+      - "C:/ST/STM32CubeCLT_1.20.0/git.cmd.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/git.cmd.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/git.cmd"
+      - "C:/ST/STM32CubeCLT_1.20.0/CMake/bin/git.cmd.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/CMake/bin/git.cmd.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/CMake/bin/git.cmd"
+      - "C:/ST/STM32CubeCLT_1.20.0/st-arm-clang/bin/git.cmd.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/st-arm-clang/bin/git.cmd.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/st-arm-clang/bin/git.cmd"
+      - "C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/git.cmd.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/git.cmd.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/git.cmd"
+      - "C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/git.cmd.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/git.cmd.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/git.cmd"
+      - "C:/ST/STM32CubeCLT_1.20.0/STLink-gdb-server/bin/git.cmd.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/STLink-gdb-server/bin/git.cmd.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/STLink-gdb-server/bin/git.cmd"
+      - "C:/ST/STM32CubeCLT_1.20.0/STM32CubeProgrammer/bin/git.cmd.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/STM32CubeProgrammer/bin/git.cmd.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/STM32CubeProgrammer/bin/git.cmd"
+      - "C:/Windows/System32/OpenSSH/git.cmd.com"
+      - "C:/Windows/System32/OpenSSH/git.cmd.exe"
+      - "C:/Windows/System32/OpenSSH/git.cmd"
+      - "C:/Windows/System32/git.cmd.com"
+      - "C:/Windows/System32/git.cmd.exe"
+      - "C:/Windows/System32/git.cmd"
+      - "C:/Windows/git.cmd.com"
+      - "C:/Windows/git.cmd.exe"
+      - "C:/Windows/git.cmd"
+      - "C:/Windows/System32/wbem/git.cmd.com"
+      - "C:/Windows/System32/wbem/git.cmd.exe"
+      - "C:/Windows/System32/wbem/git.cmd"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/git.cmd.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/git.cmd.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/git.cmd"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA app/NvDLISR/git.cmd.com"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA app/NvDLISR/git.cmd.exe"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA app/NvDLISR/git.cmd"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/git.cmd.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/git.cmd.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/git.cmd"
+      - "C:/Program Files/dotnet/git.cmd.com"
+      - "C:/Program Files/dotnet/git.cmd.exe"
+      - "C:/Program Files/dotnet/git.cmd"
+      - "C:/Program Files/Git/cmd/git.cmd.com"
+      - "C:/Program Files/Git/cmd/git.cmd.exe"
+      - "C:/Program Files/Git/cmd/git.cmd"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/git.cmd.com"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/git.cmd.exe"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/git.cmd"
+      - "C:/Program Files/Tailscale/git.cmd.com"
+      - "C:/Program Files/Tailscale/git.cmd.exe"
+      - "C:/Program Files/Tailscale/git.cmd"
+      - "C:/Program Files (x86)/Vector CANdb++ 3.1/Exec32/git.cmd.com"
+      - "C:/Program Files (x86)/Vector CANdb++ 3.1/Exec32/git.cmd.exe"
+      - "C:/Program Files (x86)/Vector CANdb++ 3.1/Exec32/git.cmd"
+      - "C:/Users/marce/AppData/Local/nvm/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/nvm/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/nvm/git.cmd"
+      - "C:/nvm4w/nodejs/git.cmd.com"
+      - "C:/nvm4w/nodejs/git.cmd.exe"
+      - "C:/nvm4w/nodejs/git.cmd"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/git.cmd.com"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/git.cmd.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/git.cmd"
+      - "C:/Program Files/CMake/bin/git.cmd.com"
+      - "C:/Program Files/CMake/bin/git.cmd.exe"
+      - "C:/Program Files/CMake/bin/git.cmd"
+      - "C:/Program Files (x86)/Windows Kits/8.1/Windows Performance Toolkit/git.cmd.com"
+      - "C:/Program Files (x86)/Windows Kits/8.1/Windows Performance Toolkit/git.cmd.exe"
+      - "C:/Program Files (x86)/Windows Kits/8.1/Windows Performance Toolkit/git.cmd"
+      - "C:/Program Files/FirefoxPWA/git.cmd.com"
+      - "C:/Program Files/FirefoxPWA/git.cmd.exe"
+      - "C:/Program Files/FirefoxPWA/git.cmd"
+      - "C:/ProgramData/chocolatey/bin/git.cmd.com"
+      - "C:/ProgramData/chocolatey/bin/git.cmd.exe"
+      - "C:/ProgramData/chocolatey/bin/git.cmd"
+      - "C:/Program Files/PuTTY/git.cmd.com"
+      - "C:/Program Files/PuTTY/git.cmd.exe"
+      - "C:/Program Files/PuTTY/git.cmd"
+      - "C:/Program Files/Docker/Docker/resources/bin/git.cmd.com"
+      - "C:/Program Files/Docker/Docker/resources/bin/git.cmd.exe"
+      - "C:/Program Files/Docker/Docker/resources/bin/git.cmd"
+      - "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/bin/git.cmd.com"
+      - "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/bin/git.cmd.exe"
+      - "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/14.3 rel1/bin/git.cmd"
+      - "C:/Users/marce/scoop/shims/git.cmd.com"
+      - "C:/Users/marce/scoop/shims/git.cmd.exe"
+      - "C:/Users/marce/scoop/shims/git.cmd"
+      - "C:/Users/marce/AppData/Local/Programs/oh-my-posh/bin/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/Programs/oh-my-posh/bin/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/Programs/oh-my-posh/bin/git.cmd"
+      - "C:/Users/marce/AppData/Local/pnpm/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/pnpm/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/pnpm/git.cmd"
+      - "C:/Users/marce/AppData/Local/Programs/Python/Launcher/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/Programs/Python/Launcher/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/Programs/Python/Launcher/git.cmd"
+      - "C:/Users/marce/AppData/Local/Microsoft/WindowsApps/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/Microsoft/WindowsApps/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/Microsoft/WindowsApps/git.cmd"
+      - "C:/Users/marce/AppData/Local/Programs/Microsoft VS Code/bin/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/Programs/Microsoft VS Code/bin/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/Programs/Microsoft VS Code/bin/git.cmd"
+      - "C:/Users/marce/AppData/Local/spicetify/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/spicetify/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/spicetify/git.cmd"
+      - "C:/Users/marce/AppData/Local/JetBrains/Toolbox/scripts/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/JetBrains/Toolbox/scripts/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/JetBrains/Toolbox/scripts/git.cmd"
+      - "C:/Users/marce/AppData/Local/GitHubDesktop/bin/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/GitHubDesktop/bin/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/GitHubDesktop/bin/git.cmd"
+      - "C:/Users/marce/AppData/Local/Microsoft/WinGet/Packages/Typst.Typst_Microsoft.Winget.Source_8wekyb3d8bbwe/typst-x86_64-pc-windows-msvc/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/Microsoft/WinGet/Packages/Typst.Typst_Microsoft.Winget.Source_8wekyb3d8bbwe/typst-x86_64-pc-windows-msvc/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/Microsoft/WinGet/Packages/Typst.Typst_Microsoft.Winget.Source_8wekyb3d8bbwe/typst-x86_64-pc-windows-msvc/git.cmd"
+      - "C:/Users/marce/.bun/bin/git.cmd.com"
+      - "C:/Users/marce/.bun/bin/git.cmd.exe"
+      - "C:/Users/marce/.bun/bin/git.cmd"
+      - "C:/Users/marce/AppData/Local/nvm/v24.4.0/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/nvm/v24.4.0/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/nvm/v24.4.0/git.cmd"
+      - "C:/msys64/ucrt64/bin/git.cmd.com"
+      - "C:/msys64/ucrt64/bin/git.cmd.exe"
+      - "C:/msys64/ucrt64/bin/git.cmd"
+      - "C:/tools/neovim/nvim-win64/bin/git.cmd.com"
+      - "C:/tools/neovim/nvim-win64/bin/git.cmd.exe"
+      - "C:/tools/neovim/nvim-win64/bin/git.cmd"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/ninja/win/x64/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/ninja/win/x64/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/ninja/win/x64/git.cmd"
+      - "/bin/git.cmd.com"
+      - "/bin/git.cmd.exe"
+      - "/bin/git.cmd"
+      - "C:/Users/marce/AppData/Local/Atlassian/SourceTree/git_local/bin/git.cmd.com"
+      - "C:/Users/marce/AppData/Local/Atlassian/SourceTree/git_local/bin/git.cmd.exe"
+      - "C:/Users/marce/AppData/Local/Atlassian/SourceTree/git_local/bin/git.cmd"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/mingw/bin/git.com"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/mingw/bin/git.exe"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/mingw/bin/git"
+      - "C:/Program Files (x86)/STMicroelectronics/stlink_server/git.com"
+      - "C:/Program Files (x86)/STMicroelectronics/stlink_server/git.exe"
+      - "C:/Program Files (x86)/STMicroelectronics/stlink_server/git"
+      - "C:/ST/STM32CubeCLT_1.20.0/git.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/git.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/git"
+      - "C:/ST/STM32CubeCLT_1.20.0/CMake/bin/git.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/CMake/bin/git.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/CMake/bin/git"
+      - "C:/ST/STM32CubeCLT_1.20.0/st-arm-clang/bin/git.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/st-arm-clang/bin/git.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/st-arm-clang/bin/git"
+      - "C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/git.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/git.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/git"
+      - "C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/git.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/git.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/GNU-tools-for-STM32/bin/git"
+      - "C:/ST/STM32CubeCLT_1.20.0/STLink-gdb-server/bin/git.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/STLink-gdb-server/bin/git.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/STLink-gdb-server/bin/git"
+      - "C:/ST/STM32CubeCLT_1.20.0/STM32CubeProgrammer/bin/git.com"
+      - "C:/ST/STM32CubeCLT_1.20.0/STM32CubeProgrammer/bin/git.exe"
+      - "C:/ST/STM32CubeCLT_1.20.0/STM32CubeProgrammer/bin/git"
+      - "C:/Windows/System32/OpenSSH/git.com"
+      - "C:/Windows/System32/OpenSSH/git.exe"
+      - "C:/Windows/System32/OpenSSH/git"
+      - "C:/Windows/System32/git.com"
+      - "C:/Windows/System32/git.exe"
+      - "C:/Windows/System32/git"
+      - "C:/Windows/git.com"
+      - "C:/Windows/git.exe"
+      - "C:/Windows/git"
+      - "C:/Windows/System32/wbem/git.com"
+      - "C:/Windows/System32/wbem/git.exe"
+      - "C:/Windows/System32/wbem/git"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/git.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/git.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/git"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA app/NvDLISR/git.com"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA app/NvDLISR/git.exe"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA app/NvDLISR/git"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/git.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/git.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/git"
+      - "C:/Program Files/dotnet/git.com"
+      - "C:/Program Files/dotnet/git.exe"
+      - "C:/Program Files/dotnet/git"
+      - "C:/Program Files/Git/cmd/git.com"
+    found: "C:/Program Files/Git/cmd/git.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\mingw\\bin"
+        - "C:\\Program Files (x86)\\STMicroelectronics\\stlink_server"
+        - "C:\\ST\\STM32CubeCLT_1.20.0"
+        - "C:\\ST\\STM32CubeCLT_1.20.0\\CMake\\bin"
+        - "C:\\ST\\STM32CubeCLT_1.20.0\\st-arm-clang\\bin"
+        - "C:\\ST\\STM32CubeCLT_1.20.0\\Ninja\\bin"
+        - "C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin"
+        - "C:\\ST\\STM32CubeCLT_1.20.0\\STLink-gdb-server\\bin"
+        - "C:\\ST\\STM32CubeCLT_1.20.0\\STM32CubeProgrammer\\bin"
+        - "C:\\Windows\\System32\\OpenSSH"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA app\\NvDLISR"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\Tailscale\\"
+        - "C:\\Program Files (x86)\\Vector CANdb++ 3.1\\Exec32"
+        - "C:\\Users\\marce\\AppData\\Local\\nvm"
+        - "C:\\nvm4w\\nodejs"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files (x86)\\Windows Kits\\8.1\\Windows Performance Toolkit\\"
+        - "C:\\Program Files\\FirefoxPWA\\"
+        - "C:\\ProgramData\\chocolatey\\bin"
+        - "C:\\Program Files\\PuTTY\\"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files (x86)\\Arm GNU Toolchain arm-none-eabi\\14.3 rel1\\bin"
+        - "C:\\Users\\marce\\scoop\\shims"
+        - "C:\\Users\\marce\\AppData\\Local\\Programs\\oh-my-posh\\bin\\"
+        - "C:\\Users\\marce\\AppData\\Local\\pnpm"
+        - "C:\\Users\\marce\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\marce\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\marce\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\marce\\AppData\\Local\\spicetify"
+        - "C:\\Users\\marce\\AppData\\Local\\JetBrains\\Toolbox\\scripts"
+        - "C:\\Users\\marce\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\marce\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Typst.Typst_Microsoft.Winget.Source_8wekyb3d8bbwe\\typst-x86_64-pc-windows-msvc"
+        - "C:\\Users\\marce\\.bun\\bin"
+        - "C:\\Users\\marce\\AppData\\Local\\nvm\\v24.4.0"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\tools\\neovim\\nvim-win64\\bin"
+        - "C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\ninja\\win\\x64"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/transceiver_CM7"
+      CMAKE_SYSTEM_PROGRAM_PATH:
+        - "/bin"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/CFeatureCheck.cmake:30 (try_compile)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:27 (c_feature_check)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/opus/CMakeFiles/CMakeTmp"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/opus/CMakeFiles/CMakeTmp"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "COMPILE_VLA_SUPPORTED"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/opus/CMakeFiles/CMakeTmp'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_5b024
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe   -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99 -o CMakeFiles/cmTC_5b024.dir/vla.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/vla.c
+        V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/vla.c: In function 'main':
+        V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/vla.c:5:9: warning: unused variable 'N' [-Wunused-variable]
+            5 |     int N;
+              |         ^
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_5b024.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_5b024.a  CMakeFiles/cmTC_5b024.dir/vla.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_5b024.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckIncludeFile.cmake:165 (try_compile)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:30 (check_include_file)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Looking for alloca.h"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-ok0vi6"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-ok0vi6"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "HAVE_ALLOCA_H"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-ok0vi6'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_80726
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe   -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99 -o CMakeFiles/cmTC_80726.dir/CheckIncludeFile.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-ok0vi6/CheckIncludeFile.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_80726.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_80726.a  CMakeFiles/cmTC_80726.dir/CheckIncludeFile.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_80726.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckSymbolExists.cmake:193 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckSymbolExists.cmake:98 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:35 (check_symbol_exists)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Looking for alloca"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-lfcvhd"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-lfcvhd"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "USE_ALLOCA_SUPPORTED"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-lfcvhd'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_bb63b
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe   -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99 -o CMakeFiles/cmTC_bb63b.dir/CheckSymbolExists.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-lfcvhd/CheckSymbolExists.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_bb63b.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_bb63b.a  CMakeFiles/cmTC_bb63b.dir/CheckSymbolExists.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_bb63b.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckLibraryExists.cmake:154 (try_compile)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:43 (check_library_exists)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Looking for floor in m"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-7ju3z5"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-7ju3z5"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "HAVE_LIBM"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-7ju3z5'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_948b2
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe   -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections -DCHECK_FUNCTION_EXISTS=floor -std=gnu99 -o CMakeFiles/cmTC_948b2.dir/CheckFunctionExists.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-7ju3z5/CheckFunctionExists.c
+        <command-line>: warning: conflicting types for built-in function 'floor'; expected 'double(double)' [-Wbuiltin-declaration-mismatch]
+        V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-7ju3z5/CheckFunctionExists.c:7:3: note: in expansion of macro 'CHECK_FUNCTION_EXISTS'
+            7 |   CHECK_FUNCTION_EXISTS(void);
+              |   ^~~~~~~~~~~~~~~~~~~~~
+        V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-7ju3z5/CheckFunctionExists.c:1:1: note: 'floor' is declared in header '<math.h>'
+          +++ |+#include <math.h>
+            1 | #ifdef CHECK_FUNCTION_EXISTS
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_948b2.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_948b2.a  CMakeFiles/cmTC_948b2.dir/CheckFunctionExists.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_948b2.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckSymbolExists.cmake:193 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckSymbolExists.cmake:98 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:49 (check_symbol_exists)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Looking for lrintf"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-q5e4wj"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-q5e4wj"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "HAVE_LRINTF"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-q5e4wj'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_02fa8
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe   -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99 -o CMakeFiles/cmTC_02fa8.dir/CheckSymbolExists.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-q5e4wj/CheckSymbolExists.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_02fa8.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_02fa8.a  CMakeFiles/cmTC_02fa8.dir/CheckSymbolExists.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_02fa8.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckSymbolExists.cmake:193 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckSymbolExists.cmake:98 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:50 (check_symbol_exists)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Looking for lrint"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-lrizpj"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-lrizpj"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "HAVE_LRINT"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-lrizpj'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_30df0
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe   -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99 -o CMakeFiles/cmTC_30df0.dir/CheckSymbolExists.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-lrizpj/CheckSymbolExists.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_30df0.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_30df0.a  CMakeFiles/cmTC_30df0.dir/CheckSymbolExists.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_30df0.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckIncludeFile.cmake:165 (try_compile)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusFunctions.cmake:139 (check_include_file)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:70 (opus_detect_neon)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Looking for arm_neon.h"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-h6nzs0"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-h6nzs0"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "HAVE_ARM_NEON_H"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-h6nzs0'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_adc63
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe   -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99 -o CMakeFiles/cmTC_adc63.dir/CheckIncludeFile.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-h6nzs0/CheckIncludeFile.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_adc63.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_adc63.a  CMakeFiles/cmTC_adc63.dir/CheckIncludeFile.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_adc63.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckCCompilerFlag.cmake:105 (cmake_check_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusFunctions.cmake:46 (check_c_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:88 (check_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Performing Test FAST_MATH_SUPPORTED"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-crgbzf"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-crgbzf"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "FAST_MATH_SUPPORTED"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-crgbzf'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_7f6fa
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DFAST_MATH_SUPPORTED  -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99   -ffast-math -o CMakeFiles/cmTC_7f6fa.dir/src.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-crgbzf/src.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_7f6fa.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_7f6fa.a  CMakeFiles/cmTC_7f6fa.dir/src.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_7f6fa.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckCCompilerFlag.cmake:105 (cmake_check_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusFunctions.cmake:46 (check_c_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:89 (check_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Performing Test STACK_PROTECTOR_SUPPORTED"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-qwsrsa"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-qwsrsa"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "STACK_PROTECTOR_SUPPORTED"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-qwsrsa'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_7d14a
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DSTACK_PROTECTOR_SUPPORTED  -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99   -fstack-protector-strong -o CMakeFiles/cmTC_7d14a.dir/src.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-qwsrsa/src.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_7d14a.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_7d14a.a  CMakeFiles/cmTC_7d14a.dir/src.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_7d14a.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckCCompilerFlag.cmake:105 (cmake_check_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusFunctions.cmake:46 (check_c_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:90 (check_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Performing Test HIDDEN_VISIBILITY_SUPPORTED"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-jei2ka"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-jei2ka"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "HIDDEN_VISIBILITY_SUPPORTED"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-jei2ka'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_c4d55
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DHIDDEN_VISIBILITY_SUPPORTED  -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99   -fvisibility=hidden -o CMakeFiles/cmTC_c4d55.dir/src.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-jei2ka/src.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_c4d55.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_c4d55.a  CMakeFiles/cmTC_c4d55.dir/src.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_c4d55.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckCCompilerFlag.cmake:105 (cmake_check_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:113 (check_c_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Performing Test Wall_SUPPORTED"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-1w9slv"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-1w9slv"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "Wall_SUPPORTED"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-1w9slv'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_820b6
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DWall_SUPPORTED  -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99   -Wall -o CMakeFiles/cmTC_820b6.dir/src.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-1w9slv/src.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_820b6.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_820b6.a  CMakeFiles/cmTC_820b6.dir/src.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_820b6.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckCCompilerFlag.cmake:105 (cmake_check_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:113 (check_c_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Performing Test W_SUPPORTED"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-dveuwz"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-dveuwz"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "W_SUPPORTED"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-dveuwz'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_f461e
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DW_SUPPORTED  -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99   -W -o CMakeFiles/cmTC_f461e.dir/src.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-dveuwz/src.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_f461e.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_f461e.a  CMakeFiles/cmTC_f461e.dir/src.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_f461e.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckCCompilerFlag.cmake:105 (cmake_check_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:113 (check_c_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Performing Test Wstrictprototypes_SUPPORTED"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-4ghuiz"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-4ghuiz"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "Wstrictprototypes_SUPPORTED"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-4ghuiz'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_97bcf
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DWstrictprototypes_SUPPORTED  -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99   -Wstrict-prototypes -o CMakeFiles/cmTC_97bcf.dir/src.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-4ghuiz/src.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_97bcf.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_97bcf.a  CMakeFiles/cmTC_97bcf.dir/src.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_97bcf.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckCCompilerFlag.cmake:105 (cmake_check_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:113 (check_c_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Performing Test Wextra_SUPPORTED"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-3yyvwa"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-3yyvwa"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "Wextra_SUPPORTED"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-3yyvwa'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_eb692
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DWextra_SUPPORTED  -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99   -Wextra -o CMakeFiles/cmTC_eb692.dir/src.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-3yyvwa/src.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_eb692.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_eb692.a  CMakeFiles/cmTC_eb692.dir/src.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_eb692.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckCCompilerFlag.cmake:105 (cmake_check_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:113 (check_c_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Performing Test Wcastalign_SUPPORTED"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-sml2yc"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-sml2yc"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "Wcastalign_SUPPORTED"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-sml2yc'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_8cc46
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DWcastalign_SUPPORTED  -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99   -Wcast-align -o CMakeFiles/cmTC_8cc46.dir/src.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-sml2yc/src.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_8cc46.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_8cc46.a  CMakeFiles/cmTC_8cc46.dir/src.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_8cc46.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckCCompilerFlag.cmake:105 (cmake_check_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:113 (check_c_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Performing Test Wnestedexterns_SUPPORTED"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-yaxqpd"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-yaxqpd"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "Wnestedexterns_SUPPORTED"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-yaxqpd'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_3ba35
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DWnestedexterns_SUPPORTED  -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99   -Wnested-externs -o CMakeFiles/cmTC_3ba35.dir/src.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-yaxqpd/src.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_3ba35.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_3ba35.a  CMakeFiles/cmTC_3ba35.dir/src.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_3ba35.a && cd ."
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "C:/Users/marce/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-4.1/Modules/CheckCCompilerFlag.cmake:105 (cmake_check_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake/OpusConfig.cmake:113 (check_c_compiler_flag)"
+      - "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/CMakeLists.txt:11 (include)"
+    checks:
+      - "Performing Test Wshadow_SUPPORTED"
+    directories:
+      source: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-bcwf79"
+      binary: "V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-bcwf79"
+    cmakeVariables:
+      CMAKE_C_FLAGS: " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections"
+      CMAKE_C_FLAGS_DEBUG: "-O0 -g3"
+      CMAKE_EXE_LINKER_FLAGS: "-mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -T \"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/stm32h755xx_flash_CM7.ld\" --specs=nano.specs -Wl,-Map=transceiver_CM7.map -Wl,--gc-sections -Wl,--print-memory-usage "
+      CMAKE_MODULE_PATH: "V:/racing/SW06-drivers-radio/firmware/transceiver/Middlewares/Third_Party/opus/cmake"
+    buildResult:
+      variable: "Wshadow_SUPPORTED"
+      cached: true
+      stdout: |
+        Change Dir: 'V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-bcwf79'
+        
+        Run Build Command(s): C:/ST/STM32CubeCLT_1.20.0/Ninja/bin/ninja.exe -v cmTC_66730
+        [1/2] C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DWshadow_SUPPORTED  -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections  -std=gnu99   -Wshadow -o CMakeFiles/cmTC_66730.dir/src.c.obj -c V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/CMakeFiles/CMakeScratch/TryCompile-bcwf79/src.c
+        [2/2] C:\\WINDOWS\\system32\\cmd.exe /C "cd . && C:\\Users\\marce\\AppData\\Local\\Programs\\CLion\\bin\\cmake\\win\\x64\\bin\\cmake.exe -E rm -f libcmTC_66730.a && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ar.exe qc libcmTC_66730.a  CMakeFiles/cmTC_66730.dir/src.c.obj && C:\\ST\\STM32CubeCLT_1.20.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-ranlib.exe libcmTC_66730.a && cd ."
+        
+      exitCode: 0
+...
