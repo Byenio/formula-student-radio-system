@@ -171,9 +171,15 @@ void StartRadioTxTask(void* argument)
 
         uint16_t total_len = 3 + tx_packet.length;
 
+        SCB_CleanDCache_by_Addr((uint32_t*)dma_buffer, total_len + 32);
+
         if (HAL_UART_Transmit_DMA(&huart6, dma_buffer, total_len) != HAL_OK)
         {
           xSemaphoreGive(xUartTxSemaphore);
+          HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);
+        } else
+        {
+          HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET);
         }
       }
     }
