@@ -240,27 +240,32 @@ static int8_t AUDIO_MuteCtl_FS(uint8_t cmd)
 static int8_t AUDIO_PeriodicTC_FS(uint8_t *pbuf, uint32_t size, uint8_t cmd)
 {
   /* USER CODE BEGIN 5 */
-  uint16_t total_stereo_samples = size / 2;
-  uint16_t mono_samples = total_stereo_samples / 2;
-
-  int16_t mono_buffer[mono_samples];
   int16_t* pcm_in = (int16_t*)pbuf;
+  uint16_t num_stereo_samples = size / 4;
 
-  for (int i = 0; i < mono_samples; i++)
+  // 48 samples * 2 bytes = 96 bytes (more than enough for USB FS)
+  int16_t mono_buffer[48];
+  size_t bytes_to_send = num_stereo_samples * sizeof(int16_t);
+
+  // Prevent partial writes that permanently misalign 16-bit PCM data
+  if (xStreamBufferSpacesAvailable(xAudioInputStreamBuffer) >= bytes_to_send)
   {
-    mono_buffer[i] = pcm_in[i * 2];
+    for (int i = 0; i < num_stereo_samples; i++)
+    {
+      mono_buffer[i] = pcm_in[i * 2];
+    }
+
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+    xStreamBufferSendFromISR(
+      xAudioInputStreamBuffer,
+      mono_buffer,
+      bytes_to_send,
+      &xHigherPriorityTaskWoken
+    );
+
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
   }
-
-  BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
-  xStreamBufferSendFromISR(
-    xAudioInputStreamBuffer,
-    (void*) mono_buffer,
-    mono_samples * sizeof(int16_t),
-    &xHigherPriorityTaskWoken
-  );
-
-  portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
   UNUSED(cmd);
   return USBD_OK;

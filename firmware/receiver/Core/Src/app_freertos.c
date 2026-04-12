@@ -71,15 +71,19 @@ extern SemaphoreHandle_t xPcUartSemaphore;
 /* ============================================================ */
 void StartParserTask(void* argument)
 {
-  uint8_t rx_byte;
-  uint8_t state = 0;  // 0=WaitStart, 1=Type, 2=Len, 3=Payload
+  uint8_t rx_chunk[128];
+  uint8_t state = 0; // 0=WaitStart, 1=Type, 2=Len, 3=Payload
   RadioPacket_t current_packet;
   uint8_t payload_index = 0;
 
   for (;;)
   {
-    if (xStreamBufferReceive(xRadioRxStreamBuffer, &rx_byte, 1, portMAX_DELAY) == 1)
+    size_t bytes_read = xStreamBufferReceive(xRadioRxStreamBuffer, rx_chunk, sizeof(rx_chunk), portMAX_DELAY);
+
+    for (size_t i = 0; i < bytes_read; i++)
     {
+      uint8_t rx_byte = rx_chunk[i];
+
       switch (state)
       {
         case 0:
@@ -92,27 +96,52 @@ void StartParserTask(void* argument)
 
         case 1:
           current_packet.type = rx_byte;
-          state = 2;
+          if (current_packet.type == PACKET_TYPE_AUDIO || current_packet.type == PACKET_TYPE_TELEMETRY)
+          {
+            state = 2;
+          } else
+          {
+            HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_11);
+            state = 0;
+          }
           break;
 
         case 2:
           current_packet.length = rx_byte;
-
           if (current_packet.length > MAX_PAYLOAD_SIZE)
           {
+            HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_11);
             state = 0;
           } else
           {
-            payload_index = 0;
             state = 3;
           }
           break;
 
         case 3:
+          current_packet.seq_num = rx_byte;
+          if (current_packet.length == 0)
+          {
+            xQueueSend(xPcTxQueue, &current_packet, 0);
+            state = 0;
+          } else
+          {
+            payload_index = 0;
+            state = 4;
+          }
+          break;
+
+        case 4:
           current_packet.payload[payload_index++] = rx_byte;
           if (payload_index >= current_packet.length)
           {
-            xQueueSend(xPcTxQueue, &current_packet, pdMS_TO_TICKS(10));
+            if (xQueueSend(xPcTxQueue, &current_packet, 0) == pdTRUE)
+            {
+              HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_9);
+            } else
+            {
+              HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_11);
+            }
             state = 0;
           }
           break;
@@ -139,9 +168,10 @@ void StartPcTxTask(void* argument)
         pc_buffer[0] = tx_packet.start_byte;
         pc_buffer[1] = tx_packet.type;
         pc_buffer[2] = tx_packet.length;
-        memcpy(&pc_buffer[3], tx_packet.payload, tx_packet.length);
+        pc_buffer[3] = tx_packet.seq_num;
+        memcpy(&pc_buffer[4], tx_packet.payload, tx_packet.length);
 
-        uint16_t len = 3 + tx_packet.length;
+        uint16_t len = 4 + tx_packet.length;
 
         HAL_UART_Transmit_DMA(&hlpuart1, pc_buffer, len);
       }

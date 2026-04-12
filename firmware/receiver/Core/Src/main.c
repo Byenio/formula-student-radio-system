@@ -134,7 +134,8 @@ int main(void)
   xPcUartSemaphore = xSemaphoreCreateBinary();
   xSemaphoreGive(xPcUartSemaphore);
 
-  HAL_UART_Receive_DMA(&huart1, rx_dma_buffer, RX_DMA_BUFFER_SIZE);
+  HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rx_dma_buffer, RX_DMA_BUFFER_SIZE);
+  __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -371,22 +372,35 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, FE_CTRL3_Pin|GPIO_PIN_5|FE_CTRL1_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : FE_CTRL3_Pin FE_CTRL1_Pin */
-  GPIO_InitStruct.Pin = FE_CTRL3_Pin|FE_CTRL1_Pin;
+  // /*Configure GPIO pins : FE_CTRL3_Pin FE_CTRL1_Pin */
+  // GPIO_InitStruct.Pin = FE_CTRL3_Pin|FE_CTRL1_Pin;
+  // GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  // GPIO_InitStruct.Pull = GPIO_NOPULL;
+  // GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  // HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  //
+  // /*Configure GPIO pin : PC5 */
+  // GPIO_InitStruct.Pin = GPIO_PIN_5;
+  // GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  // GPIO_InitStruct.Pull = GPIO_NOPULL;
+  // GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  // HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9|GPIO_PIN_11|GPIO_PIN_15, GPIO_PIN_RESET);
+
+  GPIO_InitStruct.Pin = FE_CTRL3_Pin|FE_CTRL1_Pin|GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PC5 */
-  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  // Configure WL55JC LEDs as outputs
+  GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_11|GPIO_PIN_15;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN MX_GPIO_Init_2 */
-
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
   /* USER CODE END MX_GPIO_Init_2 */
 }
 
@@ -398,18 +412,22 @@ void Process_DMA_Buffer(UART_HandleTypeDef* huart)
 
   if (new_pos != old_pos)
   {
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
     if (new_pos > old_pos)
     {
-      xStreamBufferSendFromISR(xRadioRxStreamBuffer, &rx_dma_buffer[old_pos], new_pos - old_pos, NULL);
+      xStreamBufferSendFromISR(xRadioRxStreamBuffer, &rx_dma_buffer[old_pos], new_pos - old_pos, &xHigherPriorityTaskWoken);
     } else
     {
-      xStreamBufferSendFromISR(xRadioRxStreamBuffer, &rx_dma_buffer[old_pos], RX_DMA_BUFFER_SIZE - old_pos, NULL);
+      xStreamBufferSendFromISR(xRadioRxStreamBuffer, &rx_dma_buffer[old_pos], RX_DMA_BUFFER_SIZE - old_pos, &xHigherPriorityTaskWoken);
       if (new_pos > 0)
       {
-        xStreamBufferSendFromISR(xRadioRxStreamBuffer, &rx_dma_buffer[0], new_pos, NULL);
+        xStreamBufferSendFromISR(xRadioRxStreamBuffer, &rx_dma_buffer[0], new_pos, &xHigherPriorityTaskWoken);
       }
     }
     old_pos = new_pos;
+
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
   }
 }
 
@@ -421,19 +439,65 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart) {
   if (huart->Instance == USART1) Process_DMA_Buffer(huart);
 }
 
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart)
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
-  if (huart->Instance == LPUART1)
+  if (huart->Instance == USART1)
   {
-    BaseType_t xTaskWoken = pdFALSE;
-    xSemaphoreGiveFromISR(xPcUartSemaphore, &xTaskWoken);
-    portYIELD_FROM_ISR(xTaskWoken);
+    static uint16_t old_pos = 0;
+    uint16_t pos = Size;
+    uint16_t length = 0;
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+    if (pos != old_pos)
+    {
+      if (pos > old_pos)
+      {
+        length = pos - old_pos;
+        xStreamBufferSendFromISR(xRadioRxStreamBuffer, &rx_dma_buffer[old_pos], length, &xHigherPriorityTaskWoken);
+      }
+      else
+      {
+        length = RX_DMA_BUFFER_SIZE - old_pos;
+        xStreamBufferSendFromISR(xRadioRxStreamBuffer, &rx_dma_buffer[old_pos], length, &xHigherPriorityTaskWoken);
+        if (pos > 0)
+        {
+          xStreamBufferSendFromISR(xRadioRxStreamBuffer, &rx_dma_buffer[0], pos, &xHigherPriorityTaskWoken);
+        }
+      }
+      old_pos = pos;
+    }
+
+    if (pos == RX_DMA_BUFFER_SIZE)
+    {
+      old_pos = 0;
+    }
+
+    // Restart DMA reception (Required if DMA is set to Normal mode instead of Circular)
+    HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rx_dma_buffer, RX_DMA_BUFFER_SIZE);
+    __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
+
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
   }
 }
 
-void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* huart, uint16_t Size)
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
-  if (huart->Instance == USART1) Process_DMA_Buffer(huart);
+  if (huart->Instance == USART1)
+  {
+    // Recover from framing/noise/overrun errors caused by unplugging the wires
+    HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rx_dma_buffer, RX_DMA_BUFFER_SIZE);
+    __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
+  }
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == LPUART1)
+  {
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    xSemaphoreGiveFromISR(xPcUartSemaphore, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+  }
 }
 /* USER CODE END 4 */
 

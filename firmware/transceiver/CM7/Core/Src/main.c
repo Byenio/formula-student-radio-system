@@ -71,22 +71,22 @@ DMA_HandleTypeDef hdma_usart6_rx;
 osThreadId_t AudioTaskHandle;
 const osThreadAttr_t AudioTask_attributes = {
   .name = "AudioTask",
-  .stack_size = 1024 * 4,
-  .priority = (osPriority_t) osPriorityAboveNormal,
+  .stack_size = 1024 * 48,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for TelemetryTask */
 osThreadId_t TelemetryTaskHandle;
 const osThreadAttr_t TelemetryTask_attributes = {
   .name = "TelemetryTask",
   .stack_size = 256 * 4,
-  .priority = (osPriority_t) osPriorityRealtime,
+  .priority = (osPriority_t) osPriorityHigh,
 };
 /* Definitions for RadioTxTask */
 osThreadId_t RadioTxTaskHandle;
 const osThreadAttr_t RadioTxTask_attributes = {
   .name = "RadioTxTask",
   .stack_size = 512 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+  .priority = (osPriority_t) osPriorityRealtime,
 };
 /* USER CODE BEGIN PV */
 StreamBufferHandle_t xAudioInputStreamBuffer;

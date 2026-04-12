@@ -12,6 +12,7 @@ typedef struct {
   uint8_t start_byte;
   uint8_t type;
   uint8_t length;
+  uint8_t seq_num;
   uint8_t payload[MAX_PAYLOAD_SIZE];
 } RadioPacket_t;
 

@@ -13,9 +13,9 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
 # Define the build type
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Debug")
-endif()
+set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type" FORCE)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -ffast-math")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -ffast-math")
 
 message("Build type: " ${CMAKE_BUILD_TYPE})
 
