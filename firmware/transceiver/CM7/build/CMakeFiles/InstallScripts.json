@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/cmake_install.cmake",
-		"V:/racing/SW06-drivers-radio/firmware/transceiver/CM7/build/opus/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

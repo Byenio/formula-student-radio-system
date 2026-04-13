@@ -39,3 +39,22 @@ Generated/
 # System temporary files
 .DS_Store
 Thumbs.db
+
+### Build, debug and IDE files ###
+
+# IDE files
+.vscode/
+.idea/
+.venv/
+
+# Build and debug outputs
+build/
+debug/
+release/
+dist/
+out/
+cmake/
+cmake-*/
+*.o
+*.obj
+*.so
