@@ -64,11 +64,6 @@ extern SemaphoreHandle_t xPcUartSemaphore;
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
 
-
-/* ============================================================ */
-/* PACKET PARSER                                                */
-/* Reads byte stream -> Finds Packets -> Queues for PC          */
-/* ============================================================ */
 void StartParserTask(void* argument)
 {
   uint8_t rx_chunk[128];
@@ -150,10 +145,6 @@ void StartParserTask(void* argument)
   }
 }
 
-/* ============================================================ */
-/* PC GATEKEEPER                                                */
-/* Serializes Packet -> Sends to PC via LPUART                  */
-/* ============================================================ */
 void StartPcTxTask(void* argument)
 {
   RadioPacket_t tx_packet;

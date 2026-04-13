@@ -67,21 +67,20 @@ DMA_HandleTypeDef hdma_usart1_rx;
 DMA_HandleTypeDef hdma_usart6_tx;
 DMA_HandleTypeDef hdma_usart6_rx;
 
-/* Definitions for AudioTask */
 osThreadId_t AudioTaskHandle;
 const osThreadAttr_t AudioTask_attributes = {
   .name = "AudioTask",
   .stack_size = 1024 * 48,
   .priority = (osPriority_t) osPriorityNormal,
 };
-/* Definitions for TelemetryTask */
+
 osThreadId_t TelemetryTaskHandle;
 const osThreadAttr_t TelemetryTask_attributes = {
   .name = "TelemetryTask",
   .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityHigh,
 };
-/* Definitions for RadioTxTask */
+
 osThreadId_t RadioTxTaskHandle;
 const osThreadAttr_t RadioTxTask_attributes = {
   .name = "RadioTxTask",
@@ -93,12 +92,10 @@ StreamBufferHandle_t xAudioInputStreamBuffer;
 QueueHandle_t xRadioTxQueue;
 SemaphoreHandle_t xUartTxSemaphore;
 
-// stream buffer
 #define AUDIO_STREAM_SIZE 2048
 uint8_t audio_stream_storage[AUDIO_STREAM_SIZE];
 StaticStreamBuffer_t xAudioStreamStruct;
 
-// adpcm configuration
 #define FRAME_SAMPLES 320 // 20ms@16kHz
 #define FRAME_BYTES   (FRAME_SAMPLES * sizeof(int16_t)) // 640 bytes raw
 /* USER CODE END PV */

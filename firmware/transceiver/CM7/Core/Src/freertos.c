@@ -68,10 +68,6 @@ extern UART_HandleTypeDef huart6;
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
 
-/* ============================================================ */
-/* AUDIO ENCODER (Priority: Normal)                             */
-/* Reads Raw PCM from USB Stream -> Encodes -> Pushes to Queue  */
-/* ============================================================ */
 void StartAudioTask(void* argument)
 {
   MX_USB_DEVICE_Init();
@@ -114,7 +110,6 @@ void StartAudioTask(void* argument)
     uint8_t *buffer_ptr = (uint8_t*)pcm_input_buffer;
     uint8_t audio_seq = 0;
 
-    // Accumulate EXACTLY one frame of audio (640 bytes)
     while (total_bytes_received < FRAME_BYTES)
     {
       size_t bytes_received = xStreamBufferReceive(
@@ -126,7 +121,6 @@ void StartAudioTask(void* argument)
       total_bytes_received += bytes_received;
     }
 
-    // Now we have a full frame, check PTT button
     if (BSP_PB_GetState(BUTTON_USER) == 1)
     {
       int encoded_bytes = opus_encode(
@@ -150,10 +144,6 @@ void StartAudioTask(void* argument)
   }
 }
 
-/* ============================================================ */
-/* TELEMETRY GENERATOR (Priority: High)                         */
-/* Simulates CAN data -> Pushes to Queue                        */
-/* ============================================================ */
 void StartTelemetryTask(void* argument)
 {
   RadioPacket_t telemetry_packet;
@@ -178,10 +168,6 @@ void StartTelemetryTask(void* argument)
   }
 }
 
-/* ============================================================ */
-/* RADIO GATEKEEPER (Priority: Normal/High)                     */
-/* Takes Packets from Queue -> Sends via UART DMA               */
-/* ============================================================ */
 void StartRadioTxTask(void* argument)
 {
   RadioPacket_t tx_packet;

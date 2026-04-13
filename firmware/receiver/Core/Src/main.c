@@ -53,14 +53,13 @@ DMA_HandleTypeDef hdma_lpuart1_tx;
 DMA_HandleTypeDef hdma_usart1_rx;
 DMA_HandleTypeDef hdma_usart1_tx;
 
-/* Definitions for ParserTask */
 osThreadId_t ParserTaskHandle;
 const osThreadAttr_t ParserTask_attributes = {
   .name = "ParserTask",
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 1024 * 4
 };
-/* Definitions for PcTxTask */
+
 osThreadId_t PcTxTaskHandle;
 const osThreadAttr_t PcTxTask_attributes = {
   .name = "PcTxTask",
@@ -472,7 +471,6 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
       old_pos = 0;
     }
 
-    // Restart DMA reception (Required if DMA is set to Normal mode instead of Circular)
     HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rx_dma_buffer, RX_DMA_BUFFER_SIZE);
     __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
 
@@ -484,7 +482,6 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
   if (huart->Instance == USART1)
   {
-    // Recover from framing/noise/overrun errors caused by unplugging the wires
     HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rx_dma_buffer, RX_DMA_BUFFER_SIZE);
     __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
   }

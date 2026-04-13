@@ -243,11 +243,10 @@ static int8_t AUDIO_PeriodicTC_FS(uint8_t *pbuf, uint32_t size, uint8_t cmd)
   int16_t* pcm_in = (int16_t*)pbuf;
   uint16_t num_stereo_samples = size / 4;
 
-  // 48 samples * 2 bytes = 96 bytes (more than enough for USB FS)
+  // 48 samples * 2 bytes = 96 bytes
   int16_t mono_buffer[48];
   size_t bytes_to_send = num_stereo_samples * sizeof(int16_t);
 
-  // Prevent partial writes that permanently misalign 16-bit PCM data
   if (xStreamBufferSpacesAvailable(xAudioInputStreamBuffer) >= bytes_to_send)
   {
     for (int i = 0; i < num_stereo_samples; i++)
