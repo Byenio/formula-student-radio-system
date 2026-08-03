@@ -19,6 +19,7 @@
 #if E28_ROLE_TRANSMITTER
 #include "audio.h"
 #include "ptt.h"
+#include "rs485.h"
 #else
 /* The base station relays to the PC instead of having audio hardware. */
 #include "usb_link.h"
@@ -97,6 +98,14 @@ static volatile uint32_t echo_rx_count;
 static volatile uint32_t seq_gaps;
 static volatile uint32_t tx_timeouts;
 static volatile uint32_t echo_timeouts;
+
+#if E28_ROLE_TRANSMITTER
+static volatile uint32_t telem_sent;      /*!< telemetry packets to air     */
+static volatile uint32_t audio_sent;      /*!< voice packets to air         */
+static volatile uint32_t audio_yielded;   /*!< voice frames dropped for
+                                               telemetry -- the cost of the
+                                               priority rule, made visible  */
+#endif
 
 #if !E28_ROLE_TRANSMITTER
 static volatile uint32_t usb_forwarded;   /*!< radio -> PC                  */
@@ -465,6 +474,11 @@ void E28_Dio1Callback(void)
 uint32_t E28_Radio_GetDio1Count(void)  { return dio1_count; }
 uint32_t E28_Radio_GetEchoRxCount(void){ return echo_rx_count; }
 uint32_t E28_Radio_GetSeqGaps(void)    { return seq_gaps; }
+#if E28_ROLE_TRANSMITTER
+uint32_t E28_Radio_GetTelemSent(void)  { return telem_sent; }
+uint32_t E28_Radio_GetAudioSent(void)  { return audio_sent; }
+uint32_t E28_Radio_GetAudioYielded(void){ return audio_yielded; }
+#endif
 bool     E28_Radio_IsConfigured(void)  { return config_ok; }
 bool     E28_Radio_IsRxArmed(void)     { return rx_armed; }
 
@@ -601,12 +615,52 @@ void E28_Radio_Loop(void)
     uint8_t rx_packet_len = 0U;
     uint8_t discard[AUDIO_ENCODED_LEN];
     uint8_t seq = 0U;
+    uint8_t telem_seq = 0U;
     uint8_t expected_seq = 0U;
     bool    have_expected = false;
     bool    listening = false;
 
     for (;;)
     {
+      /* ---- Telemetry first, always ----
+         Telemetry outranks voice: a cell temperature or state-of-charge
+         warning matters more than 10 ms of speech, and losing one voice frame
+         in a burst is barely audible. Checked before the keying branch so it
+         goes out whether or not the driver is talking -- telemetry must not
+         depend on someone holding a button.
+
+         Airtime is not the reason for the ordering. Voice occupies under 8%
+         of the channel, so both fit comfortably; this is about latency. */
+      {
+        uint8_t telem[LINK_HEADER_LEN + LINK_MAX_OTA_PAYLOAD];
+        uint8_t telem_len = 0U;
+
+        if (RS485_GetPayload(&telem[LINK_HEADER_LEN], &telem_len, 0U) &&
+            (telem_len > 0U))
+        {
+          if (listening)
+          {
+            rf_switch_idle();
+            listening = false;
+          }
+
+          telem[0] = LINK_VER_TYPE(LINK_PROTO_VERSION, LINK_PKT_TELEM_NORMAL);
+          telem[1] = telem_seq;
+          telem[2] = telem_len;
+          telem[3] = Ptt_IsOpen() ? LINK_FLAG_PTT_ACTIVE : 0x00U;
+
+          if (radio_send_blocking(telem, (uint8_t)(LINK_HEADER_LEN + telem_len), 50U))
+          {
+            telem_sent++;
+          }
+          telem_seq++;
+
+          /* Round-trip once more rather than falling through to audio: any
+             further telemetry that arrived meanwhile should go first too. */
+          continue;
+        }
+      }
+
       if (Ptt_IsTransmitting())
       {
         /* ---- Mic open: talk, do not listen ----
@@ -629,7 +683,10 @@ void E28_Radio_Loop(void)
         packet[2] = AUDIO_ENCODED_LEN;
         packet[3] = Ptt_IsOpen() ? LINK_FLAG_PTT_ACTIVE : 0x00U;
 
-        (void)radio_send_blocking(packet, sizeof(packet), 50U);
+        if (radio_send_blocking(packet, sizeof(packet), 50U))
+        {
+          audio_sent++;
+        }
         seq++;
 
 #if RADIO_LISTEN_EVERY_FRAMES > 0U
@@ -650,7 +707,7 @@ void E28_Radio_Loop(void)
            up would just make the first frame after keying be 20 ms old. */
         while (Audio_GetEncodedFrame(discard, 0U))
         {
-          /* drop */
+          audio_yielded++;
         }
 
         if (!listening)

@@ -59,6 +59,8 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define PTT_BTN_Pin GPIO_PIN_13
 #define PTT_BTN_GPIO_Port GPIOC
+#define RS485_RE_DE_Pin GPIO_PIN_14
+#define RS485_RE_DE_GPIO_Port GPIOC
 #define E28_BUSY_Pin GPIO_PIN_5
 #define E28_BUSY_GPIO_Port GPIOA
 #define E28_RX_EN_Pin GPIO_PIN_10

@@ -159,6 +159,11 @@ bool     E28_Radio_IsConfigured(void); /*!< E28_Radio_Config() succeeded */
 bool     E28_Radio_IsRxArmed(void);    /*!< SetRx accepted               */
 uint32_t E28_Radio_GetEchoRxCount(void);/*!< good echoes / relays    */
 uint32_t E28_Radio_GetSeqGaps(void);   /*!< round-trip packet losses     */
+#if E28_ROLE_TRANSMITTER
+uint32_t E28_Radio_GetTelemSent(void);   /*!< telemetry packets to air     */
+uint32_t E28_Radio_GetAudioSent(void);   /*!< voice packets to air         */
+uint32_t E28_Radio_GetAudioYielded(void);/*!< voice dropped for telemetry  */
+#endif
 
 #if E28_USE_RTOS
 /**
