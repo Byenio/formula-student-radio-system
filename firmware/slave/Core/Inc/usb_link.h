@@ -37,9 +37,14 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
-/* Outbound byte ring. Sized for several full radio packets so a momentary USB
-   stall costs latency rather than data. */
-#define USB_LINK_TX_RING_LEN    1024U
+/* Outbound byte ring.
+   Must hold a comfortable burst of the LARGEST packets, not the average. A
+   packet is refused whole if it does not fit, so a ring that is merely
+   adequate on average starves big packets while small ones still squeeze in --
+   with voice (88 B) and telemetry (up to 259 B) sharing the link, that meant
+   telemetry stopping dead the moment the driver keyed the mic, while audio
+   carried on. 4 kB is about 300 ms of the worst-case combined rate. */
+#define USB_LINK_TX_RING_LEN    4096U
 
 /* Inbound reassembly buffer: one maximum USB frame. */
 #define USB_LINK_RX_BUF_LEN     LINK_USB_MAX_FRAME

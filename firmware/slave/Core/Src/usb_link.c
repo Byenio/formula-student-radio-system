@@ -23,6 +23,12 @@
    free to answer control traffic. */
 #define USB_TX_TIMEOUT_MS   50U
 
+/* Chunks pushed per poll. One 64-byte chunk per call could not keep up with
+   voice and telemetry together (~150 packets/s, ~13 kB/s), so the ring filled
+   and the larger packets were the ones refused. The USB stack is polled from
+   the same loop, so this is bounded rather than a drain-everything loop. */
+#define USB_TX_CHUNKS_PER_POLL  8U
+
 static UX_SLAVE_CLASS_CDC_ACM *cdc_acm;      /* set by the activate callback */
 
 /* ---- Outbound ------------------------------------------------------------ */
@@ -287,12 +293,17 @@ void UsbLink_Poll(void)
      reports UX_STATE_NEXT. That repetition is the part that trips people up:
      the call does not finish the transfer by itself, and abandoning it after
      one attempt looks exactly like a broken write. */
-  if (!tx_in_flight)
+  for (uint32_t pass = 0U; pass < USB_TX_CHUNKS_PER_POLL; pass++)
   {
-    uint32_t used = tx_ring_used();
-
-    if (used > 0U)
+    if (!tx_in_flight)
     {
+      uint32_t used = tx_ring_used();
+
+      if (used == 0U)
+      {
+        break;                      /* nothing queued */
+      }
+
       tx_chunk_len = (used < USB_CHUNK) ? used : USB_CHUNK;
 
       for (uint32_t i = 0U; i < tx_chunk_len; i++)
@@ -303,10 +314,7 @@ void UsbLink_Poll(void)
       tx_in_flight  = true;
       tx_started_ms = HAL_GetTick();
     }
-  }
 
-  if (tx_in_flight)
-  {
     actual_length = 0U;
 
     if (ux_device_class_cdc_acm_write_run(cdc_acm, tx_chunk, tx_chunk_len,
@@ -315,14 +323,19 @@ void UsbLink_Poll(void)
       tx_tail      = (tx_tail + tx_chunk_len) & (USB_LINK_TX_RING_LEN - 1U);
       tx_in_flight = false;
     }
-    else if ((HAL_GetTick() - tx_started_ms) > USB_TX_TIMEOUT_MS)
+    else
     {
-      /* Nobody is reading. Drop everything queued rather than retrying
-         forever: stale audio is worthless, and holding the class in a
-         transmit state stops it answering control requests. */
-      tx_tail      = tx_head;
-      tx_in_flight = false;
-      tx_abandoned++;
+      if ((HAL_GetTick() - tx_started_ms) > USB_TX_TIMEOUT_MS)
+      {
+        /* Nobody is reading. Drop everything queued rather than retrying
+           forever: stale audio is worthless, and holding the class in a
+           transmit state stops it answering control requests. */
+        tx_tail      = tx_head;
+        tx_in_flight = false;
+        tx_abandoned++;
+      }
+
+      break;    /* still busy -- give the stack a turn before trying again */
     }
   }
 }

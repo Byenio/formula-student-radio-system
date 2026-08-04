@@ -105,6 +105,8 @@ static volatile uint32_t audio_sent;      /*!< voice packets to air         */
 static volatile uint32_t audio_yielded;   /*!< voice frames dropped for
                                                telemetry -- the cost of the
                                                priority rule, made visible  */
+static volatile uint32_t telem_aggregated;/*!< payloads merged into a packet
+                                               already being built          */
 #endif
 
 #if !E28_ROLE_TRANSMITTER
@@ -478,6 +480,7 @@ uint32_t E28_Radio_GetSeqGaps(void)    { return seq_gaps; }
 uint32_t E28_Radio_GetTelemSent(void)  { return telem_sent; }
 uint32_t E28_Radio_GetAudioSent(void)  { return audio_sent; }
 uint32_t E28_Radio_GetAudioYielded(void){ return audio_yielded; }
+uint32_t E28_Radio_GetTelemAggregated(void) { return telem_aggregated; }
 #endif
 bool     E28_Radio_IsConfigured(void)  { return config_ok; }
 bool     E28_Radio_IsRxArmed(void)     { return rx_armed; }
@@ -638,6 +641,45 @@ void E28_Radio_Loop(void)
         if (RS485_GetPayload(&telem[LINK_HEADER_LEN], &telem_len, 0U) &&
             (telem_len > 0U))
         {
+          /* Pack whatever else is already waiting into the same packet.
+             Every transmission costs a fixed overhead -- packet params, the
+             SPI buffer write, the TX itself, waiting for TxDone, and switching
+             back to receive -- and on a half-duplex link the board is deaf for
+             all of it. Four small packets therefore cost roughly four times
+             the airtime and four times the missed voice frames of one large
+             one carrying the same data.
+
+             Records are self-delimiting and the receiver splits them by
+             walking their headers, so concatenating payloads needs no
+             separator. Only whole payloads are added: each already contains
+             whole records, and splitting one would desynchronise the far end. */
+          for (;;)
+          {
+            uint8_t extra_len = 0U;
+            uint8_t room = (uint8_t)(LINK_MAX_OTA_PAYLOAD - telem_len);
+
+            if (room < 16U)               /* no room for even a short record */
+            {
+              break;
+            }
+
+            uint8_t next_len = RS485_PeekLen();
+
+            if ((next_len == 0U) || (next_len > room))
+            {
+              break;                      /* nothing waiting, or it will not fit */
+            }
+
+            if (!RS485_GetPayload(&telem[LINK_HEADER_LEN + telem_len],
+                                  &extra_len, 0U) || (extra_len == 0U))
+            {
+              break;
+            }
+
+            telem_len = (uint8_t)(telem_len + extra_len);
+            telem_aggregated++;
+          }
+
           if (listening)
           {
             rf_switch_idle();
@@ -673,9 +715,13 @@ void E28_Radio_Loop(void)
           listening = false;
         }
 
-        if (!Audio_GetEncodedFrame(&packet[LINK_HEADER_LEN], 20U))
+        /* Short wait rather than a full frame period: the loop has to come
+           back to the telemetry check promptly, and blocking here for 20 ms
+           would cap telemetry at 50 packets/s even when the queue is full.
+           Timing out costs nothing -- the next pass picks the frame up. */
+        if (!Audio_GetEncodedFrame(&packet[LINK_HEADER_LEN], 4U))
         {
-          continue;   /* no frame ready yet; the DMA paces us */
+          continue;
         }
 
         packet[0] = LINK_VER_TYPE(LINK_PROTO_VERSION, LINK_PKT_AUDIO);
@@ -716,11 +762,19 @@ void E28_Radio_Loop(void)
           listening = true;
         }
 
-        /* Short wait so a key press is acted on within one frame period.
-           Loops rather than handling a single packet: with no clear-on-entry
-           the flag may already be set for a packet that landed while we were
-           busy, and a burst must not be truncated. */
-        while (E28_Port_WaitDio1(20U))
+        /* ONE packet per pass, deliberately not a loop.
+           Looping here meant that while the other station transmitted
+           continuously -- 100 voice frames a second -- a packet was always
+           waiting, so this never returned to the top of the outer loop. The
+           telemetry check lives up there, so telemetry stopped being sent
+           entirely and its queue overflowed.
+
+           Handling one packet and falling back out costs a queue poll per
+           packet, which is nothing, and guarantees telemetry is looked at
+           between every received frame. No notification is lost by leaving:
+           WaitDio1 does not clear on entry, so a packet that arrived while we
+           were busy still has its flag set on the next pass. */
+        if (E28_Port_WaitDio1(20U))
         {
           last_irq = radio_get_irq();
 
@@ -750,12 +804,6 @@ void E28_Radio_Loop(void)
           }
 
           (void)radio_clear_irq(E28_IRQ_ALL);
-
-          /* Leave promptly if the driver keyed the mic mid-burst. */
-          if (Ptt_IsTransmitting())
-          {
-            break;
-          }
         }
       }
     }

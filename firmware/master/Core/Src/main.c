@@ -26,6 +26,7 @@
 #include "e28.h"
 #include "ptt.h"
 #include "rs485.h"
+#include "can_bus.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,6 +50,8 @@ DMA_HandleTypeDef hdma_adc1;
 
 DAC_HandleTypeDef hdac1;
 DMA_HandleTypeDef hdma_dac1_ch1;
+
+FDCAN_HandleTypeDef hfdcan1;
 
 SPI_HandleTypeDef hspi2;
 
@@ -90,6 +93,7 @@ static void MX_DAC1_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_USART1_UART_Init(void);
+static void MX_FDCAN1_Init(void);
 void StartDefaultTask(void *argument);
 void StartTask02(void *argument);
 
@@ -145,6 +149,7 @@ int main(void)
   MX_TIM6_Init();
   MX_SPI2_Init();
   MX_USART1_UART_Init();
+  MX_FDCAN1_Init();
   /* USER CODE BEGIN 2 */
   /* Audio peripherals are armed by the audio task itself, so the DMA
      streams start only once the scheduler is running. */
@@ -180,6 +185,7 @@ int main(void)
   Audio_Init();
   E28_Init();
   RS485_Init();
+  CanBus_Init();
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -369,6 +375,49 @@ static void MX_DAC1_Init(void)
 }
 
 /**
+  * @brief FDCAN1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_FDCAN1_Init(void)
+{
+
+  /* USER CODE BEGIN FDCAN1_Init 0 */
+
+  /* USER CODE END FDCAN1_Init 0 */
+
+  /* USER CODE BEGIN FDCAN1_Init 1 */
+
+  /* USER CODE END FDCAN1_Init 1 */
+  hfdcan1.Instance = FDCAN1;
+  hfdcan1.Init.ClockDivider = FDCAN_CLOCK_DIV1;
+  hfdcan1.Init.FrameFormat = FDCAN_FRAME_CLASSIC;
+  hfdcan1.Init.Mode = FDCAN_MODE_NORMAL;
+  hfdcan1.Init.AutoRetransmission = DISABLE;
+  hfdcan1.Init.TransmitPause = DISABLE;
+  hfdcan1.Init.ProtocolException = DISABLE;
+  hfdcan1.Init.NominalPrescaler = 10;
+  hfdcan1.Init.NominalSyncJumpWidth = 3;
+  hfdcan1.Init.NominalTimeSeg1 = 13;
+  hfdcan1.Init.NominalTimeSeg2 = 3;
+  hfdcan1.Init.DataPrescaler = 1;
+  hfdcan1.Init.DataSyncJumpWidth = 1;
+  hfdcan1.Init.DataTimeSeg1 = 1;
+  hfdcan1.Init.DataTimeSeg2 = 1;
+  hfdcan1.Init.StdFiltersNbr = 0;
+  hfdcan1.Init.ExtFiltersNbr = 0;
+  hfdcan1.Init.TxFifoQueueMode = FDCAN_TX_FIFO_OPERATION;
+  if (HAL_FDCAN_Init(&hfdcan1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN FDCAN1_Init 2 */
+
+  /* USER CODE END FDCAN1_Init 2 */
+
+}
+
+/**
   * @brief SPI2 Initialization Function
   * @param None
   * @retval None
@@ -462,7 +511,7 @@ static void MX_USART1_UART_Init(void)
 
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
-  huart1.Init.BaudRate = 1000000;
+  huart1.Init.BaudRate = 115200;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -471,7 +520,8 @@ static void MX_USART1_UART_Init(void)
   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
   huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
   huart1.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_SWAP_INIT;
+  huart1.AdvancedInit.Swap = UART_ADVFEATURE_SWAP_ENABLE;
   if (HAL_UART_Init(&huart1) != HAL_OK)
   {
     Error_Handler();
@@ -489,7 +539,25 @@ static void MX_USART1_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART1_Init 2 */
+#if RS485_BENCH_TEST
+  /* Overrun detection off and DMA kept running through a receive error.
+     With circular DMA the data register is always being drained, so overrun
+     detection can only latch a fault that stops the link -- it protects
+     against nothing here.
 
+     No RX inversion: the bench source now drives both lines of the pair in
+     antiphase, which produces the same polarity a real RS-485 driver does.
+     The received signal is therefore an ordinary UART. */
+  huart1.AdvancedInit.AdvFeatureInit      = UART_ADVFEATURE_RXOVERRUNDISABLE_INIT
+                                          | UART_ADVFEATURE_DMADISABLEONERROR_INIT;
+  huart1.AdvancedInit.OverrunDisable      = UART_ADVFEATURE_OVERRUN_DISABLE;
+  huart1.AdvancedInit.DMADisableonRxError = UART_ADVFEATURE_DMA_ENABLEONRXERROR;
+
+  if (HAL_UART_Init(&huart1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+#endif
   /* USER CODE END USART1_Init 2 */
 
 }
@@ -539,13 +607,13 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(RS485_RE_DE_GPIO_Port, RS485_RE_DE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, CAN_STB_Pin|CAN_SHDN_Pin|STATUS_LED1_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, E28_RX_EN_Pin|E28_NRESET_Pin|STATUS_LED2_Pin|E28_TX_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(E28_CS_GPIO_Port, E28_CS_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(STATUS_LED1_GPIO_Port, STATUS_LED1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PTT_BTN_Pin */
   GPIO_InitStruct.Pin = PTT_BTN_Pin;
@@ -566,6 +634,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(E28_BUSY_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : CAN_STB_Pin CAN_SHDN_Pin STATUS_LED1_Pin */
+  GPIO_InitStruct.Pin = CAN_STB_Pin|CAN_SHDN_Pin|STATUS_LED1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
   /*Configure GPIO pins : E28_RX_EN_Pin E28_NRESET_Pin E28_CS_Pin STATUS_LED2_Pin
                            E28_TX_EN_Pin */
   GPIO_InitStruct.Pin = E28_RX_EN_Pin|E28_NRESET_Pin|E28_CS_Pin|STATUS_LED2_Pin
@@ -574,13 +649,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : STATUS_LED1_Pin */
-  GPIO_InitStruct.Pin = STATUS_LED1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(STATUS_LED1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : E28_DIO3_Pin E28_DIO2_Pin */
   GPIO_InitStruct.Pin = E28_DIO3_Pin|E28_DIO2_Pin;
@@ -617,12 +685,18 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
-  /* Heartbeat: proves the scheduler is running and the tick is sane. */
-  for(;;)
-  {
-    HAL_GPIO_TogglePin(STATUS_LED1_GPIO_Port, STATUS_LED1_Pin);
-    osDelay(STATUS_LED1_BLINK_PERIOD_MS);
-  }
+	for(;;)
+	  {
+	    CanBus_Poll();
+	    Ptt_SetCanAuthority(CanBus_IsLinkAlive());
+
+	    /* LED1: solid = VCU is talking to us over CAN, off = bench mode and the
+	       board button is in charge. More informative than a heartbeat, and it
+	       makes a dead harness obvious at a glance. */
+	    HAL_GPIO_WritePin(STATUS_LED1_GPIO_Port, STATUS_LED1_Pin,
+	                      CanBus_IsLinkAlive() ? GPIO_PIN_SET : GPIO_PIN_RESET);
+	    osDelay(20);
+	  }
   /* USER CODE END 5 */
 }
 

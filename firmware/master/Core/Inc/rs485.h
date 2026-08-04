@@ -39,6 +39,32 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+/* ---- Bench test mode -----------------------------------------------------
+   Set to 1 when the telemetry source is a bare 3.3 V UART wired into the
+   differential pair at J101, rather than a real RS-485 driver:
+
+       J101 pin 1 (RS485_A)  ->  source GND
+       J101 pin 2 (RS485_B)  ->  source TX
+       GND                   ->  source GND
+
+   The transceiver stays fully enabled -- RE_DE low, exactly as in the car --
+   because it is doing the receiving. What changes is polarity. With A grounded
+   and B driven:
+
+       TX high  ->  A-B is negative      ->  receiver output LOW
+       TX low   ->  A and B both at 0 V  ->  bus failsafe, output HIGH
+
+   so the MCU sees an inverted UART. The fix is one setting: RX pin inversion,
+   applied in USER CODE BEGIN USART1_Init 2 under this same flag. A real
+   transceiver on the far end delivers the correct polarity, so this must be 0
+   in the car or nothing will decode.
+
+   Note this loads the source pin with the board's 120 ohm termination, drawing
+   around 20 mA. Fine for a bench fixture, not a design to ship. */
+#ifndef RS485_BENCH_TEST
+#define RS485_BENCH_TEST        0
+#endif
+
 /* Largest frame on the wire: sync(2) + len(1) + payload(251) + crc(2). */
 #define RS485_MAX_FRAME         (3U + LINK_MAX_OTA_PAYLOAD + 2U)
 
@@ -65,6 +91,14 @@ bool RS485_GetPayload(uint8_t *out, uint8_t *len, uint32_t timeout_ms);
 
 /* ---- Bring-up counters, all watchable in Live Expressions ---------------- */
 
+/**
+  * @brief Length of the next queued payload, or 0 if none.
+  *
+  * Lets the radio layer merge several payloads into one air packet without
+  * dequeuing one it cannot use -- there is no way to put an item back.
+  */
+uint8_t RS485_PeekLen(void);
+
 uint32_t RS485_GetBytesReceived(void);  /*!< raw bytes off the wire          */
 uint32_t RS485_GetFramesGood(void);     /*!< frames that passed CRC          */
 uint32_t RS485_GetFramesBadCrc(void);   /*!< wrong baud, noise, or a false
@@ -72,6 +106,8 @@ uint32_t RS485_GetFramesBadCrc(void);   /*!< wrong baud, noise, or a false
 uint32_t RS485_GetResyncs(void);        /*!< bytes discarded hunting sync    */
 uint32_t RS485_GetQueueFull(void);      /*!< radio not draining fast enough  */
 uint32_t RS485_GetDmaErrors(void);      /*!< overrun/framing/noise from HAL  */
+uint32_t RS485_GetRecoveries(void);     /*!< successful RX restarts          */
+uint32_t RS485_GetLastErrorCode(void);  /*!< HAL_UART_ERROR_* bitmask        */
 
 #ifdef __cplusplus
 }

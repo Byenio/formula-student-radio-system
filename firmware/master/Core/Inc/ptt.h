@@ -73,11 +73,30 @@ bool Ptt_IsTransmitting(void);
 bool Ptt_IsOpen(void);
 
 /**
-  * @brief Open or close the mic from somewhere other than the button --
-  *        the CAN packet from the steering wheel, or the PC operator.
-  *        Takes effect immediately, same as a press.
+  * @brief Open or close the mic from CAN. Absolute, not a toggle: repeating
+  *        the same state costs nothing, so the 100 ms RADIO_CONTROL cycle can
+  *        call this every time.
+  *
+  *        While CAN is alive it is authoritative and the board button is
+  *        ignored -- see Ptt_SetCanAuthority().
   */
 void Ptt_SetRemote(bool open);
+
+/**
+  * @brief Tell the keying logic whether CAN is currently in charge.
+  *
+  * With CAN alive the steering wheel decides and the board button is locked
+  * out, because two independent sources fighting over one mic is how you end
+  * up transmitting without meaning to. With CAN absent -- on the bench, or if
+  * the harness is unplugged -- the button takes over, which is what makes
+  * testing without a car possible.
+  */
+void Ptt_SetCanAuthority(bool can_alive);
+
+/**
+  * @brief True when the board button is currently the active source.
+  */
+bool Ptt_IsButtonActive(void);
 
 /**
   * @brief How many times the mic has been keyed. Handy for confirming the

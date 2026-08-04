@@ -156,6 +156,126 @@ def pcm_to_mulaw(samples) -> bytes:
     return bytes(out)
 
 
+# ------------------------------------------------------------- telemetry
+
+# Mirrors CANLOG_Encode() in the VCU firmware:
+#   [header][data 0..n][ID: 2 B std / 4 B ext][time: 4 B ms]
+#   header = dlccode(0-3) | ext(4) | channel(5-6) | dir(7)
+
+DLC_TABLE = (0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 16, 20, 24, 32, 48, 64)
+
+
+class CanRecord:
+    __slots__ = ("channel", "can_id", "data", "ext", "tx", "time_ms")
+
+    def __init__(self, channel, can_id, data, ext, tx, time_ms):
+        self.channel = channel
+        self.can_id = can_id
+        self.data = data
+        self.ext = ext
+        self.tx = tx
+        self.time_ms = time_ms
+
+
+def split_records(payload: bytes):
+    """
+    Split a telemetry payload back into individual CAN records.
+
+    The radio board forwards these untouched -- it never parses them -- so this
+    is the first place the structure is interpreted. A malformed record aborts
+    the rest of the payload rather than guessing: the batch came through one
+    CRC check, so if it does not decode cleanly something is wrong upstream and
+    silently salvaging half of it would hide that.
+    """
+    out = []
+    i = 0
+    n = len(payload)
+
+    while i < n:
+        header = payload[i]
+        code = header & 0x0F
+        ext = bool(header & 0x10)
+        channel = (header >> 5) & 0x03
+        tx = bool(header & 0x80)
+
+        dlc = DLC_TABLE[code]
+        id_len = 4 if ext else 2
+        total = 1 + dlc + id_len + 4
+
+        if i + total > n:
+            break                       # truncated tail; ignore quietly
+
+        data = payload[i + 1: i + 1 + dlc]
+        off = i + 1 + dlc
+        can_id = int.from_bytes(payload[off: off + id_len], "little")
+        time_ms = int.from_bytes(payload[off + id_len: off + id_len + 4], "little")
+
+        out.append(CanRecord(channel, can_id, data, ext, tx, time_ms))
+        i += total
+
+    return out
+
+
+class CanRepublisher:
+    """
+    Re-emits decoded records onto a python-can bus so canapka sees them as an
+    ordinary CAN channel.
+
+    udp_multicast is used because canapka already supports it as a cross-process
+    transport, which means zero changes to canapka: it connects to the same
+    address and cannot tell the difference between this and a real interface.
+    Keeping the two applications separate also means a crash in one does not
+    take down the other, which matters on a pit wall.
+
+    Each CAN bus gets its own multicast port, so canapka's four channels map
+    straight onto the car's four buses.
+    """
+
+    BASE_PORT = 43113          # python-can's default is 43113; +0..3 per bus
+    GROUP = "239.0.0.1"
+
+    def __init__(self):
+        self.buses = {}
+        self.available = False
+        self.error = None
+        try:
+            import can
+            self._can = can
+            self.available = True
+        except ImportError:
+            self.error = "python-can not installed"
+
+    def _bus(self, channel):
+        if channel not in self.buses:
+            self.buses[channel] = self._can.Bus(
+                interface="udp_multicast",
+                channel=f"{self.GROUP}:{self.BASE_PORT + channel}",
+                receive_own_messages=False)
+        return self.buses[channel]
+
+    def publish(self, rec: CanRecord):
+        if not self.available:
+            return False
+        try:
+            msg = self._can.Message(arbitration_id=rec.can_id,
+                                    is_extended_id=rec.ext,
+                                    data=rec.data,
+                                    is_rx=not rec.tx)
+            self._bus(rec.channel).send(msg, timeout=0)
+            return True
+        except Exception as exc:
+            self.error = str(exc)
+            return False
+
+    def close(self):
+        for b in self.buses.values():
+            try:
+                b.shutdown()
+            except Exception:
+                pass
+        self.buses.clear()
+
+
 # ------------------------------------------------------------------- parser
 
 class FrameParser:
@@ -525,6 +645,14 @@ class Station:
         self.mic_peak = 0        # peak of the last captured block, for the meter
         self.rx_peak = 0         # peak of the last received frame
 
+        self.republisher = None
+        self.telem_records = 0        # total CAN records decoded
+        self.telem_published = 0      # successfully put on the CAN bus
+        self.telem_bad = 0            # payloads that did not decode
+        self.telem_per_bus = [0, 0, 0, 0]
+        self.telem_last_time = 0.0
+        self.telem_active = False
+
     # -- outbound ---------------------------------------------------------
 
     def send_packet(self, ptype, payload, flags=0):
@@ -573,6 +701,11 @@ class Station:
         if self.driver_talking and (time.time() - self._last_audio_time) > 0.3:
             self.driver_talking = False
 
+        # Same treatment for telemetry: inferred from traffic, so it has to
+        # time out or it would latch on after the car is switched off.
+        if self.telem_active and (time.time() - self.telem_last_time) > 2.0:
+            self.telem_active = False
+
         if self.conversation is not None:
             self.conversation.tick()
 
@@ -620,6 +753,21 @@ class Station:
             if self.conversation is not None:
                 self.conversation.push_driver(mulaw_to_pcm(payload))
 
+        elif ptype in (PKT_TELEM_CRITICAL, PKT_TELEM_NORMAL, PKT_TELEM_BULK):
+            self.telem_active = True
+            self.telem_last_time = time.time()
+
+            records = split_records(payload)
+            if not records and payload:
+                self.telem_bad += 1
+
+            for rec in records:
+                self.telem_records += 1
+                if rec.channel < 4:
+                    self.telem_per_bus[rec.channel] += 1
+                if self.republisher is not None and self.republisher.publish(rec):
+                    self.telem_published += 1
+
         elif ptype == PKT_CONTROL and payload:
             if payload[0] == CTRL_LINK_STATS and len(payload) >= 8:
                 rssi = struct.unpack("b", payload[1:2])[0]
@@ -637,383 +785,367 @@ class Station:
 
 # ------------------------------------------------------------------- gui
 
-def run_gui(station, engine, has_mic):
+def run_gui(app):
     """
-    Minimal operator console.
+    Operator console.
 
-    Exists because PyCharm's Run window is a pipe, not a terminal -- neither
-    msvcrt nor termios sees a keystroke there, so console key handling silently
-    does nothing. A window also gives the operator something glanceable, which
-    matters more on a pit wall than in a shell.
+    Runs with no command-line flags: everything the operator needs is in the
+    window, so the app can be launched from a shortcut and left running beside
+    canapka for a whole session. It also survives the radio being unplugged --
+    the serial port is reopened automatically -- because on a pit wall nobody
+    should have to notice a USB glitch and restart software.
     """
     import tkinter as tk
     from tkinter import ttk
 
     root = tk.Tk()
     root.title("Driver's Radio -- Base Station")
-    root.geometry("620x520")
+    root.geometry("660x760")
     root.configure(bg="#1e1e1e")
 
-    FG, DIM, BG = "#e0e0e0", "#808080", "#1e1e1e"
+    FG, DIM, BG, PANEL = "#e0e0e0", "#808080", "#1e1e1e", "#262626"
 
-    def label(parent, text, size=10, fg=FG, **kw):
-        return tk.Label(parent, text=text, bg=BG, fg=fg,
+    def label(parent, text, size=10, fg=FG, bg=BG, **kw):
+        return tk.Label(parent, text=text, bg=bg, fg=fg,
                         font=("Consolas", size), **kw)
 
-    # -- mic button ----------------------------------------------------
-    mic_btn = tk.Button(root, text="MIC CLOSED", font=("Consolas", 16, "bold"),
-                        width=18, height=2,
-                        bg="#3a3a3a", fg=FG, activebackground="#4a4a4a",
-                        relief="flat", state="normal" if has_mic else "disabled")
-    mic_btn.pack(pady=(16, 4))
+    def section(title):
+        f = tk.Frame(root, bg=PANEL, padx=10, pady=8)
+        f.pack(fill="x", padx=10, pady=4)
+        label(f, title, 9, DIM, PANEL).pack(anchor="w")
+        return f
 
-    hint = label(root, "click, or press SPACE" if has_mic
-                 else "run with --talk to enable your microphone",
-                 9, DIM)
-    hint.pack()
+    # ================= connection =================
+    conn = section("LINK")
+    conn_lbl = label(conn, "searching for radio...", 11, "#ffb000", PANEL)
+    conn_lbl.pack(anchor="w", pady=(2, 0))
 
-    # -- driver indicator ----------------------------------------------
-    driver_lbl = label(root, "DRIVER: silent", 13)
-    driver_lbl.pack(pady=(14, 2))
+    # ================= voice =================
+    voice = section("VOICE")
 
-    # Declared early because the device selectors report failures through it.
-    warn_lbl = label(root, "", 10, "#ffb000")
+    mic_btn = tk.Button(voice, text="MIC CLOSED", font=("Consolas", 15, "bold"),
+                        width=20, height=2, bg="#3a3a3a", fg=FG,
+                        activebackground="#4a4a4a", relief="flat")
+    mic_btn.pack(pady=(4, 2))
+    label(voice, "click, or press SPACE", 8, DIM, PANEL).pack()
 
-    # -- device selection ------------------------------------------------
-    if engine is not None:
-        dev_frame = tk.Frame(root, bg=BG)
-        dev_frame.pack(pady=(10, 0))
+    driver_lbl = label(voice, "DRIVER: silent", 12, DIM, PANEL)
+    driver_lbl.pack(pady=(8, 4))
 
-        def add_selector(row, caption, kind, opener, enabled):
-            label(dev_frame, caption, 9, DIM).grid(row=row, column=0,
-                                                   sticky="e", padx=(0, 6))
-            entries = engine.devices(kind)
-            names = ["(system default)"] + [n for _, n in entries]
-            box = ttk.Combobox(dev_frame, values=names, width=46,
-                               state="readonly" if enabled else "disabled")
-            box.current(0)
-            box.grid(row=row, column=1, pady=2)
-
-            def on_pick(_e):
-                sel = box.current()
-                device = None if sel == 0 else entries[sel - 1][0]
-                try:
-                    opener(device)
-                    warn_lbl.config(text="")
-                except Exception as exc:
-                    # A device can refuse the rate or be exclusively held by
-                    # another app; say so rather than dying silently.
-                    warn_lbl.config(text=f"could not open device: {exc}")
-
-            box.bind("<<ComboboxSelected>>", on_pick)
-            return box
-
-    # -- level meters and gain ------------------------------------------
-    meter_frame = tk.Frame(root, bg=BG)
-    meter_frame.pack(pady=(8, 0))
-
-    label(meter_frame, "your mic ", 9, DIM).grid(row=0, column=0, sticky="e")
-    mic_meter = tk.Canvas(meter_frame, width=220, height=12,
-                          bg="#2a2a2a", highlightthickness=0)
+    meters = tk.Frame(voice, bg=PANEL)
+    meters.pack()
+    label(meters, "your mic ", 9, DIM, PANEL).grid(row=0, column=0, sticky="e")
+    mic_meter = tk.Canvas(meters, width=240, height=11, bg="#151515",
+                          highlightthickness=0)
     mic_meter.grid(row=0, column=1, pady=1)
-
-    label(meter_frame, "driver  ", 9, DIM).grid(row=1, column=0, sticky="e")
-    rx_meter = tk.Canvas(meter_frame, width=220, height=12,
-                         bg="#2a2a2a", highlightthickness=0)
+    label(meters, "driver   ", 9, DIM, PANEL).grid(row=1, column=0, sticky="e")
+    rx_meter = tk.Canvas(meters, width=240, height=11, bg="#151515",
+                         highlightthickness=0)
     rx_meter.grid(row=1, column=1, pady=1)
 
-    if has_mic:
-        gain_frame = tk.Frame(root, bg=BG)
-        gain_frame.pack(pady=(6, 0))
-        label(gain_frame, "mic gain", 9, DIM).pack(side="left", padx=(0, 6))
+    gainf = tk.Frame(voice, bg=PANEL)
+    gainf.pack(pady=(6, 0))
+    label(gainf, "mic gain", 9, DIM, PANEL).pack(side="left", padx=(0, 6))
+    gain_val = label(gainf, "1.0x", 9, FG, PANEL)
 
-        gain_val = label(gain_frame, "1.0x", 9, FG)
+    def on_gain(v):
+        app.station.mic_gain = float(v)
+        gain_val.config(text=f"{float(v):.1f}x")
 
-        def on_gain(v):
-            station.mic_gain = float(v)
-            gain_val.config(text=f"{float(v):.1f}x")
+    gain = tk.Scale(gainf, from_=1.0, to=20.0, resolution=0.5,
+                    orient="horizontal", length=190, showvalue=False,
+                    command=on_gain, bg=PANEL, fg=FG, troughcolor="#151515",
+                    highlightthickness=0, sliderrelief="flat")
+    gain.set(1.0)
+    gain.pack(side="left")
+    gain_val.pack(side="left", padx=(6, 0))
 
-        gain = tk.Scale(gain_frame, from_=1.0, to=20.0, resolution=0.5,
-                        orient="horizontal", length=200, showvalue=False,
-                        command=on_gain, bg=BG, fg=FG, troughcolor="#2a2a2a",
-                        highlightthickness=0, sliderrelief="flat")
-        gain.set(1.0)
-        gain.pack(side="left")
-        gain_val.pack(side="left", padx=(6, 0))
+    # ================= telemetry =================
+    telem = section("TELEMETRY")
+    telem_lbl = label(telem, "no telemetry", 11, DIM, PANEL)
+    telem_lbl.pack(anchor="w", pady=(2, 0))
+    bus_lbl = label(telem, "", 9, DIM, PANEL, justify="left")
+    bus_lbl.pack(anchor="w")
+    pub_lbl = label(telem, "", 9, DIM, PANEL, justify="left")
+    pub_lbl.pack(anchor="w", pady=(2, 0))
+
+    # ================= devices =================
+    devs = section("AUDIO DEVICES")
+    devgrid = tk.Frame(devs, bg=PANEL)
+    devgrid.pack(anchor="w", pady=(2, 0))
+
+    def add_selector(row, caption, kind, opener):
+        label(devgrid, caption, 9, DIM, PANEL).grid(row=row, column=0,
+                                                    sticky="e", padx=(0, 6))
+        entries = app.engine.devices(kind) if app.engine else []
+        names = ["(system default)"] + [n for _, n in entries]
+        box = ttk.Combobox(devgrid, values=names, width=50, state="readonly")
+        box.current(0)
+        box.grid(row=row, column=1, pady=2)
+
+        def on_pick(_e):
+            sel = box.current()
+            device = None if sel == 0 else entries[sel - 1][0]
+            try:
+                opener(device)
+                warn_lbl.config(text="")
+            except Exception as exc:
+                warn_lbl.config(text=f"could not open device: {exc}")
+
+        box.bind("<<ComboboxSelected>>", on_pick)
+
+    # ================= status =================
+    stat = section("STATUS")
+    stats_lbl = label(stat, "waiting...", 9, DIM, PANEL, justify="left")
+    stats_lbl.pack(anchor="w")
+    radio_lbl = label(stat, "", 9, DIM, PANEL, justify="left")
+    radio_lbl.pack(anchor="w")
+    rec_lbl = label(stat, "", 9, DIM, PANEL)
+    rec_lbl.pack(anchor="w", pady=(4, 0))
+    warn_lbl = label(stat, "", 9, "#ffb000", PANEL)
+    warn_lbl.pack(anchor="w", pady=(2, 0))
+
+    if app.engine is not None:
+        add_selector(0, "output", "output", app.engine.open_output)
+        add_selector(1, "input ", "input", app.engine.open_input)
+
+    # ================= behaviour =================
+    def toggle(_event=None):
+        st = app.station
+        if st.capture is None:
+            warn_lbl.config(text="no microphone open")
+            return
+        st.mic_open = not st.mic_open
+        mic_btn.config(text="MIC OPEN" if st.mic_open else "MIC CLOSED",
+                       bg="#c03030" if st.mic_open else "#3a3a3a")
+
+    mic_btn.config(command=toggle)
+    root.bind("<space>", toggle)
+    root.bind("t", toggle)
+    root.focus_force()
 
     def draw_meter(canvas, peak):
-        """Log scale: a linear bar spends most of its length on loud signals,
-        which is the opposite of where the interesting detail is."""
         canvas.delete("all")
         if peak > 0:
             db = 20 * math.log10(max(peak, 1) / 32768.0)
             frac = max(0.0, min(1.0, (db + 60.0) / 60.0))
         else:
             frac = 0.0
-        w = int(220 * frac)
-        # green up to -12 dBFS, amber to -3, red above: clipping is the thing
-        # to avoid, so it has to be visible before it happens.
+        w = int(240 * frac)
         colour = "#40c040" if frac < 0.8 else ("#ffb000" if frac < 0.95 else "#ff3030")
         if w > 0:
-            canvas.create_rectangle(0, 0, w, 12, fill=colour, width=0)
-
-    # -- stats ---------------------------------------------------------
-    stats_lbl = label(root, "waiting for packets...", 10, DIM, justify="left")
-    stats_lbl.pack(pady=(12, 2))
-
-    radio_lbl = label(root, "", 10, DIM, justify="left")
-    radio_lbl.pack()
-
-    rec_lbl = label(root, "", 9, DIM)
-    rec_lbl.pack(pady=(6, 0))
-
-    warn_lbl.pack(pady=(10, 0))
-
-    def toggle(_event=None):
-        if not has_mic:
-            return
-        station.mic_open = not station.mic_open
-        if station.mic_open:
-            mic_btn.config(text="MIC OPEN", bg="#c03030")
-        else:
-            mic_btn.config(text="MIC CLOSED", bg="#3a3a3a")
-
-    mic_btn.config(command=toggle)
-    root.bind("<space>", toggle)
-    root.bind("t", toggle)
-    root.bind("<Escape>", lambda e: root.destroy())
-    root.focus_force()
-
-    if engine is not None:
-        add_selector(0, "output", "output", engine.open_output, True)
-        add_selector(1, "input ", "input", engine.open_input, has_mic)
+            canvas.create_rectangle(0, 0, w, 11, fill=colour, width=0)
 
     state = {"last": time.time()}
 
     def tick():
-        try:
-            station.poll()
-        except Exception as exc:              # serial unplugged, etc.
-            warn_lbl.config(text=f"link error: {exc}")
-            root.after(500, tick)
-            return
+        app.poll()
+        st = app.station
 
         now = time.time()
         elapsed = now - state["last"]
         if elapsed >= 0.5:
             state["last"] = now
-            rates = station.take_stats(elapsed)
+            rates = st.take_stats(elapsed) if st else {}
 
-            audio = rates.get("audio", 0.0)
-            ctrl = rates.get("control", 0.0)
+            # -- connection --
+            if app.connected:
+                conn_lbl.config(text=f"connected  {app.port}", fg="#40c040")
+            else:
+                conn_lbl.config(
+                    text=f"radio not found -- retrying ({app.retries})",
+                    fg="#ffb000")
 
+            # -- voice --
             driver_lbl.config(
-                text="DRIVER: TALKING" if station.driver_talking else "DRIVER: silent",
-                fg="#40c040" if station.driver_talking else DIM)
+                text="DRIVER: TALKING" if st.driver_talking else "DRIVER: silent",
+                fg="#40c040" if st.driver_talking else DIM)
 
-            line = (f"audio {audio:5.0f}/s   control {ctrl:4.1f}/s   "
-                    f"gaps {station.seq_gaps}   "
-                    f"usb-crc {station.parser.crc_errors}")
-            if station.play is not None:
-                line += f"   under {station.play.underruns}"
+            draw_meter(mic_meter, st.mic_peak)
+            draw_meter(rx_meter, st.rx_peak)
+            st.mic_peak = 0
+            st.rx_peak = 0
+
+            # -- telemetry --
+            trate = rates.get("telem", 0.0) + rates.get("telem-crit", 0.0) \
+                  + rates.get("telem-bulk", 0.0)
+            if st.telem_active:
+                rec_rate = st.telem_records - state.get("prev_rec", 0)
+                telem_lbl.config(
+                    text=f"ACTIVE   {trate:.0f} packet/s   "
+                         f"{rec_rate / elapsed:.0f} CAN frame/s",
+                    fg="#40c040")
+            else:
+                telem_lbl.config(text="no telemetry", fg=DIM)
+            state["prev_rec"] = st.telem_records
+
+            bus_lbl.config(text="   ".join(
+                f"CAN{i+1} {v}" for i, v in enumerate(st.telem_per_bus)))
+
+            if st.republisher is None or not st.republisher.available:
+                why = st.republisher.error if st.republisher else "disabled"
+                pub_lbl.config(text=f"CAN republish off ({why})", fg=DIM)
+            else:
+                pub_lbl.config(
+                    text=f"republished {st.telem_published} to udp_multicast "
+                         f"{CanRepublisher.GROUP}:{CanRepublisher.BASE_PORT}-"
+                         f"{CanRepublisher.BASE_PORT + 3}",
+                    fg=DIM)
+
+            # -- status --
+            line = (f"audio {rates.get('audio', 0):5.0f}/s   "
+                    f"gaps {st.seq_gaps}   usb-crc {st.parser.crc_errors}   "
+                    f"resync {st.parser.resyncs}")
+            if st.play is not None:
+                line += f"   under {st.play.underruns}"
             stats_lbl.config(text=line)
 
-            if station.conversation is not None:
-                mins, secs = divmod(int(station.conversation.duration), 60)
+            if st.link_stats:
+                rssi, rx, crce, backp, armed = st.link_stats
+                radio_lbl.config(text=f"radio   rssi {rssi} dBm   rx {rx}   "
+                                      f"crc {crce}   backp {backp}   armed {armed}")
+
+            if st.conversation is not None:
+                mins, secs = divmod(int(st.conversation.duration), 60)
                 rec_lbl.config(
-                    text=f"REC  {os.path.basename(station.conversation.path)}"
-                         f"   {mins}:{secs:02d}",
-                    fg="#c04040")
+                    text=f"REC  {os.path.basename(st.conversation.path)}   "
+                         f"{mins}:{secs:02d}", fg="#c04040")
 
-            draw_meter(mic_meter, station.mic_peak)
-            draw_meter(rx_meter, station.rx_peak)
-            station.mic_peak = 0
-            station.rx_peak = 0
-
-            if station.link_stats:
-                rssi, rx, crce, backp, armed = station.link_stats
-                radio_lbl.config(
-                    text=f"radio   rssi {rssi} dBm   rx {rx}   "
-                         f"crc {crce}   backp {backp}   armed {armed}")
-
-            # Both stations transmitting at once is the one case that
-            # measurably degrades the link, so say so plainly.
-            if station.mic_open and station.driver_talking:
-                warn_lbl.config(
-                    text="BOTH TRANSMITTING -- driver muted, packets lost")
-            elif not station.link_stats:
-                warn_lbl.config(text="")
+            if st.mic_open and st.driver_talking:
+                warn_lbl.config(text="BOTH TRANSMITTING -- driver muted, packets lost")
+            elif st.telem_bad:
+                warn_lbl.config(text=f"{st.telem_bad} telemetry payloads failed to decode")
             else:
                 warn_lbl.config(text="")
 
         root.after(5, tick)
 
+    def on_close():
+        app.shutdown()
+        root.destroy()
+
+    root.protocol("WM_DELETE_WINDOW", on_close)
     root.after(5, tick)
     root.mainloop()
 
 
-# ---------------------------------------------------------------------- main
+# ------------------------------------------------------------------- app
 
+class App:
+    """
+    Owns everything and keeps it alive.
+
+    The serial port is opened lazily and reopened on failure, so the app can be
+    started before the radio is plugged in and survives it being unplugged.
+    That is deliberate: this is meant to be launched once and left running for
+    a whole session alongside canapka.
+    """
+
+    RETRY_SEC = 2.0
+
+    def __init__(self, record_dir="recordings"):
+        self.ser = None
+        self.port = None
+        self.connected = False
+        self.retries = 0
+        self._last_try = 0.0
+
+        self.conversation = ConversationRecorder(record_dir)
+        self.station = Station(None, recorder=None,
+                               conversation=self.conversation)
+        self.station.republisher = CanRepublisher()
+
+        self.engine = None
+        try:
+            self.engine = AudioEngine(self.station)
+            self.engine.open_output(None)
+            self.engine.open_input(None)
+        except Exception:
+            # No sound hardware, or no sounddevice: telemetry still works, and
+            # that is the half that must not depend on audio being available.
+            self.engine = None
+
+    def _try_connect(self):
+        now = time.time()
+        if now - self._last_try < self.RETRY_SEC:
+            return
+        self._last_try = now
+
+        port = find_port(None)
+        if not port:
+            self.retries += 1
+            return
+
+        try:
+            self.ser = serial.Serial(port, 115200, timeout=0.005)
+            self.station.ser = self.ser
+            self.port = port
+            self.connected = True
+            self.retries = 0
+            print(f"connected: {port}")
+        except Exception:
+            self.retries += 1
+            self.ser = None
+            self.station.ser = None
+
+    def poll(self):
+        if not self.connected:
+            self._try_connect()
+            if self.conversation is not None:
+                self.conversation.tick()   # keep the timeline honest
+            return
+
+        try:
+            self.station.poll()
+        except Exception as exc:
+            print(f"link lost: {exc}")
+            self.connected = False
+            try:
+                self.ser.close()
+            except Exception:
+                pass
+            self.ser = None
+            self.station.ser = None
+
+    def shutdown(self):
+        if self.conversation is not None:
+            path = self.conversation.close()
+            mins, secs = divmod(int(self.conversation.duration), 60)
+            print(f"saved {path}  ({mins}:{secs:02d})")
+        if self.station.republisher is not None:
+            self.station.republisher.close()
+        if self.engine is not None:
+            self.engine.close()
+        if self.ser is not None:
+            try:
+                self.ser.close()
+            except Exception:
+                pass
+
+
+# ---------------------------------------------------------------------- main
 
 def find_port(explicit):
     if explicit:
         return explicit
     for p in list_ports.comports():
-        # VID 0x0483 is ST; PID 0x5711 is what we set in ux_device_descriptors.h
+        # VID 0x0483 is ST; PID 0x5711 is set in ux_device_descriptors.h
         if p.vid == 0x0483 and p.pid in (0x5711, 0x5710):
             return p.device
     return None
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Driver's radio base station")
-    ap.add_argument("-p", "--port", help="serial port (auto-detected if omitted)")
-    ap.add_argument("--echo", action="store_true",
-                    help="bounce audio packets back to the car")
-    ap.add_argument("--play", action="store_true",
-                    help="play received audio locally")
-    ap.add_argument("--talk", "--loopback", action="store_true", dest="talk",
-                    help="enable your microphone")
-    ap.add_argument("--record", metavar="FILE.wav",
-                    help="write received audio only, to a named WAV "
-                         "(the two-sided recording below is separate)")
-    ap.add_argument("--record-dir", default="recordings", metavar="DIR",
-                    help="where conversation recordings go (default: "
-                         "./recordings)")
-    ap.add_argument("--no-record", action="store_true",
-                    help="do not record the conversation")
-    ap.add_argument("--list-devices", action="store_true",
-                    help="print available audio devices and exit")
-    ap.add_argument("--input-device", metavar="N_OR_NAME",
-                    help="capture device index, or part of its name")
-    ap.add_argument("--output-device", metavar="N_OR_NAME",
-                    help="playback device index, or part of its name")
-    ap.add_argument("--mic-gain", type=float, default=1.0, metavar="X",
-                    help="multiply captured mic audio (console mode; the GUI "
-                         "has a live slider)")
-    ap.add_argument("--console", action="store_true",
-                    help="text output instead of the window")
-    ap.add_argument("--hexdump", action="store_true",
-                    help="print the first bytes of every packet")
-    args = ap.parse_args()
+    print("Driver's Radio -- base station")
+    print("  recordings/  conversation WAVs")
+    print("  telemetry is republished on udp_multicast for canapka")
+    print()
 
-    if args.list_devices:
-        try:
-            import sounddevice as sd
-        except ImportError:
-            sys.exit("needs:  pip install sounddevice numpy")
-        apis = sd.query_hostapis()
-        print(f"{'idx':>4}  {'in':>3} {'out':>3}  device")
-        for i, d in enumerate(sd.query_devices()):
-            print(f"{i:>4}  {d['max_input_channels']:>3} "
-                  f"{d['max_output_channels']:>3}  {d['name']}  "
-                  f"[{apis[d['hostapi']]['name']}]")
-        return
-
-    port = find_port(args.port)
-    if not port:
-        print("No relay found. Available ports:")
-        for p in list_ports.comports():
-            desc = f"  {p.device}  {p.description}"
-            if p.vid:
-                desc += f"  VID:PID={p.vid:04X}:{p.pid:04X}"
-            print(desc)
-        sys.exit(1)
-
-    # Baud rate is meaningless over CDC -- the host sets it, the device ignores
-    # it. Left at a conventional value so nothing downstream complains.
-    ser = serial.Serial(port, 115200, timeout=0.005)
-    print(f"connected: {port}")
-
-    def resolve_device(spec, kind):
-        """Accept an index or a substring, so the operator can pass a readable
-        name instead of a number that shifts when devices are plugged in."""
-        if spec is None:
-            return None
-        try:
-            return int(spec)
-        except ValueError:
-            pass
-        import sounddevice as sd
-        key = "max_input_channels" if kind == "input" else "max_output_channels"
-        needle = spec.lower()
-        for i, d in enumerate(sd.query_devices()):
-            if d[key] > 0 and needle in d["name"].lower():
-                return i
-        sys.exit(f"no {kind} device matching {spec!r}; try --list-devices")
-
-    play = capture = recorder = engine = None
-
-    if args.record:
-        recorder = wave.open(args.record, "wb")
-        recorder.setnchannels(1)
-        recorder.setsampwidth(2)
-        recorder.setframerate(AUDIO_RATE)
-        print(f"recording to {args.record}")
-
-    conversation = None
-    if not args.no_record:
-        # On by default: an unrecorded session cannot be recovered, and the
-        # cost is about 115 MB an hour on a laptop that has plenty.
-        conversation = ConversationRecorder(args.record_dir)
-        print(f"recording conversation to {conversation.path}")
-
-    station = Station(ser, play=None, capture=None, recorder=recorder,
-                      echo=args.echo, hexdump=args.hexdump,
-                      conversation=conversation)
-    station.mic_gain = args.mic_gain
-
-    if args.play or args.talk:
-        try:
-            engine = AudioEngine(station)
-        except ImportError:
-            sys.exit("audio needs:  pip install sounddevice numpy")
-
-        if args.play:
-            engine.open_output(resolve_device(args.output_device, "output"))
-        if args.talk:
-            engine.open_input(resolve_device(args.input_device, "input"))
-
+    app = App()
     try:
-        if args.console:
-            last = time.time()
-            while True:
-                station.poll()
-                now = time.time()
-                elapsed = now - last
-                if elapsed >= 1.0:
-                    last = now
-                    rates = station.take_stats(elapsed)
-                    parts = [f"{k}={v:.0f}/s" for k, v in sorted(rates.items())]
-                    line = "  ".join(parts) if parts else "no packets"
-                    line += f"  gaps={station.seq_gaps}"
-                    line += f"  crc_err={station.parser.crc_errors}"
-                    line += f"  resync={station.parser.resyncs}"
-                    if station.play is not None:
-                        line += (f"  under={station.play.underruns}"
-                                 f" late={station.play.dropped}")
-                    if station.link_stats:
-                        rssi, rx, crce, backp, armed = station.link_stats
-                        line += (f"  | radio rssi={rssi}dBm rx={rx} crc={crce}"
-                                 f" backp={backp} armed={armed}")
-                    print(line)
-        else:
-            run_gui(station, engine, has_mic=args.talk)
+        run_gui(app)
     except KeyboardInterrupt:
-        print("\nstopping")
-    finally:
-        if conversation is not None:
-            path = conversation.close()
-            mins, secs = divmod(int(conversation.duration), 60)
-            print(f"saved {path}  ({mins}:{secs:02d}, "
-                  f"driver {conversation.driver_frames} frames, "
-                  f"engineer {conversation.engineer_frames})")
-        if engine is not None:
-            engine.close()
-        if recorder is not None:
-            recorder.close()
-            print(f"wrote {args.record}")
-        ser.close()
+        app.shutdown()
 
 
 if __name__ == "__main__":

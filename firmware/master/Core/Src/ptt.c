@@ -17,6 +17,7 @@ static volatile uint32_t toggle_count;
 static uint8_t  stable_pressed;
 static uint8_t  candidate_count;
 static bool     last_stable;
+static volatile bool can_authority;
 
 void Ptt_Init(void)
 {
@@ -26,6 +27,17 @@ void Ptt_Init(void)
   stable_pressed   = 0U;
   candidate_count  = 0U;
   last_stable      = false;
+  can_authority    = false;
+}
+
+void Ptt_SetCanAuthority(bool can_alive)
+{
+  can_authority = can_alive;
+}
+
+bool Ptt_IsButtonActive(void)
+{
+  return !can_authority;
 }
 
 static void ptt_toggle(void)
@@ -78,7 +90,13 @@ void Ptt_Poll(void)
 
   if (now_stable && !last_stable)
   {
-    ptt_toggle();
+    /* Button only keys when CAN is not in charge. Still tracked while locked
+       out, so releasing CAN authority does not immediately fire a stale
+       press. */
+    if (!can_authority)
+    {
+      ptt_toggle();
+    }
   }
   last_stable = now_stable;
 

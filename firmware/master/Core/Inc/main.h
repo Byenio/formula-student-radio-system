@@ -63,6 +63,10 @@ void Error_Handler(void);
 #define RS485_RE_DE_GPIO_Port GPIOC
 #define E28_BUSY_Pin GPIO_PIN_5
 #define E28_BUSY_GPIO_Port GPIOA
+#define CAN_STB_Pin GPIO_PIN_6
+#define CAN_STB_GPIO_Port GPIOA
+#define CAN_SHDN_Pin GPIO_PIN_7
+#define CAN_SHDN_GPIO_Port GPIOA
 #define E28_RX_EN_Pin GPIO_PIN_10
 #define E28_RX_EN_GPIO_Port GPIOB
 #define E28_NRESET_Pin GPIO_PIN_11
@@ -88,6 +92,7 @@ void Error_Handler(void);
 #define E28_SPI_HANDLE hspi2
 #define E28_ROLE_TRANSMITTER 1
 #define AUDIO_PATH 0
+#define RS485_BENCH_TEST 1
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
