@@ -92,7 +92,7 @@ void Error_Handler(void);
 #define E28_SPI_HANDLE hspi2
 #define E28_ROLE_TRANSMITTER 1
 #define AUDIO_PATH 0
-#define RS485_BENCH_TEST 1
+#define RS485_BENCH_TEST 0
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

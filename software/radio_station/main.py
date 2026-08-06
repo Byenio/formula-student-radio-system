@@ -221,18 +221,20 @@ class CanRepublisher:
     Re-emits decoded records onto a python-can bus so canapka sees them as an
     ordinary CAN channel.
 
-    udp_multicast is used because canapka already supports it as a cross-process
-    transport, which means zero changes to canapka: it connects to the same
-    address and cannot tell the difference between this and a real interface.
-    Keeping the two applications separate also means a crash in one does not
-    take down the other, which matters on a pit wall.
+    The transport matches canapka's own: udp_multicast, ONE port with FOUR
+    multicast groups, one per CAN bus. That is the opposite of the more obvious
+    one-group-many-ports arrangement, and getting it wrong means canapka simply
+    never sees anything -- no error, just silence. The constants below are
+    copied from canapka's sim/run_sender.py and must stay in step with it.
 
-    Each CAN bus gets its own multicast port, so canapka's four channels map
-    straight onto the car's four buses.
+    Keeping the two applications separate rather than merging this into canapka
+    means a crash in one cannot take the other down, which matters on a pit
+    wall.
     """
 
-    BASE_PORT = 43113          # python-can's default is 43113; +0..3 per bus
-    GROUP = "239.0.0.1"
+    # Must match GROUPS/PORT in canapka's sim/run_sender.py and ui/standalone.py
+    GROUPS = ("225.0.0.11", "225.0.0.12", "225.0.0.13", "225.0.0.14")
+    PORT = 43113
 
     def __init__(self):
         self.buses = {}
@@ -249,7 +251,8 @@ class CanRepublisher:
         if channel not in self.buses:
             self.buses[channel] = self._can.Bus(
                 interface="udp_multicast",
-                channel=f"{self.GROUP}:{self.BASE_PORT + channel}",
+                channel=self.GROUPS[channel % len(self.GROUPS)],
+                port=self.PORT,
                 receive_own_messages=False)
         return self.buses[channel]
 
@@ -264,6 +267,10 @@ class CanRepublisher:
             self._bus(rec.channel).send(msg, timeout=0)
             return True
         except Exception as exc:
+            if self.error != str(exc):
+                # Print each distinct failure once. Repeating it 200 times a
+                # second would bury everything else.
+                print(f"CAN republish failed: {exc!r}")
             self.error = str(exc)
             return False
 
@@ -653,11 +660,21 @@ class Station:
         self.telem_last_time = 0.0
         self.telem_active = False
 
+        self.write_failures = 0
+        self.last_rx_time = time.time()
+
     # -- outbound ---------------------------------------------------------
 
     def send_packet(self, ptype, payload, flags=0):
         hdr = make_header(ptype, self.tx_seq, len(payload), flags)
-        self.ser.write(frame(hdr + payload))
+        try:
+            self.ser.write(frame(hdr + payload))
+        except Exception:
+            # Timed out or the port went away. Dropping the packet is correct:
+            # it is live audio, worthless by the time a retry would land, and
+            # the link watchdog below handles a genuinely dead device.
+            self.write_failures += 1
+            return
         self.tx_seq = (self.tx_seq + 1) & 0xFF
 
     # -- one pass ---------------------------------------------------------
@@ -665,6 +682,7 @@ class Station:
     def poll(self):
         data = self.ser.read(4096)
         if data:
+            self.last_rx_time = time.time()
             for body in self.parser.feed(data):
                 self._handle(body)
 
@@ -985,11 +1003,19 @@ def run_gui(app):
             if st.republisher is None or not st.republisher.available:
                 why = st.republisher.error if st.republisher else "disabled"
                 pub_lbl.config(text=f"CAN republish off ({why})", fg=DIM)
+            elif st.telem_published == 0 and st.republisher.error:
+                # Importing python-can succeeded but publishing is failing.
+                # Show the reason: the usual cause is the udp_multicast backend
+                # refusing to open a socket, and hiding that behind a bare "0"
+                # makes it look like nothing is being attempted.
+                pub_lbl.config(text=f"republish FAILING: {st.republisher.error}",
+                               fg="#ff6060")
             else:
                 pub_lbl.config(
-                    text=f"republished {st.telem_published} to udp_multicast "
-                         f"{CanRepublisher.GROUP}:{CanRepublisher.BASE_PORT}-"
-                         f"{CanRepublisher.BASE_PORT + 3}",
+                    text=f"republished {st.telem_published} to "
+                         f"{CanRepublisher.GROUPS[0]}-"
+                         f"{CanRepublisher.GROUPS[-1].rsplit('.', 1)[-1]}"
+                         f":{CanRepublisher.PORT}",
                     fg=DIM)
 
             # -- status --
@@ -1077,7 +1103,12 @@ class App:
             return
 
         try:
-            self.ser = serial.Serial(port, 115200, timeout=0.005)
+            # write_timeout matters as much as timeout: without it, a device
+            # that enumerates but stops draining its endpoint blocks the write
+            # forever, and since everything runs on one thread that freezes
+            # the whole window until the cable is physically pulled.
+            self.ser = serial.Serial(port, 115200,
+                                     timeout=0.005, write_timeout=0.05)
             self.station.ser = self.ser
             self.port = port
             self.connected = True
@@ -1093,6 +1124,22 @@ class App:
             self._try_connect()
             if self.conversation is not None:
                 self.conversation.tick()   # keep the timeline honest
+            return
+
+        # The relay sends a keepalive twice a second unconditionally, so
+        # silence for several seconds means the device is gone or wedged even
+        # if the OS still shows the port. Forcing a reconnect recovers from an
+        # RF-induced USB stall without touching the cable.
+        if (time.time() - self.station.last_rx_time) > 5.0:
+            print("no data for 5 s -- reopening port")
+            self.connected = False
+            try:
+                self.ser.close()
+            except Exception:
+                pass
+            self.ser = None
+            self.station.ser = None
+            self.station.last_rx_time = time.time()
             return
 
         try:

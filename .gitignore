@@ -58,3 +58,5 @@ cmake-*/
 *.o
 *.obj
 *.so
+
+sw06_canapka/

@@ -50,7 +50,7 @@
 /* Bench testing: two boards on one desk, each with 27 dB of PA gain. At full
    power the receiver front end saturates and performance gets *worse*, which
    is a genuinely confusing failure. Raise this only for range testing. */
-#define RADIO_TX_POWER_DBM          E28_TX_POWER_BENCH_DBM
+#define RADIO_TX_POWER_DBM          E28_TX_POWER_NOMINAL_DBM
 
 /* While transmitting, pause and listen every this many frames. Zero disables
    it, which is the default: a transmitting station is deaf, so this only

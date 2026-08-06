@@ -40,33 +40,65 @@ static const uint8_t dlc_table[16] =
   0U, 1U, 2U, 3U, 4U, 5U, 6U, 7U, 8U, 12U, 16U, 20U, 24U, 32U, 48U, 64U
 };
 
-/* ---- Message pool --------------------------------------------------------
-   Real IDs from the team's DBC files, so the traffic is representative rather
-   than invented. Rates are deliberately uneven -- the inverter and BMS chatter
-   far faster than GPS on a real car, and a simulator that emits everything at
-   one rate would not exercise batching realistically. */
-
 typedef struct
 {
   uint16_t id;
   uint8_t  dlc;
 } sim_msg_t;
 
-static const sim_msg_t msgs_can1[] = {          /* inverter, VCU dynamics */
+/* ---- Message pool --------------------------------------------------------
+   Every message ID from the team's four DBC files, so canapka has something to
+   decode on every channel. An abbreviated pool leaves whole subsystems -- PDU,
+   tyre temperatures, cooling, steering angle -- permanently blank in the GUI,
+   which looks like a broken telemetry path rather than a simulator limitation.
+
+   Payload bytes are pseudo-random apart from a sequence counter, so the
+   DECODED values are meaningless. This exercises the transport, the decoder
+   and the display; it does not produce plausible physics. */
+
+/* CAN1: all 21 messages from dbc/can1.dbc */
+static const sim_msg_t msgs_can1[] = {
   {0x101U, 8U}, {0x102U, 8U}, {0x103U, 8U}, {0x104U, 8U},
-  {0x152U, 7U}, {0x153U, 8U}, {0x154U, 6U},
-};
-static const sim_msg_t msgs_can2[] = {          /* HV BMS, charger */
-  {0x050U, 6U}, {0x051U, 5U}, {0x100U, 8U}, {0x201U, 5U}, {0x202U, 8U},
-};
-static const sim_msg_t msgs_can3[] = {          /* LV BMS, PDU, radio */
-  {0x100U, 8U}, {0x201U, 7U}, {0x202U, 8U}, {0x203U, 6U}, {0x480U, 1U},
-};
-static const sim_msg_t msgs_can4[] = {          /* GPS, aux sensors */
-  {0x400U, 8U}, {0x401U, 8U}, {0x402U, 8U}, {0x403U, 8U},
+  {0x305U, 8U}, {0x206U, 8U}, {0x207U, 8U}, {0x308U, 8U},
+  {0x309U, 6U}, {0x310U, 6U}, {0x311U, 8U}, {0x312U, 8U},
+  {0x313U, 6U}, {0x414U, 8U}, {0x115U, 8U}, {0x116U, 3U},
+  {0x051U, 7U}, {0x152U, 7U}, {0x153U, 7U}, {0x501U, 6U},
+  {0x551U, 6U},
 };
 
-/* Cumulative weights x100: CAN1 45%, CAN2 30%, CAN3 15%, CAN4 10%. */
+/* CAN2: all 17 messages from dbc/can2.dbc */
+static const sim_msg_t msgs_can2[] = {
+  {0x050U, 6U}, {0x051U, 5U}, {0x100U, 8U}, {0x201U, 5U},
+  {0x202U, 8U}, {0x203U, 8U}, {0x204U, 8U}, {0x305U, 6U},
+  {0x306U, 7U}, {0x406U, 8U}, {0x407U, 8U}, {0x408U, 8U},
+  {0x409U, 8U}, {0x500U, 8U}, {0x501U, 8U}, {0x206U, 8U},
+  {0x410U, 7U},
+};
+
+/* CAN3: all 20 messages from dbc/can3.dbc */
+static const sim_msg_t msgs_can3[] = {
+  {0x100U, 8U}, {0x201U, 7U}, {0x202U, 8U}, {0x203U, 6U},
+  {0x207U, 8U}, {0x204U, 5U}, {0x305U, 5U}, {0x406U, 8U},
+  {0x451U, 8U}, {0x452U, 5U}, {0x453U, 8U}, {0x454U, 6U},
+  {0x456U, 6U}, {0x450U, 3U}, {0x455U, 4U}, {0x501U, 6U},
+  {0x502U, 6U}, {0x503U, 6U}, {0x480U, 1U}, {0x490U, 4U},
+};
+
+/* CAN4: all 26 messages from dbc/can4.dbc */
+static const sim_msg_t msgs_can4[] = {
+  {0x400U, 12U}, {0x401U, 8U}, {0x402U, 12U}, {0x403U, 12U},
+  {0x404U, 12U}, {0x408U, 7U}, {0x409U, 7U}, {0x100U, 12U},
+  {0x312U, 8U}, {0x420U, 12U}, {0x421U, 12U}, {0x422U, 12U},
+  {0x423U, 12U}, {0x424U, 12U}, {0x425U, 12U}, {0x426U, 12U},
+  {0x427U, 12U}, {0x500U, 2U}, {0x301U, 2U}, {0x302U, 12U},
+  {0x303U, 8U}, {0x304U, 7U}, {0x305U, 2U}, {0x306U, 8U},
+  {0x307U, 8U}, {0x308U, 8U},
+};
+
+/* Cumulative weights x100: CAN1 45%, CAN2 30%, CAN3 15%, CAN4 10%.
+   Uneven on purpose -- the inverter and BMS chatter far faster than GPS on a
+   real car, and a simulator emitting everything at one rate would not exercise
+   batching realistically. */
 static const uint8_t bus_cum[4] = { 45U, 75U, 90U, 100U };
 
 /* ---- State --------------------------------------------------------------- */

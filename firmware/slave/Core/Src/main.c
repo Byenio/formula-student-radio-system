@@ -539,13 +539,13 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(E28_CS_GPIO_Port, E28_CS_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, E28_TX_EN_Pin|E28_RX_EN_Pin|EXTEND_ILIM_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, E28_TX_EN_Pin|E28_RX_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(E28_NRESET_GPIO_Port, E28_NRESET_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(EEPROM_WP_GPIO_Port, EEPROM_WP_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, EXTEND_ILIM_Pin|EEPROM_WP_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : E28_BUSY_Pin E28_DIO3_Pin */
   GPIO_InitStruct.Pin = E28_BUSY_Pin|E28_DIO3_Pin;

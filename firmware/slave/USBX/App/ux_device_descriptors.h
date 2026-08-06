@@ -41,7 +41,7 @@ extern "C" {
 
 #define USBD_CDC_ACM_CLASS_ACTIVATED                   1U
 
-#define USBD_CONFIG_MAXPOWER                           25U
+#define USBD_CONFIG_MAXPOWER                           250U
 #define USBD_COMPOSITE_USE_IAD                         1U
 #define USBD_DEVICE_FRAMEWORK_BUILDER_ENABLED          1U
 
@@ -259,7 +259,7 @@ uint16_t USBD_Get_Configuration_Number(uint8_t class_type, uint8_t interface_typ
 /* USER CODE END Private_defines */
 
 #define USBD_VID                                      1155
-#define USBD_PID                                      22289
+#define USBD_PID                                      22288
 #define USBD_LANGID_STRING                            1033
 #define USBD_MANUFACTURER_STRING                      "STMicroelectronics"
 #define USBD_PRODUCT_STRING                           "STM32 USB Device"
