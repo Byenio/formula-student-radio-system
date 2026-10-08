@@ -53,7 +53,9 @@ debug/
 release/
 dist/
 out/
-cmake/
+# NOT cmake/ -- that also matched firmware/*/cmake/, which holds the
+# toolchain files the presets depend on. CLion's own build directories are
+# all named cmake-build-*, which the next line already covers.
 cmake-*/
 *.o
 *.obj
