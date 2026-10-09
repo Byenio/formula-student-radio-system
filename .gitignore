@@ -39,3 +39,27 @@ Generated/
 # System temporary files
 .DS_Store
 Thumbs.db
+
+### Build, debug and IDE files ###
+
+# IDE files
+.vscode/
+.idea/
+.venv/
+
+# Build and debug outputs
+build/
+debug/
+release/
+dist/
+out/
+# NOT cmake/ -- that also matched firmware/*/cmake/, which holds the
+# toolchain files the presets depend on. CLion's own build directories are
+# all named cmake-build-*, which the next line already covers.
+cmake-*/
+*.o
+*.obj
+*.so
+
+sw06_canapka/
+*.wav

@@ -1,0 +1,11 @@
+[project]
+name = "radio-station"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "future>=1.0.0",
+    "numpy==2.5.3",
+    "pyserial>=3.5",
+    "python-can==4.6.1",
+    "sounddevice==0.5.6",
+]
