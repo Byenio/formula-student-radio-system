@@ -156,7 +156,16 @@ See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 /* Normal assert() semantics without relying on the provision of an assert.h
 header file. */
 /* USER CODE BEGIN 1 */
-#define configASSERT( x ) if ((x) == 0) {taskDISABLE_INTERRUPTS(); for( ;; );}
+/* A failed assert used to disable interrupts and spin, which is silent: the
+   board looks hung and nothing says where it stopped. Route it to safety.c so
+   the site is latched and the radio is shut down like any other fatal fault.
+
+   Forward-declared rather than #include "safety.h" -- this header is pulled in
+   by the assembler port files too, and they must not see C declarations. */
+#ifndef __ASSEMBLER__
+void Safety_AssertFailed(const char *file, unsigned long line);
+#define configASSERT( x ) if ((x) == 0) { Safety_AssertFailed(__FILE__, __LINE__); }
+#endif
 /* USER CODE END 1 */
 
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS

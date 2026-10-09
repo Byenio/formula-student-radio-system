@@ -145,7 +145,9 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32G491CETX_FLASH.ld)
 
 # Target is plain "master"; the toolchain file's suffix makes it master.elf.
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES}
+               Core/Src/safety.c
+               Core/Inc/safety.h)
 
 # Relink when the linker script changes, not only when sources do.
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})

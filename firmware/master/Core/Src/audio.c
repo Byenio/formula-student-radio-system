@@ -10,6 +10,8 @@
 #include "cmsis_os2.h"
 #include <string.h>
 
+#include "FreeRTOSConfig.h"
+
 /* Handles owned by CubeMX in main.c */
 extern ADC_HandleTypeDef hadc1;
 extern DAC_HandleTypeDef hdac1;
