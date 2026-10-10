@@ -22,6 +22,17 @@
 #include "stm32g4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "safety.h"
+
+/* The four CPU fault handlers live in safety.c, as naked functions that can
+   capture the faulting stack frame. CubeMX still generates its own copies
+   further down this file as empty infinite loops; these defines rename them
+   out of the vector table's way. The renamed copies are never called and
+   the linker's --gc-sections drops them. See the header of safety.c. */
+#define HardFault_Handler   HardFault_Handler_CubeMX_unused
+#define MemManage_Handler   MemManage_Handler_CubeMX_unused
+#define BusFault_Handler    BusFault_Handler_CubeMX_unused
+#define UsageFault_Handler  UsageFault_Handler_CubeMX_unused
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
