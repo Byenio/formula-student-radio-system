@@ -154,7 +154,9 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32U375CETXQ_FLASH.ld)
 
 # Target is plain "slave"; the toolchain file's suffix makes it slave.elf.
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES}
+               Core/Inc/safety.h
+               Core/Src/safety.c)
 
 # Relink when the linker script changes, not only when sources do.
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})

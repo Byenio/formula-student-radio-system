@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "e28_radio.h"
 #include "usb_link.h"
+#include "safety.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -621,11 +622,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+  /* Called by CubeMX init code when a HAL call fails. Used to spin silently;
+     now it shuts the radio down and latches the call site -- the return
+     address of this function -- so addr2line can say which init failed. */
+  Safety_ErrorHandler(__builtin_return_address(0));
   /* USER CODE END Error_Handler_Debug */
 }
 #ifdef USE_FULL_ASSERT
