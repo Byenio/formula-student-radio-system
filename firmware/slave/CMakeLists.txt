@@ -21,8 +21,8 @@ cmake_minimum_required(VERSION 3.22)
 
 if(NOT CMAKE_TOOLCHAIN_FILE)
   message(FATAL_ERROR
-            "No toolchain file. Configure through a preset, e.g. "
-            "`cmake --preset Debug`, rather than calling cmake directly.")
+          "No toolchain file. Configure through a preset, e.g. "
+          "`cmake --preset Debug`, rather than calling cmake directly.")
 endif()
 
 project(slave C CXX ASM)
@@ -87,6 +87,15 @@ endif()
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
+# --- Statistics and instrumentation -------------------------------------------
+# ON for bench and measurement builds. OFF removes the whole layer -- perf
+# markers become no-ops, statlink/stats compile to empty objects, and on the
+# master FreeRTOS run-time stats are off too. Comparing an ON and an OFF build
+# of the same commit is how the layer's own cost is measured.
+#     cmake --preset RelWithDebInfo -DFW_STATS=OFF
+option(FW_STATS "Build the statistics and instrumentation layer" ON)
+message(STATUS "Statistics layer: ${FW_STATS}")
+
 # --- Compile options ----------------------------------------------------------
 add_compile_options(
         # One section per function and per variable, so --gc-sections at link
@@ -115,6 +124,7 @@ add_compile_options($<$<COMPILE_LANGUAGE:ASM>:-x$<SEMICOLON>assembler-with-cpp>)
 # the stack silently falls back to its own defaults -- including losing
 # UX_STANDALONE, which is what lets USBX run without ThreadX on this board.
 add_compile_definitions(
+        FW_STATS_ENABLE=$<BOOL:${FW_STATS}>
         USE_HAL_DRIVER
         STM32U375xx
         UX_INCLUDE_USER_DEFINE_FILE
@@ -143,44 +153,61 @@ include_directories(
 # CONFIGURE_DEPENDS re-runs the glob when directory contents change, so a file
 # CubeMX adds is built next time instead of silently missing.
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
-        "Core/*.c"
-        "Core/*.s"
-        "USBX/*.c"
-        "Drivers/*.c"
-        "Middlewares/*.c"
+     "Core/*.c"
+     "Core/*.s"
+     "USBX/*.c"
+     "Drivers/*.c"
+     "Middlewares/*.c"
 )
 
 # --- Link ---------------------------------------------------------------------
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32U375CETXQ_FLASH.ld)
 
 # Target is plain "slave"; the toolchain file's suffix makes it slave.elf.
-add_executable(${PROJECT_NAME} ${SOURCES}
-               Core/Inc/safety.h
-               Core/Src/safety.c)
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Relink when the linker script changes, not only when sources do.
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
 
 target_link_options(${PROJECT_NAME} PRIVATE
-        -T${LINKER_SCRIPT}
+                    -T${LINKER_SCRIPT}
 
-        # newlib-nano: the reduced C library. Full newlib adds ~1.2 kB .data
-        # and ~0.9 kB .bss of printf machinery this firmware never calls.
-        # Core/Src/syscalls.c and sysmem.c provide the OS stubs, so do NOT add
-        # --specs=nosys.specs as well; the two collide on _write and _sbrk.
-        --specs=nano.specs
+                    # newlib-nano: the reduced C library. Full newlib adds ~1.2 kB .data
+                    # and ~0.9 kB .bss of printf machinery this firmware never calls.
+                    # Core/Src/syscalls.c and sysmem.c provide the OS stubs, so do NOT add
+                    # --specs=nosys.specs as well; the two collide on _write and _sbrk.
+                    --specs=nano.specs
 
-        -Wl,--gc-sections
-        -Wl,--print-memory-usage
-        -Wl,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
+                    -Wl,--gc-sections
+                    -Wl,--print-memory-usage
+                    -Wl,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE m)
 
+# --- Build identity -----------------------------------------------------------
+# Regenerates build_info.h (git hash, dirty flag, build type) on every build;
+# the stats layer puts it in every schema frame, so each log names the exact
+# firmware that produced it. See cmake/build_info.cmake.
+set(BUILD_INFO_DIR ${PROJECT_BINARY_DIR}/generated)
+add_custom_target(build_info
+                  COMMAND ${CMAKE_COMMAND}
+                  -DOUT=${BUILD_INFO_DIR}/build_info.h
+                  -DSRC_DIR=${CMAKE_SOURCE_DIR}
+                  -DBUILD_TYPE=${CMAKE_BUILD_TYPE}
+                  -DOPT_OVERRIDE=${FW_OPT_OVERRIDE}
+                  -P ${CMAKE_SOURCE_DIR}/cmake/build_info.cmake
+                  BYPRODUCTS ${BUILD_INFO_DIR}/build_info.h
+                  COMMENT "Stamping build identity"
+                  VERBATIM
+)
+add_dependencies(${PROJECT_NAME} build_info)
+target_include_directories(${PROJECT_NAME} PRIVATE ${BUILD_INFO_DIR})
+
 # --- Post-build ---------------------------------------------------------------
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_OBJCOPY} -O ihex   $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.hex
-        COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.bin
-        COMMAND ${CMAKE_SIZE} $<TARGET_FILE:${PROJECT_NAME}>
-        COMMENT "Generating .hex and .bin, then reporting size"
+                   COMMAND ${CMAKE_OBJCOPY} -O ihex   $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.hex
+                   COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.bin
+                   COMMAND ${CMAKE_SIZE} $<TARGET_FILE:${PROJECT_NAME}>
+                   COMMENT "Generating .hex and .bin, then reporting size"
 )

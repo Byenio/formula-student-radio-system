@@ -163,6 +163,7 @@ uint32_t E28_Radio_GetSeqGaps(void);   /*!< round-trip packet losses     */
 uint32_t E28_Radio_GetTelemSent(void);   /*!< telemetry packets to air     */
 uint32_t E28_Radio_GetAudioSent(void);   /*!< voice packets to air         */
 uint32_t E28_Radio_GetAudioYielded(void);/*!< voice dropped for telemetry  */
+uint32_t E28_Radio_GetTelemAggregated(void); /*!< records merged into one packet */
 #endif
 
 #if E28_USE_RTOS

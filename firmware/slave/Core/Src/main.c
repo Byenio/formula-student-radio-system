@@ -25,6 +25,8 @@
 #include "e28_radio.h"
 #include "usb_link.h"
 #include "safety.h"
+#include "stats.h"
+#include "perf.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -130,6 +132,9 @@ int main(void)
   {
     (void)E28_Radio_RelayInit();
   }
+
+  /* Last, so the boot-time schema reflects a fully initialised board. */
+  Stats_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -139,9 +144,31 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  ux_system_tasks_run();
-	  UsbLink_Poll();
-	  E28_Radio_RelayPoll();
+    /* Each stage timed separately, and the whole pass as "loop": on a
+       bare-metal board the loop rate is the CPU budget, and these four
+       sections show where it goes. Stats_Poll sits outside the loop timing
+       so the report it sends is not counted inside the pass it measures. */
+    {
+      PERF_BEGIN(PERF_LOOP);
+      {
+        PERF_BEGIN(PERF_USBX);
+        ux_system_tasks_run();
+        PERF_END(PERF_USBX);
+      }
+      {
+        PERF_BEGIN(PERF_USBLINK);
+        UsbLink_Poll();
+        PERF_END(PERF_USBLINK);
+      }
+      {
+        PERF_BEGIN(PERF_RELAY);
+        E28_Radio_RelayPoll();
+        PERF_END(PERF_RELAY);
+      }
+      PERF_END(PERF_LOOP);
+    }
+
+    Stats_Poll();
   }
   /* USER CODE END 3 */
 }
