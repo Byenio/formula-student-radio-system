@@ -7,6 +7,7 @@
 
 #include "rs485.h"
 #include "cmsis_os2.h"
+#include "perf.h"
 #include "e28_port.h"
 #include <string.h>
 
@@ -296,16 +297,24 @@ static void RS485_Task(void *argument)
     uint32_t write_pos = RS485_DMA_BUF_LEN
                        - __HAL_DMA_GET_COUNTER(huart1.hdmarx);
 
-    while (dma_read_pos != write_pos)
+    /* rs485.drain: one pass over the bytes that arrived since the last
+       wake-up. Only timed when there is something to drain, so the 100 ms
+       idle timeouts do not dilute the figures with empty passes. */
+    if (dma_read_pos != write_pos)
     {
-      feed(dma_buf[dma_read_pos]);
-      bytes_received++;
-
-      dma_read_pos++;
-      if (dma_read_pos >= RS485_DMA_BUF_LEN)
+      PERF_BEGIN(PERF_RS485_DRAIN);
+      while (dma_read_pos != write_pos)
       {
-        dma_read_pos = 0U;
+        feed(dma_buf[dma_read_pos]);
+        bytes_received++;
+
+        dma_read_pos++;
+        if (dma_read_pos >= RS485_DMA_BUF_LEN)
+        {
+          dma_read_pos = 0U;
+        }
       }
+      PERF_END(PERF_RS485_DRAIN);
     }
   }
 }

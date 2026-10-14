@@ -88,6 +88,15 @@ endif()
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
+# --- Statistics and instrumentation -------------------------------------------
+# ON for bench and measurement builds. OFF removes the whole layer -- perf
+# markers become no-ops, statlink/stats compile to empty objects, and on the
+# master FreeRTOS run-time stats are off too. Comparing an ON and an OFF build
+# of the same commit is how the layer's own cost is measured.
+#     cmake --preset RelWithDebInfo -DFW_STATS=OFF
+option(FW_STATS "Build the statistics and instrumentation layer" ON)
+message(STATUS "Statistics layer: ${FW_STATS}")
+
 # --- Compile options ----------------------------------------------------------
 add_compile_options(
         # One section per function and per variable, so --gc-sections at link
@@ -112,6 +121,7 @@ add_compile_options($<$<COMPILE_LANGUAGE:ASM>:-x$<SEMICOLON>assembler-with-cpp>)
 # --- Defines ------------------------------------------------------------------
 # No DEBUG define: CubeIDE added one, but nothing in this project tests it.
 add_compile_definitions(
+        FW_STATS_ENABLE=$<BOOL:${FW_STATS}>
         USE_HAL_DRIVER
         STM32G491xx
 )
@@ -145,9 +155,7 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32G491CETX_FLASH.ld)
 
 # Target is plain "master"; the toolchain file's suffix makes it master.elf.
-add_executable(${PROJECT_NAME} ${SOURCES}
-               Core/Src/safety.c
-               Core/Inc/safety.h)
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Relink when the linker script changes, not only when sources do.
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
@@ -167,6 +175,25 @@ target_link_options(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE m)
+
+# --- Build identity -----------------------------------------------------------
+# Regenerates build_info.h (git hash, dirty flag, build type) on every build;
+# the stats layer puts it in every schema frame, so each log names the exact
+# firmware that produced it. See cmake/build_info.cmake.
+set(BUILD_INFO_DIR ${PROJECT_BINARY_DIR}/generated)
+add_custom_target(build_info
+                  COMMAND ${CMAKE_COMMAND}
+                  -DOUT=${BUILD_INFO_DIR}/build_info.h
+                  -DSRC_DIR=${CMAKE_SOURCE_DIR}
+                  -DBUILD_TYPE=${CMAKE_BUILD_TYPE}
+                  -DOPT_OVERRIDE=${FW_OPT_OVERRIDE}
+                  -P ${CMAKE_SOURCE_DIR}/cmake/build_info.cmake
+                  BYPRODUCTS ${BUILD_INFO_DIR}/build_info.h
+                  COMMENT "Stamping build identity"
+                  VERBATIM
+)
+add_dependencies(${PROJECT_NAME} build_info)
+target_include_directories(${PROJECT_NAME} PRIVATE ${BUILD_INFO_DIR})
 
 # --- Post-build ---------------------------------------------------------------
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

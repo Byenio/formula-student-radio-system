@@ -178,7 +178,29 @@ standard names. */
 #define USE_CUSTOM_SYSTICK_HANDLER_IMPLEMENTATION 0
 
 /* USER CODE BEGIN Defines */
-/* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
+/* Per-task CPU time, for the stats layer's TASKS frame.
+
+   The run-time clock is the DWT cycle counter rather than a hardware timer:
+   it is already running for perf.c, needs no timer (TIM6 is the audio clock,
+   TIM7 the HAL tick), and has full CPU-clock resolution. It is a plain
+   memory read at a fixed architectural address, so reading it on every
+   context switch costs a couple of cycles.
+
+   Its one limitation -- a 32-bit counter at 170 MHz wraps every 25.3 s -- is
+   handled in stats.c, which only ever uses differences between reports.
+
+   Compiled out with the rest of the stats layer (FW_STATS=OFF).
+
+   If FreeRTOS run-time stats are ever enabled in CubeMX as well, delete
+   CubeMX's configGENERATE_RUN_TIME_STATS line, not this block. */
+#if FW_STATS_ENABLE
+#ifndef __ASSEMBLER__
+void Perf_Init(void);
+#endif
+#define configGENERATE_RUN_TIME_STATS             1
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()  Perf_Init()
+#define portGET_RUN_TIME_COUNTER_VALUE()          (*(volatile uint32_t *)0xE0001004UL)
+#endif
 /* USER CODE END Defines */
 
 #endif /* FREERTOS_CONFIG_H */

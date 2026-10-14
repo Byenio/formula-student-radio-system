@@ -13,6 +13,7 @@
 #include "cmsis_os2.h"
 #endif
 #include "link_proto.h"
+#include "perf.h"
 
 /* Only the car board has audio hardware. Guarding the include (not just the
    code) keeps the base station from needing audio.c at all. */
@@ -307,7 +308,20 @@ bool E28_Radio_SetChannel(uint8_t channel)
 
 /* ---- Transmit ------------------------------------------------------------- */
 
+static bool radio_send_impl(const uint8_t *data, uint8_t len);
+
+/* Timed wrapper: the radio.send section is the SPI upload of the packet plus
+   the commands that start transmission -- the CPU and bus cost of one send,
+   not the airtime, which radio.airtime measures separately on the master. */
 bool E28_Radio_Send(const uint8_t *data, uint8_t len)
+{
+  PERF_BEGIN(PERF_RADIO_SEND);
+  const bool ok = radio_send_impl(data, len);
+  PERF_END(PERF_RADIO_SEND);
+  return ok;
+}
+
+static bool radio_send_impl(const uint8_t *data, uint8_t len)
 {
   if (data == NULL || len == 0U) { return false; }
 
@@ -513,12 +527,18 @@ static bool radio_send_blocking(const uint8_t *packet, uint8_t len,
     return false;
   }
 
+  /* radio.airtime: TX started -> TxDone interrupt seen by this task. Time
+     on air plus DIO1 and wake-up latency, so it sits slightly above the
+     theoretical airtime; the difference is itself worth reporting. Only
+     successful sends are recorded -- a timeout is counted in tx_timeouts. */
+  PERF_BEGIN(PERF_RADIO_AIRTIME);
   if (!E28_Port_WaitDio1(timeout_ms))
   {
     tx_timeouts++;
     rf_switch_idle();
     return false;
   }
+  PERF_END(PERF_RADIO_AIRTIME);
 
   last_irq = radio_get_irq();
   (void)radio_clear_irq(E28_IRQ_ALL);

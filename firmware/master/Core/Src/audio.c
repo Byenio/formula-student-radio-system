@@ -8,9 +8,20 @@
 #include "audio.h"
 #include "audio_codec.h"
 #include "cmsis_os2.h"
-#include <string.h>
+#include "perf.h"
 
-#include "FreeRTOSConfig.h"
+/* audio.wake: cycles from the ADC DMA interrupt to the audio task running.
+   Stamped in the ISR, recorded by the task. This is the RTOS scheduling
+   latency the 10 ms frame deadline actually sees. */
+#if FW_STATS_ENABLE
+static volatile uint32_t audio_wake_stamp;
+#define AUDIO_STAMP_WAKE()   (audio_wake_stamp = Perf_Now())
+#define AUDIO_RECORD_WAKE()  Perf_Record(PERF_AUDIO_WAKE, Perf_Now() - audio_wake_stamp)
+#else
+#define AUDIO_STAMP_WAKE()   ((void)0)
+#define AUDIO_RECORD_WAKE()  ((void)0)
+#endif
+#include <string.h>
 
 /* Handles owned by CubeMX in main.c */
 extern ADC_HandleTypeDef hadc1;
@@ -132,15 +143,20 @@ static void Audio_Task(void *argument)
   {
     uint32_t flags = osThreadFlagsWait(AUDIO_FLAG_FIRST_HALF | AUDIO_FLAG_SECOND_HALF,
                                        osFlagsWaitAny, osWaitForever);
+    AUDIO_RECORD_WAKE();
 
     if (flags & AUDIO_FLAG_FIRST_HALF)
     {
+      PERF_BEGIN(PERF_AUDIO_FRAME);
       Audio_ProcessFrame(&adc_buffer[0], &dac_buffer[0]);
+      PERF_END(PERF_AUDIO_FRAME);
     }
     if (flags & AUDIO_FLAG_SECOND_HALF)
     {
+      PERF_BEGIN(PERF_AUDIO_FRAME);
       Audio_ProcessFrame(&adc_buffer[AUDIO_FRAME_SAMPLES],
                          &dac_buffer[AUDIO_FRAME_SAMPLES]);
+      PERF_END(PERF_AUDIO_FRAME);
     }
   }
 }
@@ -186,14 +202,26 @@ static void Audio_ProcessFrame(const uint16_t *mic_in, uint16_t *spk_out)
 
   /* Straight through the codec and back, bypassing the queues and the radio.
      Isolates decimation and companding from anything the link does. */
-  AudioCodec_EncodeFrame(mic_in, AUDIO_FRAME_SAMPLES, encoded, AUDIO_ENCODED_LEN);
-  AudioCodec_DecodeFrame(encoded, AUDIO_ENCODED_LEN, spk_out, AUDIO_FRAME_SAMPLES);
+  {
+    PERF_BEGIN(PERF_AUDIO_ENCODE);
+    AudioCodec_EncodeFrame(mic_in, AUDIO_FRAME_SAMPLES, encoded, AUDIO_ENCODED_LEN);
+    PERF_END(PERF_AUDIO_ENCODE);
+  }
+  {
+    PERF_BEGIN(PERF_AUDIO_DECODE);
+    AudioCodec_DecodeFrame(encoded, AUDIO_ENCODED_LEN, spk_out, AUDIO_FRAME_SAMPLES);
+    PERF_END(PERF_AUDIO_DECODE);
+  }
   frames_played++;
 
 #else   /* AUDIO_PATH_RADIO_ECHO */
 
-  AudioCodec_EncodeFrame(mic_in, AUDIO_FRAME_SAMPLES,
-                         encoded, AUDIO_ENCODED_LEN);
+  {
+    PERF_BEGIN(PERF_AUDIO_ENCODE);
+    AudioCodec_EncodeFrame(mic_in, AUDIO_FRAME_SAMPLES,
+                           encoded, AUDIO_ENCODED_LEN);
+    PERF_END(PERF_AUDIO_ENCODE);
+  }
 
   /* Timeout zero. If the radio has not drained the queue we drop this frame
      rather than miss the DMA deadline -- one lost 10 ms of speech is far
@@ -209,8 +237,10 @@ static void Audio_ProcessFrame(const uint16_t *mic_in, uint16_t *spk_out)
 
   if (osMessageQueueGet(audioRxQueue, received, NULL, 0U) == osOK)
   {
+    PERF_BEGIN(PERF_AUDIO_DECODE);
     AudioCodec_DecodeFrame(received, AUDIO_ENCODED_LEN,
                            spk_out, AUDIO_FRAME_SAMPLES);
+    PERF_END(PERF_AUDIO_DECODE);
     frames_played++;
   }
   else
@@ -232,6 +262,7 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc)
 {
   if (hadc->Instance == ADC1 && audioTaskHandle != NULL)
   {
+    AUDIO_STAMP_WAKE();
     osThreadFlagsSet(audioTaskHandle, AUDIO_FLAG_FIRST_HALF);
   }
 }
@@ -240,6 +271,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
   if (hadc->Instance == ADC1 && audioTaskHandle != NULL)
   {
+    AUDIO_STAMP_WAKE();
     osThreadFlagsSet(audioTaskHandle, AUDIO_FLAG_SECOND_HALF);
   }
 }

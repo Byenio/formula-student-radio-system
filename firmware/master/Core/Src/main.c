@@ -28,6 +28,7 @@
 #include "rs485.h"
 #include "can_bus.h"
 #include "safety.h"
+#include "stats.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -183,6 +184,9 @@ int main(void)
   myTask02Handle = osThreadNew(StartTask02, NULL, &myTask02_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
+  /* First: starts the cycle counter every other module's timing relies on,
+     and sends the boot-time schema before anything else can fail. */
+  Stats_Init();
   Audio_Init();
   E28_Init();
   RS485_Init();
