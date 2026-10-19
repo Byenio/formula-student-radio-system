@@ -46,9 +46,22 @@ extern "C" {
 #include "main.h"
 #include <stdint.h>
 
-/* Must match the master board's USART1 setting. */
+/* Must match the master board's USART1 setting, which is 1 Mbaud -- the rate
+   the real VCU link uses. Matching the master here, rather than slowing the
+   master down for the bench, keeps bench firmware identical to car firmware.
+
+   History: the bench link was once dropped to 115200 because 1 Mbaud failed.
+   That was the earlier single-wire hack (B driven, A grounded), which relied
+   on the transceiver's bus-failsafe threshold for every low bit and could not
+   settle within a 1 us bit. This complementary drive never goes near that
+   threshold, so the limitation no longer applies. At the 64 MHz core clock
+   one bit is 64 cycles, and each edge is scheduled from an absolute cycle
+   count, so timing does not drift across a byte.
+
+   If the master's stats ever show rs485.bad_crc or rs485.dma_err climbing,
+   drop BOTH ends to 115200 rather than one. */
 #ifndef BB_DIFF_BAUD
-#define BB_DIFF_BAUD            115200U
+#define BB_DIFF_BAUD            1000000U
 #endif
 
 /* Line A: mark high. Line B: its complement. */
