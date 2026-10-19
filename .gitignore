@@ -63,3 +63,5 @@ cmake-*/
 
 sw06_canapka/
 *.wav
+
+software/statlink/runs/*

@@ -552,7 +552,14 @@ static void MX_USART1_UART_Init(void)
 
      No RX inversion: the bench source now drives both lines of the pair in
      antiphase, which produces the same polarity a real RS-485 driver does.
-     The received signal is therefore an ordinary UART. */
+     The received signal is therefore an ordinary UART.
+
+     Baud: the bench source is a bit-banged transmitter on the Nucleo, which
+     cannot run at the real link's 1 Mbaud -- measured, every byte failed with
+     a noise error while the idle line between frames stayed clean. It runs
+     at RS485_BENCH_BAUD instead, and this end follows. The car build keeps
+     CubeMX's 1 Mbaud, untouched. */
+  huart1.Init.BaudRate                    = RS485_BENCH_BAUD;
   huart1.AdvancedInit.AdvFeatureInit      = UART_ADVFEATURE_RXOVERRUNDISABLE_INIT
                                           | UART_ADVFEATURE_DMADISABLEONERROR_INIT;
   huart1.AdvancedInit.OverrunDisable      = UART_ADVFEATURE_OVERRUN_DISABLE;

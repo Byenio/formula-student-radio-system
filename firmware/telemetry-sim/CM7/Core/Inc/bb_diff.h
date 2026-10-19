@@ -46,22 +46,22 @@ extern "C" {
 #include "main.h"
 #include <stdint.h>
 
-/* Must match the master board's USART1 setting, which is 1 Mbaud -- the rate
-   the real VCU link uses. Matching the master here, rather than slowing the
-   master down for the bench, keeps bench firmware identical to car firmware.
+/* Must equal RS485_BENCH_BAUD in the master's rs485.h, which the master uses
+   when built with RS485_BENCH_TEST = 1. The real VCU link is 1 Mbaud; this
+   fixture cannot reach that.
 
-   History: the bench link was once dropped to 115200 because 1 Mbaud failed.
-   That was the earlier single-wire hack (B driven, A grounded), which relied
-   on the transceiver's bus-failsafe threshold for every low bit and could not
-   settle within a 1 us bit. This complementary drive never goes near that
-   threshold, so the limitation no longer applies. At the 64 MHz core clock
-   one bit is 64 cycles, and each edge is scheduled from an absolute cycle
-   count, so timing does not drift across a byte.
+   Measured, not assumed: at 1 Mbaud with correct polarity, the master logged
+   about 2250 noise errors a second -- one per byte sent, at 50 frames/s of
+   ~45 bytes -- with essentially no byte received intact, while the idle line
+   between frames stayed clean. Holding this board in reset stopped the
+   errors entirely, so the receiver, wiring and ground were all fine; the
+   transmitter is simply too slow at 1 us per bit, driving the master's
+   120 ohm termination from GPIO pins.
 
-   If the master's stats ever show rs485.bad_crc or rs485.dma_err climbing,
-   drop BOTH ends to 115200 rather than one. */
+   115200 is the rate this fixture was proven at, and is far more than the
+   traffic needs (200 records/s is ~3 kB/s, about a quarter of the link). */
 #ifndef BB_DIFF_BAUD
-#define BB_DIFF_BAUD            1000000U
+#define BB_DIFF_BAUD            115200U
 #endif
 
 /* Line A: mark high. Line B: its complement. */

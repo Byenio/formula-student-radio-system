@@ -40,29 +40,49 @@ extern "C" {
 #include <stdbool.h>
 
 /* ---- Bench test mode -----------------------------------------------------
-   Set to 1 when the telemetry source is a bare 3.3 V UART wired into the
-   differential pair at J101, rather than a real RS-485 driver:
+   Set to 1 when the telemetry source is the Nucleo telemetry simulator
+   rather than the real VCU. The simulator bit-bangs both lines of the pair
+   in antiphase (firmware/telemetry-sim, bb_diff.c):
 
-       J101 pin 1 (RS485_A)  ->  source GND
-       J101 pin 2 (RS485_B)  ->  source TX
-       GND                   ->  source GND
+       Nucleo PD4  ->  J101 pin 1 (RS485_A)
+       Nucleo PD5  ->  J101 pin 2 (RS485_B)
+       Nucleo GND  ->  master GND
 
-   The transceiver stays fully enabled -- RE_DE low, exactly as in the car --
-   because it is doing the receiving. What changes is polarity. With A grounded
-   and B driven:
+   That produces the same polarity as a real RS-485 driver, so the transceiver
+   works exactly as in the car -- RE_DE low, no RX inversion. What the flag
+   changes, in USER CODE BEGIN USART1_Init 2 of main.c:
 
-       TX high  ->  A-B is negative      ->  receiver output LOW
-       TX low   ->  A and B both at 0 V  ->  bus failsafe, output HIGH
+     - baud drops to RS485_BENCH_BAUD, because the bit-banged source cannot
+       reach the real link's 1 Mbaud;
+     - overrun detection is off and DMA keeps running through a receive
+       error, so a glitch on the bench wiring cannot stop the link.
 
-   so the MCU sees an inverted UART. The fix is one setting: RX pin inversion,
-   applied in USER CODE BEGIN USART1_Init 2 under this same flag. A real
-   transceiver on the far end delivers the correct polarity, so this must be 0
-   in the car or nothing will decode.
+   Must be 0 in the car, or the master listens at the wrong baud.
 
-   Note this loads the source pin with the board's 120 ohm termination, drawing
-   around 20 mA. Fine for a bench fixture, not a design to ship. */
+   History, because it explains the wiring: the first bench setup drove only
+   B from a plain UART, with A grounded. Half of every bit then sat at zero
+   differential and relied on the transceiver's bus-failsafe threshold, which
+   chattered under noise; it needed RX inversion and still failed. Driving
+   both lines removed both problems.
+
+   The Nucleo pins drive the board's 120 ohm termination directly, sourcing
+   around 15-20 mA each. Fine for a bench fixture, not a design to ship. */
 #ifndef RS485_BENCH_TEST
 #define RS485_BENCH_TEST        0
+#endif
+
+/* Bench link baud. The real VCU link is 1 Mbaud (CubeMX's setting for
+   USART1); the bench fixture's bit-banged transmitter is not fast enough for
+   that, so with RS485_BENCH_TEST = 1 the master listens at this rate instead.
+   Must equal BB_DIFF_BAUD in the telemetry sim's bb_diff.h.
+
+   Bench measurements are therefore taken at a slower wire rate than the car:
+   a 45-byte telemetry frame spends ~3.9 ms on the wire instead of ~0.45 ms.
+   Throughput is unaffected (the link is far from full at either rate), but
+   any end-to-end telemetry latency measured on the bench includes the extra
+   ~3.5 ms per frame, and must be reported with that caveat. */
+#ifndef RS485_BENCH_BAUD
+#define RS485_BENCH_BAUD        115200U
 #endif
 
 /* Largest frame on the wire: sync(2) + len(1) + payload(251) + crc(2). */
