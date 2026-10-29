@@ -56,6 +56,12 @@ static volatile uint32_t recoveries;
 static volatile uint32_t last_error_code;   /*!< huart1.ErrorCode at the fault */
 static volatile bool     needs_recovery;
 
+/* Line errors, counted by polling rather than by interrupt -- see
+   rs485_line_errors_poll(). Reception carries on through all of them. */
+static volatile uint32_t noise_errors;
+static volatile uint32_t framing_errors;
+static volatile uint32_t overrun_errors;
+
 #define RS485_FLAG_DATA     (1U << 0)
 
 /**
@@ -70,6 +76,49 @@ static volatile bool     needs_recovery;
   * So recovery happens here, in task context, and aborts first. The abort is
   * the part that clears the error state; without it the restart is a no-op.
   */
+/* ---- Line-error policy ----------------------------------------------------
+   With DMA reception active, the HAL treats EVERY UART error as blocking: a
+   noise flag, a framing error or an overrun aborts the whole DMA transfer
+   and calls HAL_UART_ErrorCallback (stm32g4xx_hal_uart.c, "Blocking error").
+   Combined with a restart in the task, that turns one doubtful byte into the
+   loss of everything buffered -- and a source that raises a flag on every
+   byte into a link that receives nothing at all. That is exactly what the
+   bench fixture did: a noise flag on each start bit, while the data itself
+   was sampled correctly.
+
+   The noise flag in particular is only a warning. The byte has already been
+   received by majority vote of three samples; the flag says the samples
+   disagreed. Next to an inverter, the occasional noise flag on a good byte
+   is normal.
+
+   So line errors no longer interrupt anything. Error interrupts (EIE) are
+   switched off once reception is running, the DMA keeps streaming, and the
+   flags are polled and counted here instead. Integrity is the frame CRC's
+   job, which it already does: a byte genuinely corrupted by noise fails the
+   CRC and costs one frame, not the buffer.
+
+   The full restart remains for faults that really do stop the link -- a DMA
+   transfer error, reported through the same callback. */
+static void rs485_line_errors_off(void)
+{
+  CLEAR_BIT(huart1.Instance->CR3, USART_CR3_EIE);
+}
+
+static void rs485_line_errors_poll(void)
+{
+  const uint32_t isr = huart1.Instance->ISR;
+  uint32_t clear = 0U;
+
+  if ((isr & USART_ISR_NE)  != 0U) { noise_errors++;   clear |= USART_ICR_NECF;  }
+  if ((isr & USART_ISR_FE)  != 0U) { framing_errors++; clear |= USART_ICR_FECF;  }
+  if ((isr & USART_ISR_ORE) != 0U) { overrun_errors++; clear |= USART_ICR_ORECF; }
+
+  if (clear != 0U)
+  {
+    huart1.Instance->ICR = clear;
+  }
+}
+
 static void rs485_restart_rx(void)
 {
   (void)HAL_UART_AbortReceive(&huart1);
@@ -90,6 +139,7 @@ static void rs485_restart_rx(void)
   if (HAL_UARTEx_ReceiveToIdle_DMA(&huart1, dma_buf, RS485_DMA_BUF_LEN) == HAL_OK)
   {
     __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
+    rs485_line_errors_off();
     recoveries++;
   }
 }
@@ -280,9 +330,17 @@ static void RS485_Task(void *argument)
   /* The half-transfer interrupt is not useful here and only adds callbacks. */
   __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
 
+  /* Line errors are counted, not acted on. See rs485_line_errors_poll(). */
+  rs485_line_errors_off();
+
   for (;;)
   {
     (void)osThreadFlagsWait(RS485_FLAG_DATA, osFlagsWaitAny, 100U);
+
+    /* At least every 100 ms, and on every wake-up. A flag that is set twice
+       between polls counts once, so these are lower bounds -- fine for a
+       health indicator, and the frame CRC catches what matters. */
+    rs485_line_errors_poll();
 
     if (needs_recovery)
     {
@@ -359,3 +417,6 @@ uint32_t RS485_GetQueueFull(void)     { return queue_full; }
 uint32_t RS485_GetDmaErrors(void)     { return dma_errors; }
 uint32_t RS485_GetRecoveries(void)    { return recoveries; }
 uint32_t RS485_GetLastErrorCode(void) { return last_error_code; }
+uint32_t RS485_GetNoiseErrors(void)   { return noise_errors; }
+uint32_t RS485_GetFramingErrors(void) { return framing_errors; }
+uint32_t RS485_GetOverrunErrors(void) { return overrun_errors; }

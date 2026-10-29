@@ -128,6 +128,12 @@ uint32_t RS485_GetQueueFull(void);      /*!< radio not draining fast enough  */
 uint32_t RS485_GetDmaErrors(void);      /*!< overrun/framing/noise from HAL  */
 uint32_t RS485_GetRecoveries(void);     /*!< successful RX restarts          */
 uint32_t RS485_GetLastErrorCode(void);  /*!< HAL_UART_ERROR_* bitmask        */
+/* Line errors. Counted only -- reception continues through them, and the
+   frame CRC decides whether data is good. Lower bounds: polled, so two of
+   the same flag between polls count as one. */
+uint32_t RS485_GetNoiseErrors(void);    /*!< start/data bit samples disagreed */
+uint32_t RS485_GetFramingErrors(void);  /*!< stop bit not where expected      */
+uint32_t RS485_GetOverrunErrors(void);  /*!< byte lost: RDR not read in time  */
 
 #ifdef __cplusplus
 }

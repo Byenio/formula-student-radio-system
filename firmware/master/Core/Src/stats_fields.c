@@ -56,6 +56,9 @@
   X(U32, "rs485.dma_err",         RS485_GetDmaErrors())                        \
   X(U32, "rs485.recoveries",      RS485_GetRecoveries())                       \
   X(U32, "rs485.last_err",        RS485_GetLastErrorCode())                    \
+  X(U32, "rs485.noise",           RS485_GetNoiseErrors())                      \
+  X(U32, "rs485.framing",         RS485_GetFramingErrors())                    \
+  X(U32, "rs485.overrun",         RS485_GetOverrunErrors())                    \
   /* audio */                                                                  \
   X(U32, "audio.captured",        Audio_GetFramesCaptured())                   \
   X(U32, "audio.played",          Audio_GetFramesPlayed())                     \
