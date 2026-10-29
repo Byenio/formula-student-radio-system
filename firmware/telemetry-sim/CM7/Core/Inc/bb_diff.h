@@ -47,19 +47,20 @@ extern "C" {
 #include <stdint.h>
 
 /* Must equal RS485_BENCH_BAUD in the master's rs485.h, which the master uses
-   when built with RS485_BENCH_TEST = 1. The real VCU link is 1 Mbaud; this
-   fixture cannot reach that.
+   when built with RS485_BENCH_TEST = 1. The real VCU link is 1 Mbaud.
 
-   Measured, not assumed: at 1 Mbaud with correct polarity, the master logged
-   about 2250 noise errors a second -- one per byte sent, at 50 frames/s of
-   ~45 bytes -- with essentially no byte received intact, while the idle line
-   between frames stayed clean. Holding this board in reset stopped the
-   errors entirely, so the receiver, wiring and ground were all fine; the
-   transmitter is simply too slow at 1 us per bit, driving the master's
-   120 ohm termination from GPIO pins.
+   Why 115200 and not 1 Mbaud: the bench link was brought up at 115200, and
+   that is the rate it is proven at. An earlier note here blamed 1 Mbaud's
+   failure on this transmitter being too slow. That was wrong: the leads were
+   on PD5/PD6 instead of PD4/PD5, so only one line was driven correctly. The
+   fault was found and fixed after the switch to 115200, and 1 Mbaud has not
+   been retried since. Until it is, treat 1 Mbaud from this fixture as
+   untested, not as impossible.
 
-   115200 is the rate this fixture was proven at, and is far more than the
-   traffic needs (200 records/s is ~3 kB/s, about a quarter of the link). */
+   115200 is far more than the traffic needs (200 records/s is ~3 kB/s, about
+   a quarter of the link), so the bench measurements do not depend on it --
+   except the master's RS-485 byte timing, which is 8.7x slower than on the
+   car. Do not change it in the middle of a measurement campaign. */
 #ifndef BB_DIFF_BAUD
 #define BB_DIFF_BAUD            115200U
 #endif

@@ -440,6 +440,12 @@ def main() -> int:
     ap.add_argument("--replay", metavar="RAW",
                     help="decode a raw.bin instead of a serial port; writes "
                          "the CSVs next to it unless --out is given")
+    ap.add_argument("--settle", type=float, default=1.0,
+                    help="seconds of input discarded after opening the port "
+                         "(default 1.0). The STLINK-V3 keeps VCP data it could "
+                         "not deliver while no program had the port open, and "
+                         "hands it over first: frames from before this run, "
+                         "which would show up as one large false 'lost' gap.")
     ap.add_argument("--no-save", action="store_true", help="decode and print only")
     ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args()
@@ -480,9 +486,16 @@ def main() -> int:
     if out:
         print(f"recording to {out}", file=sys.stderr)
 
-    t_end = time.monotonic() + args.duration if args.duration else None
     with serial.Serial(args.port, args.baud, timeout=0.1) as ser:
+        # Drop what the probe was holding from before the port was opened.
+        # Flushing once is not enough: the STLINK delivers its backlog over
+        # the first few hundred milliseconds, after the host buffer is empty.
+        t_settle = time.monotonic() + max(args.settle, 0.0)
+        while time.monotonic() < t_settle:
+            ser.read(4096)
         ser.reset_input_buffer()
+
+        t_end = time.monotonic() + args.duration if args.duration else None
         try:
             while t_end is None or time.monotonic() < t_end:
                 data = ser.read(4096)
