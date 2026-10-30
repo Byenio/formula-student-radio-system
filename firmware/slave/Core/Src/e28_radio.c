@@ -935,6 +935,29 @@ void E28_Radio_Loop(void)
    is talking. Also gives the USB path something to carry during bring-up. */
 #define RELAY_KEEPALIVE_MS      500U
 
+/* Minimum time between the starts of two downlink transmissions.
+
+   The PC does not deliver voice evenly. The app reads the sound card in
+   whatever chunks the OS hands it (often 20 ms or more) and sends every frame
+   it has at once, so frames reach the relay in bursts, and the relay used to
+   put them on air back to back -- deaf to the car for the whole burst.
+
+   That collided with how the car board works. Its radio task sleeps in
+   receive and wakes when a pit packet arrives; queued telemetry goes out on
+   that same wake-up, i.e. right after the pit's packet ends -- exactly when
+   the relay was already sending the next frame of the burst. Both packets
+   were lost every time: measured with telemetry + pit PTT, the car received
+   52 of 100 voice frames/s and the pit 4 of 50 telemetry packets/s, with zero
+   CRC errors and zero send failures on either board.
+
+   Spacing the frames re-creates the gap the car's reply needs. 9 ms keeps the
+   relay slightly faster than the 100 frames/s it must carry, so a burst
+   drains instead of piling up; the tick is 1 ms, so the real gap is 8-9 ms,
+   against ~1.5 ms for the car's telemetry upload plus airtime. */
+#ifndef RELAY_DOWNLINK_GAP_MS
+#define RELAY_DOWNLINK_GAP_MS   9U
+#endif
+
 typedef enum
 {
   RELAY_LISTENING = 0,   /*!< armed for receive                     */
@@ -944,6 +967,7 @@ typedef enum
 static RelayState_t relay_state;
 static uint32_t     relay_last_activity;
 static uint32_t     relay_last_keepalive;
+static uint32_t     relay_last_downlink;
 static uint8_t      relay_packet[E28_MAX_PAYLOAD];
 static uint8_t      relay_packet_len;
 
@@ -1074,13 +1098,21 @@ void E28_Radio_RelayPoll(void)
   }
 
   /* ---- Downlink: anything the PC sent goes out over the air ---- */
-  if (relay_state == RELAY_LISTENING)
+  if ((relay_state == RELAY_LISTENING) &&
+      ((E28_Port_Now() - relay_last_downlink) < RELAY_DOWNLINK_GAP_MS))
+  {
+    /* Too soon after the last one: stay listening. Any waiting frame stays
+       in the USB link's queue, so nothing is lost -- usb.rx_overflow would
+       show it if that queue ever ran out. */
+  }
+  else if (relay_state == RELAY_LISTENING)
   {
     uint8_t  down[E28_MAX_PAYLOAD];
     uint8_t  down_len = 0U;
 
     if (UsbLink_GetPacket(down, &down_len, sizeof(down)) && (down_len > 0U))
     {
+      relay_last_downlink = E28_Port_Now();
       if (E28_Radio_Send(down, down_len))
       {
         air_from_usb++;
