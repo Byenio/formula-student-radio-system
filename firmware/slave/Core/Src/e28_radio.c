@@ -331,7 +331,36 @@ static bool radio_send_impl(const uint8_t *data, uint8_t len)
 {
   if (data == NULL || len == 0U) { return false; }
 
+  if (!E28_WaitReady(100U)) { return false; }
+
+  /* Leave receive BEFORE touching the FIFO.
+
+     Both boards keep the radio in continuous receive between transmissions,
+     and this function used to start uploading straight away. Uploading takes
+     0.6-0.8 ms of SPI, and during that time the radio was still receiving:
+
+       - a packet arriving then was written into the same FIFO, at the same
+         offset, as the packet being uploaded;
+       - its RxDone raised DIO1, and the caller's wait for TxDone woke on that
+         edge instead. Both callers took any DIO1 as "transmission finished"
+         and switched the RF path to idle -- while the radio was still
+         transmitting. That packet went out through a switched-off antenna
+         path, and the received one was never read.
+
+     Invisible until both ends transmit at once (pit PTT + telemetry): then the
+     car's voice stuttered and the pit's telemetry fell to a few packets/s.
+
+     Standby first ends the receive -- a packet half-received at this instant
+     is lost, which on a half-duplex link it always was -- and only then are
+     the interrupt status and the DIO1 notification cleared, so nothing stale
+     can be mistaken for this transmission's TxDone. */
+  {
+    uint8_t stdby = E28_STDBY_RC;
+    if (!E28_WriteCommand(E28_CMD_SET_STANDBY, &stdby, 1U)) { return false; }
+  }
+  rf_switch_idle();
   (void)radio_clear_irq(E28_IRQ_ALL);
+  E28_Port_ClearDio1();
 
   if (!E28_WaitReady(100U)) { return false; }
 
@@ -568,23 +597,40 @@ static bool radio_send_blocking(const uint8_t *packet, uint8_t len,
      on air plus DIO1 and wake-up latency, so it sits slightly above the
      theoretical airtime; the difference is itself worth reporting. Only
      successful sends are recorded -- a timeout is counted in tx_timeouts. */
+  /* Only TxDone (or the radio's own timeout) ends the wait. Any other wake-up
+     is counted and waited through: switching the RF path to idle on it would
+     cut this transmission off mid-air. With standby-before-send above this
+     should never happen; tx_wrong_irq proves whether it does. */
   PERF_BEGIN(PERF_RADIO_AIRTIME);
-  if (!E28_Port_WaitDio1(timeout_ms))
   {
-    tx_timeouts++;
-    rf_switch_idle();
-    return false;
+    const uint32_t start = E28_Port_Now();
+
+    for (;;)
+    {
+      const uint32_t spent = E28_Port_Now() - start;
+
+      if ((spent >= timeout_ms) || !E28_Port_WaitDio1(timeout_ms - spent))
+      {
+        tx_timeouts++;
+        (void)radio_clear_irq(E28_IRQ_ALL);
+        rf_switch_idle();
+        return false;
+      }
+
+      last_irq = radio_get_irq();
+      if (last_irq & (E28_IRQ_TX_DONE | E28_IRQ_RX_TX_TIMEOUT))
+      {
+        break;
+      }
+      tx_wrong_irq++;
+      (void)radio_clear_irq(last_irq);
+    }
   }
   PERF_END(PERF_RADIO_AIRTIME);
 
-  last_irq = radio_get_irq();
   (void)radio_clear_irq(E28_IRQ_ALL);
   rf_switch_idle();
 
-  if ((last_irq & E28_IRQ_TX_DONE) == 0U)
-  {
-    tx_wrong_irq++;
-  }
   return ((last_irq & E28_IRQ_TX_DONE) != 0U);
 }
 
@@ -1008,8 +1054,16 @@ void E28_Radio_RelayPoll(void)
 
       case RELAY_SENDING:
       default:
-        /* TxDone, or a timeout the radio reported -- either way, go back to
-           listening. Dropping one packet beats getting stuck. */
+        /* Only TxDone or the radio's own timeout ends a transmission. Any
+           other edge used to end it too, switching the RF path to idle while
+           the packet was still going out (see radio_send_impl). Ignore it and
+           keep waiting; the two-second watchdog below still catches a
+           transmission that never finishes. */
+        if ((last_irq & (E28_IRQ_TX_DONE | E28_IRQ_RX_TX_TIMEOUT)) == 0U)
+        {
+          tx_wrong_irq++;
+          break;
+        }
         rf_switch_idle();
         rx_armed    = E28_Radio_StartRx();
         relay_state = RELAY_LISTENING;
