@@ -1,0 +1,230 @@
+{
+  "tag": "s5_telem_drvptt",
+  "host": "master",
+  "started": "2026-10-30T14:11:36",
+  "argv": [
+    "statlink.py",
+    "/dev/ttyACM0",
+    "--board",
+    "master",
+    "--tag",
+    "s5_telem_drvptt",
+    "--duration",
+    "240"
+  ],
+  "port": "/dev/ttyACM0",
+  "baud": 1000000,
+  "ended": "2026-10-30T14:15:37",
+  "decoder": {
+    "frames": 5088,
+    "crc_errors": 0,
+    "bytes_skipped": 0,
+    "lost_frames": 0,
+    "late_decoded": 88,
+    "no_schema": 0,
+    "schema_mismatch": 0,
+    "reboots": 0
+  },
+  "schemas": [
+    {
+      "proto": 1,
+      "board": "master",
+      "schema_id": "0xFE42",
+      "core_hz": 170000000,
+      "sample_ms": 100,
+      "tasks_ms": 1000,
+      "perf_overhead_cycles": 1,
+      "perf_supported": true,
+      "baud": 1000000,
+      "build": "fa885d3a RelWithDebInfo gcc 14.3.1 20250623",
+      "fields": [
+        {
+          "name": "radio.tx",
+          "kind": "u32"
+        },
+        {
+          "name": "radio.rx",
+          "kind": "u32"
+        },
+        {
+          "name": "radio.crc_err",
+          "kind": "u32"
+        },
+        {
+          "name": "radio.rssi",
+          "kind": "i32"
+        },
+        {
+          "name": "radio.dio1",
+          "kind": "u32"
+        },
+        {
+          "name": "radio.seq_gaps",
+          "kind": "u32"
+        },
+        {
+          "name": "radio.tx_timeouts",
+          "kind": "u32"
+        },
+        {
+          "name": "radio.tx_wrong_irq",
+          "kind": "u32"
+        },
+        {
+          "name": "radio.configured",
+          "kind": "u32"
+        },
+        {
+          "name": "radio.rx_armed",
+          "kind": "u32"
+        },
+        {
+          "name": "sched.telem_sent",
+          "kind": "u32"
+        },
+        {
+          "name": "sched.telem_aggr",
+          "kind": "u32"
+        },
+        {
+          "name": "sched.audio_sent",
+          "kind": "u32"
+        },
+        {
+          "name": "sched.audio_yielded",
+          "kind": "u32"
+        },
+        {
+          "name": "rs485.bytes",
+          "kind": "u32"
+        },
+        {
+          "name": "rs485.frames",
+          "kind": "u32"
+        },
+        {
+          "name": "rs485.bad_crc",
+          "kind": "u32"
+        },
+        {
+          "name": "rs485.resyncs",
+          "kind": "u32"
+        },
+        {
+          "name": "rs485.queue_full",
+          "kind": "u32"
+        },
+        {
+          "name": "rs485.dma_err",
+          "kind": "u32"
+        },
+        {
+          "name": "rs485.recoveries",
+          "kind": "u32"
+        },
+        {
+          "name": "rs485.last_err",
+          "kind": "u32"
+        },
+        {
+          "name": "rs485.noise",
+          "kind": "u32"
+        },
+        {
+          "name": "rs485.framing",
+          "kind": "u32"
+        },
+        {
+          "name": "rs485.overrun",
+          "kind": "u32"
+        },
+        {
+          "name": "audio.captured",
+          "kind": "u32"
+        },
+        {
+          "name": "audio.played",
+          "kind": "u32"
+        },
+        {
+          "name": "audio.tx_dropped",
+          "kind": "u32"
+        },
+        {
+          "name": "audio.rx_underrun",
+          "kind": "u32"
+        },
+        {
+          "name": "audio.pkpk",
+          "kind": "u32"
+        },
+        {
+          "name": "can.rx",
+          "kind": "u32"
+        },
+        {
+          "name": "can.stale",
+          "kind": "u32"
+        },
+        {
+          "name": "can.link_drops",
+          "kind": "u32"
+        },
+        {
+          "name": "can.errors",
+          "kind": "u32"
+        },
+        {
+          "name": "can.counter",
+          "kind": "u32"
+        },
+        {
+          "name": "can.alive",
+          "kind": "u32"
+        },
+        {
+          "name": "can.ptt_req",
+          "kind": "u32"
+        },
+        {
+          "name": "ptt.toggles",
+          "kind": "u32"
+        },
+        {
+          "name": "ptt.open",
+          "kind": "u32"
+        },
+        {
+          "name": "ptt.transmitting",
+          "kind": "u32"
+        },
+        {
+          "name": "ptt.button",
+          "kind": "u32"
+        },
+        {
+          "name": "statlink.bytes",
+          "kind": "u32"
+        },
+        {
+          "name": "statlink.dropped",
+          "kind": "u32"
+        }
+      ],
+      "perf_sections": [
+        "audio.frame",
+        "audio.encode",
+        "audio.decode",
+        "audio.wake",
+        "radio.airtime",
+        "rs485.drain",
+        "radio.send",
+        "stats.self",
+        "loop",
+        "usbx",
+        "usblink",
+        "relay"
+      ]
+    }
+  ]
+}
