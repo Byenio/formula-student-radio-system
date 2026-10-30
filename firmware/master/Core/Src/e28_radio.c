@@ -99,6 +99,12 @@ static volatile uint32_t echo_rx_count;
 static volatile uint32_t seq_gaps;
 static volatile uint32_t tx_timeouts;
 static volatile uint32_t echo_timeouts;
+/* A blocking send that woke on DIO1 but found no TxDone in the IRQ status:
+   the wake-up was for something else (typically a packet that finished
+   arriving just as the transmission was being started). The send is reported
+   as failed although the radio may still complete it. Counted separately from
+   tx_timeouts because the cause is different. */
+static volatile uint32_t tx_wrong_irq;
 
 #if E28_ROLE_TRANSMITTER
 static volatile uint32_t telem_sent;      /*!< telemetry packets to air     */
@@ -386,6 +392,35 @@ bool E28_Radio_StartRx(void)
 
   (void)radio_clear_irq(E28_IRQ_ALL);
 
+  /* Restore the maximum payload length before every receive.
+
+     In variable-length mode the PayloadLength field of SetPacketParams is not
+     only "how long the next transmission is" -- for the receiver it is the
+     longest packet it will accept. radio_send_impl() sets it to the length of
+     each packet it sends and nothing ever set it back, so after a transmit the
+     radio silently discarded every incoming packet longer than the last one
+     it sent: no RxDone, no CRC error, nothing on DIO1.
+
+     Found in the baseline matrix: with telemetry running, the car board sends
+     ~60-byte telemetry packets, then cannot hear the pit's 84-byte voice
+     packets at all (scenario 6: master radio.rx = 0, against 100/s in
+     scenario 3, where the master had never transmitted since boot). The base
+     station had the same latent fault: after sending one 84-byte voice
+     packet it would drop any aggregated telemetry packet longer than that.
+
+     One extra SPI command per StartRx, a few microseconds. */
+  {
+    uint8_t pp[7];
+    pp[0] = RADIO_PREAMBLE;
+    pp[1] = RADIO_SYNCWORD_LEN;
+    pp[2] = RADIO_SYNCWORD_MATCH;
+    pp[3] = RADIO_HEADER_TYPE;
+    pp[4] = E28_MAX_PAYLOAD;
+    pp[5] = RADIO_CRC_LEN;
+    pp[6] = RADIO_WHITENING;
+    if (!E28_WriteCommand(E28_CMD_SET_PACKETPARAMS, pp, 7U)) { return false; }
+  }
+
   rf_switch_rx();
 
   /* 0xFFFF means continuous: stay in Rx even after a packet arrives, so we
@@ -488,6 +523,8 @@ void E28_Dio1Callback(void)
 }
 
 uint32_t E28_Radio_GetDio1Count(void)  { return dio1_count; }
+uint32_t E28_Radio_GetTxTimeouts(void) { return tx_timeouts; }
+uint32_t E28_Radio_GetTxWrongIrq(void) { return tx_wrong_irq; }
 uint32_t E28_Radio_GetEchoRxCount(void){ return echo_rx_count; }
 uint32_t E28_Radio_GetSeqGaps(void)    { return seq_gaps; }
 #if E28_ROLE_TRANSMITTER
@@ -544,6 +581,10 @@ static bool radio_send_blocking(const uint8_t *packet, uint8_t len,
   (void)radio_clear_irq(E28_IRQ_ALL);
   rf_switch_idle();
 
+  if ((last_irq & E28_IRQ_TX_DONE) == 0U)
+  {
+    tx_wrong_irq++;
+  }
   return ((last_irq & E28_IRQ_TX_DONE) != 0U);
 }
 

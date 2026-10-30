@@ -155,6 +155,8 @@ uint32_t E28_Radio_GetCrcErrorCount(void);
 int8_t   E28_Radio_GetLastRssi(void);      /*!< dBm, negative              */
 uint16_t E28_Radio_GetLastIrq(void);
 uint32_t E28_Radio_GetDio1Count(void); /*!< DIO1 interrupts seen         */
+uint32_t E28_Radio_GetTxTimeouts(void); /*!< blocking sends with no DIO1   */
+uint32_t E28_Radio_GetTxWrongIrq(void); /*!< woke on DIO1, but no TxDone   */
 bool     E28_Radio_IsConfigured(void); /*!< E28_Radio_Config() succeeded */
 bool     E28_Radio_IsRxArmed(void);    /*!< SetRx accepted               */
 uint32_t E28_Radio_GetEchoRxCount(void);/*!< good echoes / relays    */
