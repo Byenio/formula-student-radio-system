@@ -40,6 +40,8 @@
   X(I32, "radio.rssi",            E28_Radio_GetLastRssi())                     \
   X(U32, "radio.dio1",            E28_Radio_GetDio1Count())                    \
   X(U32, "radio.seq_gaps",        E28_Radio_GetSeqGaps())                      \
+  X(U32, "radio.tx_timeouts",     E28_Radio_GetTxTimeouts())                   \
+  X(U32, "radio.tx_wrong_irq",    E28_Radio_GetTxWrongIrq())                   \
   X(U32, "radio.configured",      E28_Radio_IsConfigured())                    \
   X(U32, "radio.rx_armed",        E28_Radio_IsRxArmed())                       \
   /* scheduler: what went on air, and what voice gave way to telemetry */      \
